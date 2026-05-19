@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- ====================================================================== -->
+  <!-- 1_METADATOS_Y_FUENTES                                                  -->
+  <!-- ====================================================================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NiveLu | Catálogo Premium de Flores Artesanales</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <style>
+    /* ====================================================================== */
+    /* 2_ESTILOS_CSS_VARIABLES                                                */
+    /* ====================================================================== */
+    :root {
+      --color-crema: #fdfcf8;
+      --color-acento: #c5a8a0;
+      --color-oscuro: #4a4543;
+      --color-wpp: #25d366;
+      --color-blanco: #ffffff;
+      --fuente-principal: 'Segoe UI', sans-serif;
+      --sombra-tarjeta: 0 15px 35px rgba(0,0,0,0.05);
+      --sombra-neon-acento: 0 0 15px rgba(197, 168, 160, 0.6);
+      --radio-borde: 30px;
+      --radio-borde-hud: 25px;
+      --tiempo-animacion: 0.5s;
+    }
+
+    /* ====================================================================== */
+    /* 3_ESTILOS_CSS_COMPONENTES (CON MEJORAS Y ANIMACIONES)                  */
+    /* ====================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-crema);
+      color: var(--color-oscuro);
+      font-family: var(--fuente-principal);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cabecera-sistema {
+      padding: 25px 20px 15px 20px;
+      text-align: center;
+      flex-shrink: 0;
+      animation: aparecerSuave var(--tiempo-animacion) ease-out;
+    }
+
+    .titulo-marca {
+      font-weight: 200;
+      letter-spacing: 8px;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    /* HUD DE FILTRADO GEOMÉTRICO MEJORADO */
+    .contenedor-hud {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      padding: 10px 20px 20px 20px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(197, 168, 160, 0.3);
+      animation: aparecerSuave 0.7s ease-out;
+    }
+
+    .boton-filtro {
+      padding: 8px 25px;
+      border-radius: var(--radio-borde-hud);
+      border: 1px solid var(--color-acento);
+      background-color: transparent;
+      color: var(--color-acento);
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .boton-filtro:hover {
+      background-color: rgba(197, 168, 160, 0.1);
+      box-shadow: var(--sombra-neon-acento);
+      transform: translateY(-2px);
+    }
+
+    .filtro-activo {
+      background-color: var(--color-acento) !important;
+      color: var(--color-blanco) !important;
+      box-shadow: 0 5px 15px rgba(197, 168, 160, 0.4);
+      transform: scale(1.05);
+    }
+
+    /* ÁREA PRINCIPAL Y MATRIZ */
+    .panel-catalogo {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 30px 20px;
+      scroll-behavior: smooth;
+    }
+
+    .panel-catalogo::-webkit-scrollbar {
+      width: 8px;
+    }
+    .panel-catalogo::-webkit-scrollbar-thumb {
+      background-color: var(--color-acento);
+      border-radius: 10px;
+    }
+
+    .matriz-simetrica {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tarjeta-item {
+      background-color: var(--color-blanco);
+      border-radius: var(--radio-borde);
+      padding: 10px;
+      box-shadow: var(--sombra-tarjeta);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+      display: flex;
+      flex-direction: column;
+      opacity: 0; /* Preparación para la animación en cascada */
+      animation: entradaCascada 0.6s forwards ease-out;
+    }
+
+    .tarjeta-item:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 25px 45px rgba(0,0,0,0.1);
+    }
+
+    .imagen-item {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 20px;
+      cursor: zoom-in;
+      transition: filter 0.3s;
+    }
+
+    .tarjeta-item:hover .imagen-item {
+      filter: brightness(1.05);
+    }
+
+    .info-item {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .texto-grupo {
+      font-size: 0.75rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+    }
+
+    .texto-nombre {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--color-oscuro);
+    }
+
+    .texto-precio {
+      font-weight: bold;
+      color: var(--color-acento);
+      font-size: 1.2rem;
+      margin-top: 5px;
+    }
+
+    .boton-wpp {
+      font-size: 2rem;
+      color: var(--color-wpp);
+      text-decoration: none;
+      transition: transform 0.3s;
+      animation: latidoSutil 2s infinite;
+    }
+
+    .boton-wpp:hover {
+      transform: scale(1.2);
+      animation: none; /* Detiene el latido al interactuar */
+    }
+
+    /* MODAL DE ZOOM MEJORADO */
+    .modal-zoom {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      backdrop-filter: blur(15px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-activo {
+      display: flex !important;
+      opacity: 1 !important;
+    }
+
+    .imagen-zoom {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 20px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.5);
+      transform: scale(0.8);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-activo .imagen-zoom {
+      transform: scale(1);
+    }
+
+    /* ====================================================================== */
+    /* KEYFRAMES DE ANIMACIÓN                                                 */
+    /* ====================================================================== */
+    @keyframes aparecerSuave {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes entradaCascada {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes latidoSutil {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====================================================================== -->
+  <!-- 4_ESTRUCTURA_HTML_DOM                                                  -->
+  <!-- ====================================================================== -->
+  <header class="cabecera-sistema">
+    <h1 class="titulo-marca">NIVELU</h1>
+  </header>
+
+  <!-- HUD Dinámico de Categorías -->
+  <nav id="contenedor-hud" class="contenedor-hud">
+    <!-- Inyección dinámica de botones de filtro -->
+  </nav>
+
+  <main class="panel-catalogo">
+    <div id="contenedor-matriz" class="matriz-simetrica">
+      <!-- Inyección dinámica desde Firebase según filtro -->
+    </div>
+  </main>
+
+  <div id="zoom-modal" class="modal-zoom">
+    <img id="imagen-ampliada" class="imagen-zoom" src="">
+  </div>
+
+  <script>
+    // Señor de la vida®
+    // ======================================================================
+    // 5_JAVASCRIPT_ESTADO_GLOBAL
+    // Documentación: Control central de dependencias, datos y estado HUD.
+    // Afecta a: Renderizado condicional de la UI y persistencia en memoria.
+    // ======================================================================
+    const ConfiguracionFirebase = {};
+    ConfiguracionFirebase.apiKey = "AIzaSyBqsTxi2PoFjPgvre4QqZvWHczUoO5sqU8";
+    ConfiguracionFirebase.projectId = "limpiapipas-98f13";
+    ConfiguracionFirebase.appId = "1:456357010113:web:c10522df7cdb2dbea1d240";
+
+    const EstadoAplicacion = {};
+    EstadoAplicacion.datosProcesados = [];
+    EstadoAplicacion.categoriasUnicas = [];
+    EstadoAplicacion.filtroActivo = "TODO";
+
+    // ======================================================================
+    // 6_JAVASCRIPT_UTILIDADES_Y_MATEMATICAS
+    // Documentación: Funciones puras para procesar cadenas y URLs sin mutar.
+    // ======================================================================
+    const Utilidades = {};
+
+    Utilidades.crearEnlaceWpp = function(nombreFlorLimpio) {
+      let base = "https://wa.me/59173162007?text=";
+      let mensaje = "Hola, estoy interesado/a en la flor artesanal: ";
+      let textoCompleto = mensaje + nombreFlorLimpio;
+      let urlCodificada = encodeURI(textoCompleto);
+      return base + urlCodificada;
+    };
+
+    Utilidades.diseccionarNombre = function(cadenaCruda) {
+      let cadenaSegura = cadenaCruda || "";
+      let contieneGuionBajo = cadenaSegura.includes('_');
+      let resultadoDiseccion = {};
+      
+      if (contieneGuionBajo) {
+        let fragmentos = cadenaSegura.split('_');
+        let primeraParte = fragmentos[0];
+        let restoDelArreglo = fragmentos.slice(1);
+        let restoUnido = restoDelArreglo.join(' ');
+        
+        let categoriaLimpia = primeraParte.trim();
+        let categoriaMayusculas = categoriaLimpia.toUpperCase();
+        let nombreFlorLimpio = restoUnido.trim();
+        
+        resultadoDiseccion.grupo = categoriaMayusculas;
+        resultadoDiseccion.nombre = nombreFlorLimpio;
+      } else {
+        let cadenaLimpia = cadenaSegura.trim();
+        
+        resultadoDiseccion.grupo = "GENERAL";
+        resultadoDiseccion.nombre = cadenaLimpia;
+      }
+      
+      return resultadoDiseccion;
+    };
+
+    // ======================================================================
+    // 7_JAVASCRIPT_MOTORES_LOGICOS
+    // Documentación: Motores de renderizado simétrico y filtrado dinámico.
+    // ======================================================================
+    const MotorConexion = {};
+    MotorConexion.iniciar = function() {
+      firebase.initializeApp(ConfiguracionFirebase);
+      let baseDatos = firebase.firestore();
+      
+      let promesaPersistencia = baseDatos.enablePersistence();
+      promesaPersistencia.catch(function(error) {
+        console.warn("Resiliencia Offline no disponible o fallida:", error);
+      });
+      
+      return baseDatos;
+    };
+
+    const MotorUI = {};
+    MotorUI.referencias = {};
+    
+    MotorUI.mapearNodos = function() {
+      let nodoMatriz = document.getElementById('contenedor-matriz');
+      let nodoModal = document.getElementById('zoom-modal');
+      let nodoImagen = document.getElementById('imagen-ampliada');
+      let nodoHUD = document.getElementById('contenedor-hud');
+      
+      MotorUI.referencias.matriz = nodoMatriz;
+      MotorUI.referencias.modal = nodoModal;
+      MotorUI.referencias.imagenAmpliada = nodoImagen;
+      MotorUI.referencias.hud = nodoHUD;
+    };
+
+    MotorUI.renderizarHUD = function() {
+      let contenedorHUD = MotorUI.referencias.hud;
+      contenedorHUD.innerHTML = "";
+      
+      let btnTodo = document.createElement('button');
+      btnTodo.className = "boton-filtro";
+      btnTodo.textContent = "TODO";
+      btnTodo.dataset.categoria = "TODO";
+      
+      let activoEsTodo = EstadoAplicacion.filtroActivo === "TODO";
+      if (activoEsTodo) {
+        btnTodo.classList.add('filtro-activo');
+      }
+      
+      contenedorHUD.appendChild(btnTodo);
+      
+      let indiceCat = 0;
+      let totalCat = EstadoAplicacion.categoriasUnicas.length;
+      
+      while (indiceCat < totalCat) {
+        let nombreCategoria = EstadoAplicacion.categoriasUnicas[indiceCat];
+        let esCategoriaGeneral = nombreCategoria === "GENERAL";
+        
+        if (!esCategoriaGeneral) {
+          let btnCat = document.createElement('button');
+          btnCat.className = "boton-filtro";
+          btnCat.textContent = nombreCategoria;
+          btnCat.dataset.categoria = nombreCategoria;
+          
+          let estaActivo = EstadoAplicacion.filtroActivo === nombreCategoria;
+          if (estaActivo) {
+            btnCat.classList.add('filtro-activo');
+          }
+          
+          contenedorHUD.appendChild(btnCat);
+        }
+        
+        indiceCat = indiceCat + 1;
+      }
+    };
+
+    MotorUI.renderizarCatalogo = function() {
+      let nodoContenedor = MotorUI.referencias.matriz;
+      nodoContenedor.innerHTML = "";
+      
+      let indiceElemento = 0;
+      let indiceVisual = 0; // Para calcular el delay de la cascada
+      let totalItems = EstadoAplicacion.datosProcesados.length;
+      let filtroActual = EstadoAplicacion.filtroActivo;
+      
+      while (indiceElemento < totalItems) {
+        let item = EstadoAplicacion.datosProcesados[indiceElemento];
+        
+        let esTodo = filtroActual === "TODO";
+        let coincideGrupo = item.grupo === filtroActual;
+        let seDebeMostrar = esTodo || coincideGrupo;
+        
+        if (seDebeMostrar) {
+          let tarjeta = document.createElement('div');
+          tarjeta.className = "tarjeta-item";
+          
+          // Cálculo estricto de animación escalonada (staggered delay)
+          let retrasoAnimacion = indiceVisual * 0.05;
+          let retrasoCadena = retrasoAnimacion.toString() + "s";
+          tarjeta.style.animationDelay = retrasoCadena;
+          
+          let imagen = document.createElement('img');
+          imagen.className = "imagen-item";
+          imagen.src = item.img || item.direccion || "";
+          imagen.dataset.url = imagen.src;
+          
+          let infoContenedor = document.createElement('div');
+          infoContenedor.className = "info-item";
+          
+          let bloqueTexto = document.createElement('div');
+          
+          let txtGrupo = document.createElement('div');
+          txtGrupo.className = "texto-grupo";
+          txtGrupo.textContent = item.grupo;
+          
+          let txtNombre = document.createElement('div');
+          txtNombre.className = "texto-nombre";
+          txtNombre.textContent = item.nombre;
+          
+          let txtPrecio = document.createElement('div');
+          txtPrecio.className = "texto-precio";
+          
+          let existePrecio = item.precio !== undefined && item.precio !== "";
+          if (existePrecio) {
+            txtPrecio.textContent = "Bs. " + item.precio;
+          } else {
+            txtPrecio.textContent = "";
+          }
+          
+          let enlaceWpp = document.createElement('a');
+          enlaceWpp.className = "boton-wpp";
+          let enlaceGenerado = Utilidades.crearEnlaceWpp(item.nombre);
+          enlaceWpp.href = enlaceGenerado;
+          enlaceWpp.target = "_blank";
+          
+          let iconoWpp = document.createElement('i');
+          iconoWpp.className = "fab fa-whatsapp";
+          
+          enlaceWpp.appendChild(iconoWpp);
+          
+          bloqueTexto.appendChild(txtGrupo);
+          bloqueTexto.appendChild(txtNombre);
+          bloqueTexto.appendChild(txtPrecio);
+          
+          infoContenedor.appendChild(bloqueTexto);
+          infoContenedor.appendChild(enlaceWpp);
+          
+          tarjeta.appendChild(imagen);
+          tarjeta.appendChild(infoContenedor);
+          
+          nodoContenedor.appendChild(tarjeta);
+          
+          indiceVisual = indiceVisual + 1;
+        }
+        
+        indiceElemento = indiceElemento + 1;
+      }
+    };
+
+    MotorUI.abrirZoom = function(urlImagen) {
+      let modal = MotorUI.referencias.modal;
+      let imgAmpliada = MotorUI.referencias.imagenAmpliada;
+      
+      imgAmpliada.src = urlImagen;
+      modal.classList.add('modal-activo');
+    };
+
+    MotorUI.cerrarZoom = function() {
+      let modal = MotorUI.referencias.modal;
+      modal.classList.remove('modal-activo');
+      
+      // Limpieza retrasada para permitir que la transición de CSS termine
+      setTimeout(function() {
+        let estaActivo = modal.classList.contains('modal-activo');
+        if (!estaActivo) {
+          modal.style.display = "none";
+          // Reseteo forzado para el proximo ciclo
+          modal.style.display = ""; 
+        }
+      }, 300);
+    };
+
+    // ======================================================================
+    // 8_JAVASCRIPT_EVENT_LISTENERS
+    // Documentación: Delegación de eventos y control de burbujeo mutacional.
+    // ======================================================================
+    const MotorEventos = {};
+
+    MotorEventos.escucharDOM = function() {
+      let contenedorMatriz = MotorUI.referencias.matriz;
+      let modalZoom = MotorUI.referencias.modal;
+      let contenedorHUD = MotorUI.referencias.hud;
+      
+      contenedorHUD.addEventListener('click', function(evento) {
+        let elementoClickeado = evento.target;
+        let esBotonFiltro = elementoClickeado.classList.contains('boton-filtro');
+        
+        if (esBotonFiltro) {
+          let nuevaCategoria = elementoClickeado.dataset.categoria;
+          EstadoAplicacion.filtroActivo = nuevaCategoria;
+          
+          MotorUI.renderizarHUD();
+          MotorUI.renderizarCatalogo();
+        }
+      });
+      
+      contenedorMatriz.addEventListener('click', function(evento) {
+        let elementoClickeado = evento.target;
+        let esImagen = elementoClickeado.classList.contains('imagen-item');
+        
+        if (esImagen) {
+          let url = elementoClickeado.dataset.url;
+          MotorUI.abrirZoom(url);
+        }
+      });
+      
+      modalZoom.addEventListener('click', function(evento) {
+        MotorUI.cerrarZoom();
+      });
+    };
+
+    MotorEventos.sincronizarFirebase = function(db) {
+      let coleccionFlores = db.collection("flores");
+      
+      coleccionFlores.onSnapshot(function(snapshot) {
+        let arregloTemporal = [];
+        let conjuntoCategorias = new Set();
+        let documentos = snapshot.docs;
+        let indice = 0;
+        let totalDocumentos = documentos.length;
+        
+        while (indice < totalDocumentos) {
+          let doc = documentos[indice];
+          let datosCrudos = doc.data();
+          let idDoc = doc.id;
+          
+          let nombreBase = datosCrudos.nombre;
+          let datosDiseccionados = Utilidades.diseccionarNombre(nombreBase);
+          
+          let grupoAnalizado = datosDiseccionados.grupo;
+          let nombreAnalizado = datosDiseccionados.nombre;
+          
+          conjuntoCategorias.add(grupoAnalizado);
+          
+          let objetoDominio = {};
+          objetoDominio.id = idDoc;
+          objetoDominio.grupo = grupoAnalizado;
+          objetoDominio.nombre = nombreAnalizado;
+          objetoDominio.img = datosCrudos.img || datosCrudos.direccion;
+          objetoDominio.precio = datosCrudos.precio;
+          
+          arregloTemporal.push(objetoDominio);
+          indice = indice + 1;
+        }
+        
+        let arregloCategorias = Array.from(conjuntoCategorias);
+        arregloCategorias.sort();
+        
+        EstadoAplicacion.datosProcesados = arregloTemporal;
+        EstadoAplicacion.categoriasUnicas = arregloCategorias;
+        
+        MotorUI.renderizarHUD();
+        MotorUI.renderizarCatalogo();
+      });
+    };
+
+    // ======================================================================
+    // 9_JAVASCRIPT_INICIALIZACION
+    // Documentación: Secuencia de arranque del sistema monolítico.
+    // ======================================================================
+    function inicializarSistema() {
+      let conexionActiva = MotorConexion.iniciar();
+      MotorUI.mapearNodos();
+      MotorEventos.escucharDOM();
+      MotorEventos.sincronizarFirebase(conexionActiva);
+    }
+
+    document.addEventListener('DOMContentLoaded', inicializarSistema);
+  </script>
+</body>
+</html>
