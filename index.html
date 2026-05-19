@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- ====================================================================== -->
-  <!-- 1_METADATOS_Y_FUENTES                                                  -->
-  <!-- ====================================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NiveLu | Catálogo Premium de Flores Artesanales</title>
@@ -23,14 +20,14 @@
       --color-blanco: #ffffff;
       --fuente-principal: 'Segoe UI', sans-serif;
       --sombra-tarjeta: 0 15px 35px rgba(0,0,0,0.05);
-      --sombra-neon-acento: 0 0 15px rgba(197, 168, 160, 0.6);
+      --sombra-neon-acento: 0 0 15px rgba(197, 168, 160, 0.5);
       --radio-borde: 30px;
       --radio-borde-hud: 25px;
-      --tiempo-animacion: 0.5s;
+      --tiempo-animacion: 0.4s;
     }
 
     /* ====================================================================== */
-    /* 3_ESTILOS_CSS_COMPONENTES (CON MEJORAS Y ANIMACIONES)                  */
+    /* 3_ESTILOS_CSS_COMPONENTES (GEOMETRÍA Y CINEMÁTICA)                     */
     /* ====================================================================== */
     * {
       box-sizing: border-box;
@@ -50,74 +47,70 @@
     }
 
     .cabecera-sistema {
-      padding: 25px 20px 15px 20px;
+      padding: 30px 20px 10px 20px;
       text-align: center;
       flex-shrink: 0;
-      animation: aparecerSuave var(--tiempo-animacion) ease-out;
+      animation: aparecerTop 0.6s ease-out;
     }
 
     .titulo-marca {
       font-weight: 200;
       letter-spacing: 8px;
       font-size: 2.5rem;
-      margin-bottom: 10px;
     }
 
-    /* HUD DE FILTRADO GEOMÉTRICO MEJORADO */
+    /* HUD DE FILTRADO INTERACTIVO */
     .contenedor-hud {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 15px;
-      padding: 10px 20px 20px 20px;
+      gap: 12px;
+      padding: 10px 20px 25px 20px;
       flex-shrink: 0;
       flex-wrap: wrap;
-      border-bottom: 1px solid rgba(197, 168, 160, 0.3);
-      animation: aparecerSuave 0.7s ease-out;
+      animation: aparecerTop 0.8s ease-out;
     }
 
     .boton-filtro {
-      padding: 8px 25px;
+      padding: 10px 28px;
       border-radius: var(--radio-borde-hud);
       border: 1px solid var(--color-acento);
       background-color: transparent;
       color: var(--color-acento);
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       letter-spacing: 1px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       text-transform: uppercase;
-      position: relative;
-      overflow: hidden;
     }
 
     .boton-filtro:hover {
-      background-color: rgba(197, 168, 160, 0.1);
-      box-shadow: var(--sombra-neon-acento);
+      background-color: rgba(197, 168, 160, 0.08);
       transform: translateY(-2px);
+      box-shadow: var(--sombra-neon-acento);
     }
 
     .filtro-activo {
       background-color: var(--color-acento) !important;
       color: var(--color-blanco) !important;
-      box-shadow: 0 5px 15px rgba(197, 168, 160, 0.4);
+      box-shadow: 0 8px 20px rgba(197, 168, 160, 0.35);
       transform: scale(1.05);
     }
 
-    /* ÁREA PRINCIPAL Y MATRIZ */
+    /* MATRIZ DE PRODUCTOS CON SCROLL INTEGRADO */
     .panel-catalogo {
       flex-grow: 1;
       overflow-y: auto;
-      padding: 30px 20px;
+      padding: 10px 20px 40px 20px;
       scroll-behavior: smooth;
     }
 
     .panel-catalogo::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
     .panel-catalogo::-webkit-scrollbar-thumb {
-      background-color: var(--color-acento);
+      background-color: rgba(197, 168, 160, 0.4);
       border-radius: 10px;
     }
 
@@ -132,35 +125,35 @@
     .tarjeta-item {
       background-color: var(--color-blanco);
       border-radius: var(--radio-borde);
-      padding: 10px;
+      padding: 12px;
       box-shadow: var(--sombra-tarjeta);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
       display: flex;
       flex-direction: column;
-      opacity: 0; /* Preparación para la animación en cascada */
-      animation: entradaCascada 0.6s forwards ease-out;
+      opacity: 0;
+      animation: entradaCascada 0.5s forwards ease-out;
     }
 
     .tarjeta-item:hover {
-      transform: translateY(-12px);
-      box-shadow: 0 25px 45px rgba(0,0,0,0.1);
+      transform: translateY(-10px);
+      box-shadow: 0 22px 40px rgba(0,0,0,0.08);
     }
 
     .imagen-item {
       width: 100%;
-      height: 350px;
+      height: 340px;
       object-fit: cover;
       border-radius: 20px;
       cursor: zoom-in;
-      transition: filter 0.3s;
+      transition: transform 0.5s ease;
     }
 
     .tarjeta-item:hover .imagen-item {
-      filter: brightness(1.05);
+      transform: scale(1.02);
     }
 
     .info-item {
-      padding: 15px;
+      padding: 15px 10px 8px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -168,51 +161,54 @@
 
     .texto-grupo {
       font-size: 0.75rem;
-      color: #aaa;
+      color: #b5b5b5;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 3px;
+      letter-spacing: 1.5px;
+      margin-bottom: 4px;
+      font-weight: 600;
     }
 
     .texto-nombre {
-      font-weight: bold;
-      font-size: 1.1rem;
+      font-weight: 700;
+      font-size: 1.15rem;
       color: var(--color-oscuro);
+      line-height: 1.3;
+      text-transform: capitalize;
     }
 
     .texto-precio {
-      font-weight: bold;
+      font-weight: 700;
       color: var(--color-acento);
-      font-size: 1.2rem;
-      margin-top: 5px;
+      font-size: 1.1rem;
+      margin-top: 4px;
     }
 
     .boton-wpp {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: var(--color-wpp);
       text-decoration: none;
-      transition: transform 0.3s;
-      animation: latidoSutil 2s infinite;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: pulsoMagnetico 2.5s infinite;
     }
 
     .boton-wpp:hover {
-      transform: scale(1.2);
-      animation: none; /* Detiene el latido al interactuar */
+      transform: scale(1.25);
+      animation: none;
     }
 
-    /* MODAL DE ZOOM MEJORADO */
+    /* MODAL DE AMPLIFICACIÓN VISUAL */
     .modal-zoom {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.95);
+      background-color: rgba(0,0,0,0.92);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(12px);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -223,12 +219,12 @@
     }
 
     .imagen-zoom {
-      max-width: 90%;
-      max-height: 90%;
+      max-width: 88%;
+      max-height: 88%;
       border-radius: 20px;
-      box-shadow: 0 0 50px rgba(0,0,0,0.5);
-      transform: scale(0.8);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 60px rgba(0,0,0,0.6);
+      transform: scale(0.85);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .modal-activo .imagen-zoom {
@@ -236,43 +232,37 @@
     }
 
     /* ====================================================================== */
-    /* KEYFRAMES DE ANIMACIÓN                                                 */
+    /* KEYFRAMES CINEMÁTICOS                                                  */
     /* ====================================================================== */
-    @keyframes aparecerSuave {
-      0% { opacity: 0; transform: translateY(-20px); }
+    @keyframes aparecerTop {
+      0% { opacity: 0; transform: translateY(-15px); }
       100% { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes entradaCascada {
-      0% { opacity: 0; transform: translateY(40px); }
+      0% { opacity: 0; transform: translateY(30px); }
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes latidoSutil {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
+    @keyframes pulsoMagnetico {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+      50% { transform: scale(1.06); }
       100% { transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
-  <!-- ====================================================================== -->
-  <!-- 4_ESTRUCTURA_HTML_DOM                                                  -->
-  <!-- ====================================================================== -->
   <header class="cabecera-sistema">
     <h1 class="titulo-marca">NIVELU</h1>
   </header>
 
-  <!-- HUD Dinámico de Categorías -->
   <nav id="contenedor-hud" class="contenedor-hud">
-    <!-- Inyección dinámica de botones de filtro -->
-  </nav>
+    </nav>
 
   <main class="panel-catalogo">
     <div id="contenedor-matriz" class="matriz-simetrica">
-      <!-- Inyección dinámica desde Firebase según filtro -->
-    </div>
+      </div>
   </main>
 
   <div id="zoom-modal" class="modal-zoom">
@@ -283,8 +273,7 @@
     // Señor de la vida®
     // ======================================================================
     // 5_JAVASCRIPT_ESTADO_GLOBAL
-    // Documentación: Control central de dependencias, datos y estado HUD.
-    // Afecta a: Renderizado condicional de la UI y persistencia en memoria.
+    // Documentación: Encapsulación de variables de entorno y control HUD.
     // ======================================================================
     const ConfiguracionFirebase = {};
     ConfiguracionFirebase.apiKey = "AIzaSyBqsTxi2PoFjPgvre4QqZvWHczUoO5sqU8";
@@ -298,13 +287,13 @@
 
     // ======================================================================
     // 6_JAVASCRIPT_UTILIDADES_Y_MATEMATICAS
-    // Documentación: Funciones puras para procesar cadenas y URLs sin mutar.
+    // Documentación: Parser de cadenas quirúrgico optimizado para guion medio.
     // ======================================================================
     const Utilidades = {};
 
     Utilidades.crearEnlaceWpp = function(nombreFlorLimpio) {
       let base = "https://wa.me/59173162007?text=";
-      let mensaje = "Hola, estoy interesado/a en la flor artesanal: ";
+      let mensaje = "Hola, me interesa la hermosa flor artesanal: ";
       let textoCompleto = mensaje + nombreFlorLimpio;
       let urlCodificada = encodeURI(textoCompleto);
       return base + urlCodificada;
@@ -312,14 +301,16 @@
 
     Utilidades.diseccionarNombre = function(cadenaCruda) {
       let cadenaSegura = cadenaCruda || "";
-      let contieneGuionBajo = cadenaSegura.includes('_');
+      let contieneGuionMedio = cadenaSegura.includes('-');
       let resultadoDiseccion = {};
       
-      if (contieneGuionBajo) {
-        let fragmentos = cadenaSegura.split('_');
+      if (contieneGuionMedio) {
+        let fragmentos = cadenaSegura.split('-');
         let primeraParte = fragmentos[0];
         let restoDelArreglo = fragmentos.slice(1);
-        let restoUnido = restoDelArreglo.join(' ');
+        
+        // Convierte el resto de guiones en espacios limpios para estética del cliente
+        let restoUnido = restoDelArreglo.join(' '); 
         
         let categoriaLimpia = primeraParte.trim();
         let categoriaMayusculas = categoriaLimpia.toUpperCase();
@@ -339,7 +330,7 @@
 
     // ======================================================================
     // 7_JAVASCRIPT_MOTORES_LOGICOS
-    // Documentación: Motores de renderizado simétrico y filtrado dinámico.
+    // Documentación: Controladores de persistencia de datos y renderizadores.
     // ======================================================================
     const MotorConexion = {};
     MotorConexion.iniciar = function() {
@@ -348,7 +339,7 @@
       
       let promesaPersistencia = baseDatos.enablePersistence();
       promesaPersistencia.catch(function(error) {
-        console.warn("Resiliencia Offline no disponible o fallida:", error);
+        console.warn("Modo Offline-First activo sin caché local previa:", error.code);
       });
       
       return baseDatos;
@@ -358,15 +349,10 @@
     MotorUI.referencias = {};
     
     MotorUI.mapearNodos = function() {
-      let nodoMatriz = document.getElementById('contenedor-matriz');
-      let nodoModal = document.getElementById('zoom-modal');
-      let nodoImagen = document.getElementById('imagen-ampliada');
-      let nodoHUD = document.getElementById('contenedor-hud');
-      
-      MotorUI.referencias.matriz = nodoMatriz;
-      MotorUI.referencias.modal = nodoModal;
-      MotorUI.referencias.imagenAmpliada = nodoImagen;
-      MotorUI.referencias.hud = nodoHUD;
+      MotorUI.referencias.matriz = document.getElementById('contenedor-matriz');
+      MotorUI.referencias.modal = document.getElementById('zoom-modal');
+      MotorUI.referencias.imagenAmpliada = document.getElementById('imagen-ampliada');
+      MotorUI.referencias.hud = document.getElementById('contenedor-hud');
     };
 
     MotorUI.renderizarHUD = function() {
@@ -382,7 +368,6 @@
       if (activoEsTodo) {
         btnTodo.classList.add('filtro-activo');
       }
-      
       contenedorHUD.appendChild(btnTodo);
       
       let indiceCat = 0;
@@ -390,9 +375,9 @@
       
       while (indiceCat < totalCat) {
         let nombreCategoria = EstadoAplicacion.categoriasUnicas[indiceCat];
-        let esCategoriaGeneral = nombreCategoria === "GENERAL";
+        let esCategoriaInvalida = nombreCategoria === "GENERAL" || nombreCategoria === "";
         
-        if (!esCategoriaGeneral) {
+        if (!esCategoriaInvalida) {
           let btnCat = document.createElement('button');
           btnCat.className = "boton-filtro";
           btnCat.textContent = nombreCategoria;
@@ -402,10 +387,8 @@
           if (estaActivo) {
             btnCat.classList.add('filtro-activo');
           }
-          
           contenedorHUD.appendChild(btnCat);
         }
-        
         indiceCat = indiceCat + 1;
       }
     };
@@ -415,7 +398,7 @@
       nodoContenedor.innerHTML = "";
       
       let indiceElemento = 0;
-      let indiceVisual = 0; // Para calcular el delay de la cascada
+      let indiceVisual = 0; 
       let totalItems = EstadoAplicacion.datosProcesados.length;
       let filtroActual = EstadoAplicacion.filtroActivo;
       
@@ -430,15 +413,15 @@
           let tarjeta = document.createElement('div');
           tarjeta.className = "tarjeta-item";
           
-          // Cálculo estricto de animación escalonada (staggered delay)
-          let retrasoAnimacion = indiceVisual * 0.05;
-          let retrasoCadena = retrasoAnimacion.toString() + "s";
-          tarjeta.style.animationDelay = retrasoCadena;
+          // Efecto escalonado dinámico para la animación de entrada
+          let retrasoAnimacion = indiceVisual * 0.04;
+          tarjeta.style.animationDelay = retrasoAnimacion.toString() + "s";
           
           let imagen = document.createElement('img');
           imagen.className = "imagen-item";
           imagen.src = item.img || item.direccion || "";
           imagen.dataset.url = imagen.src;
+          imagen.loading = "lazy";
           
           let infoContenedor = document.createElement('div');
           infoContenedor.className = "info-item";
@@ -456,39 +439,34 @@
           let txtPrecio = document.createElement('div');
           txtPrecio.className = "texto-precio";
           
-          let existePrecio = item.precio !== undefined && item.precio !== "";
-          if (existePrecio) {
+          let valorPrecio = parseInt(item.precio, 10);
+          let precioValido = !isNaN(valorPrecio) && valorPrecio > 0;
+          if (precioValido) {
             txtPrecio.textContent = "Bs. " + item.precio;
           } else {
-            txtPrecio.textContent = "";
+            txtPrecio.textContent = "Bs. Cotizar";
           }
           
           let enlaceWpp = document.createElement('a');
           enlaceWpp.className = "boton-wpp";
-          let enlaceGenerado = Utilidades.crearEnlaceWpp(item.nombre);
-          enlaceWpp.href = enlaceGenerado;
+          enlaceWpp.href = Utilidades.crearEnlaceWpp(item.nombre);
           enlaceWpp.target = "_blank";
           
           let iconoWpp = document.createElement('i');
           iconoWpp.className = "fab fa-whatsapp";
           
           enlaceWpp.appendChild(iconoWpp);
-          
           bloqueTexto.appendChild(txtGrupo);
           bloqueTexto.appendChild(txtNombre);
           bloqueTexto.appendChild(txtPrecio);
-          
           infoContenedor.appendChild(bloqueTexto);
           infoContenedor.appendChild(enlaceWpp);
-          
           tarjeta.appendChild(imagen);
           tarjeta.appendChild(infoContenedor);
-          
           nodoContenedor.appendChild(tarjeta);
           
           indiceVisual = indiceVisual + 1;
         }
-        
         indiceElemento = indiceElemento + 1;
       }
     };
@@ -496,7 +474,6 @@
     MotorUI.abrirZoom = function(urlImagen) {
       let modal = MotorUI.referencias.modal;
       let imgAmpliada = MotorUI.referencias.imagenAmpliada;
-      
       imgAmpliada.src = urlImagen;
       modal.classList.add('modal-activo');
     };
@@ -504,21 +481,11 @@
     MotorUI.cerrarZoom = function() {
       let modal = MotorUI.referencias.modal;
       modal.classList.remove('modal-activo');
-      
-      // Limpieza retrasada para permitir que la transición de CSS termine
-      setTimeout(function() {
-        let estaActivo = modal.classList.contains('modal-activo');
-        if (!estaActivo) {
-          modal.style.display = "none";
-          // Reseteo forzado para el proximo ciclo
-          modal.style.display = ""; 
-        }
-      }, 300);
     };
 
     // ======================================================================
     // 8_JAVASCRIPT_EVENT_LISTENERS
-    // Documentación: Delegación de eventos y control de burbujeo mutacional.
+    // Documentación: Intercepción de acciones de usuario y control de burbujeo.
     // ======================================================================
     const MotorEventos = {};
 
@@ -570,6 +537,7 @@
           let datosCrudos = doc.data();
           let idDoc = doc.id;
           
+          // Aplicación automática del Parser sobre el nombre almacenado
           let nombreBase = datosCrudos.nombre;
           let datosDiseccionados = Utilidades.diseccionarNombre(nombreBase);
           
@@ -602,7 +570,7 @@
 
     // ======================================================================
     // 9_JAVASCRIPT_INICIALIZACION
-    // Documentación: Secuencia de arranque del sistema monolítico.
+    // Documentación: Arranque seguro del ecosistema.
     // ======================================================================
     function inicializarSistema() {
       let conexionActiva = MotorConexion.iniciar();
