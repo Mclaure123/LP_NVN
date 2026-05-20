@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Niveni | Catálogo Premium de Flores Artesanales</title>
+  <title>Niveni | Boutique de Flores Artesanales</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -15,12 +15,12 @@
     :root {
       --color-crema: #fdfcf8;
       --color-acento: #c5a8a0;
-      --color-oscuro: #4a4543;
+      --color-oscuro: #2a2a2a;
       --color-wpp: #25d366;
       --color-wpp-fondo: #f0fdf4;
       --color-wpp-borde: #bbf7d0;
       --color-blanco: #ffffff;
-      --color-cristal: rgba(255, 255, 255, 0.85);
+      --color-cristal: rgba(253, 252, 248, 0.85);
       --fuente-principal: 'Segoe UI', sans-serif;
       --sombra-tarjeta: 0 10px 20px rgba(0,0,0,0.03);
       --radio-borde: 20px;
@@ -28,7 +28,7 @@
     }
 
     /* ====================================================================== */
-    /* 3_ESTILOS_CSS_COMPONENTES (MINIMALISMO Y RENDIMIENTO)                  */
+    /* 3_ESTILOS_CSS_COMPONENTES (ALTA GAMA Y RENDIMIENTO)                    */
     /* ====================================================================== */
     * {
       box-sizing: border-box;
@@ -37,7 +37,6 @@
     }
 
     body {
-      /* FONDO SUAVE Y MINIMALISTA: Gradiente radial que simula luz de estudio */
       background: radial-gradient(circle at top center, #ffffff 0%, var(--color-crema) 100%);
       background-attachment: fixed;
       color: var(--color-oscuro);
@@ -49,7 +48,7 @@
       flex-direction: column;
     }
 
-    /* CAPA SUPERIOR FIXED - INTERFAZ CRISTAL COMPACTA */
+    /* INTERFAZ FLOTANTE - GLASSMORPHISM */
     .interfaz-fija {
       position: sticky;
       top: 0;
@@ -58,27 +57,72 @@
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
       border-bottom: 1px solid rgba(197, 168, 160, 0.15);
-      padding: 15px 15px 10px 15px;
+      padding: 20px 25px 15px 25px;
       display: flex;
       flex-direction: column;
       align-items: center;
       flex-shrink: 0;
-      animation: aparecerTop 0.5s ease-out;
+      animation: aparecerTop 0.6s ease-out;
     }
 
+    /* IDENTIDAD ULTRA-LUJO */
     .titulo-marca {
       font-weight: 200;
-      letter-spacing: 10px;
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+      letter-spacing: 18px;
+      font-size: 2.6rem;
+      margin-bottom: 15px;
       text-transform: uppercase;
+      color: var(--color-oscuro);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      margin-right: -18px;
+    }
+
+    /* ESTRUCTURA HUD (IZQ: Categorías | DER: Buscador) */
+    .hud-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .contenedor-hud {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .boton-filtro {
+      padding: 6px 18px;
+      border-radius: var(--radio-borde-hud);
+      border: 1px solid var(--color-acento);
+      background-color: transparent;
+      color: var(--color-acento);
+      font-weight: 600;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      text-transform: uppercase;
+    }
+
+    .boton-filtro:hover {
+      background-color: rgba(197, 168, 160, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .filtro-activo {
+      background-color: var(--color-acento) !important;
+      color: var(--color-blanco) !important;
+      box-shadow: 0 4px 12px rgba(197, 168, 160, 0.25);
     }
 
     .bloque-buscador {
       width: 100%;
-      max-width: 400px;
+      max-width: 300px;
       position: relative;
-      margin-bottom: 10px;
     }
 
     .bloque-buscador input {
@@ -86,7 +130,7 @@
       padding: 10px 15px 10px 35px;
       border-radius: var(--radio-borde-hud);
       border: 1px solid rgba(197, 168, 160, 0.4);
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(255, 255, 255, 0.6);
       font-size: 0.9rem;
       outline: none;
       transition: all 0.3s ease;
@@ -94,6 +138,7 @@
 
     .bloque-buscador input:focus {
       border-color: var(--color-acento);
+      background-color: var(--color-blanco);
       box-shadow: 0 4px 15px rgba(197, 168, 160, 0.1);
     }
 
@@ -106,41 +151,11 @@
       font-size: 0.9rem;
     }
 
-    .contenedor-hud {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .boton-filtro {
-      padding: 6px 18px;
-      border-radius: var(--radio-borde-hud);
-      border: 1px solid var(--color-acento);
-      background-color: transparent;
-      color: var(--color-acento);
-      font-weight: 600;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-transform: uppercase;
-    }
-
-    .boton-filtro:hover {
-      background-color: rgba(197, 168, 160, 0.08);
-    }
-
-    .filtro-activo {
-      background-color: var(--color-acento) !important;
-      color: var(--color-blanco) !important;
-    }
-
-    /* MATRIZ SIMÉTRICA (40% MÁS COMPACTA) */
+    /* MATRIZ COMPACTA 40% Y ESTADO VACÍO */
     .panel-catalogo {
       flex-grow: 1;
       overflow-y: auto;
-      padding: 20px 15px;
+      padding: 25px 20px 60px 20px;
       scroll-behavior: smooth;
     }
 
@@ -149,11 +164,34 @@
 
     .matriz-simetrica {
       display: grid;
-      /* REDUCCIÓN DE ESCALA APLICADA AQUÍ */
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 15px;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+    }
+
+    .estado-vacio {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: aparecerTop 0.5s ease-out;
+    }
+
+    .estado-vacio i {
+      font-size: 3rem;
+      color: var(--color-acento);
+      opacity: 0.5;
+      margin-bottom: 15px;
+    }
+
+    .estado-vacio p {
+      font-size: 1.1rem;
+      color: #888;
+      font-weight: 300;
     }
 
     /* TARJETAS MINIATURIZADAS */
@@ -162,28 +200,76 @@
       border-radius: var(--radio-borde);
       padding: 10px;
       box-shadow: var(--sombra-tarjeta);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
       opacity: 0;
+      position: relative;
       animation: entradaCascada 0.4s forwards ease-out;
     }
 
     .tarjeta-item:hover {
-      transform: translateY(-5px);
+      transform: translateY(-6px);
       box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+    }
+
+    /* CONTENEDOR DE IMAGEN RELATIVO PARA BADGES SOBRE LA FOTO */
+    .contenedor-imagen {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 5px;
     }
 
     .imagen-item {
       width: 100%;
-      height: 180px; /* Reducción de 350px a 180px */
+      height: 100%;
       object-fit: cover;
-      border-radius: 15px;
       cursor: zoom-in;
+      transition: transform 0.4s ease;
+    }
+    
+    .tarjeta-item:hover .imagen-item {
+      transform: scale(1.05);
+    }
+
+    /* CÁPSULAS DE CRISTAL DE ULTRA GAMA (INFERIOR DERECHA) */
+    .badge-luxury {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-luxury-nuevo {
+      background: rgba(240, 253, 244, 0.7);
+      color: #0f766e; /* Tono verde esmeralda profundo */
+      border: 1px solid rgba(15, 118, 110, 0.3);
+      animation: pulsoRespiracion 3s infinite ease-in-out;
+    }
+
+    .badge-luxury-escaso {
+      background: rgba(254, 242, 242, 0.7);
+      color: #991b1b; /* Tono borgoña sofisticado */
+      border: 1px solid rgba(153, 27, 27, 0.3);
+      animation: pulsoCorazon 1.8s infinite;
     }
 
     .info-item {
-      padding: 10px 5px 5px 5px;
+      padding: 5px 5px 2px 5px;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
@@ -213,7 +299,7 @@
       margin-top: 5px;
     }
 
-    /* BOTONERA DUAL DE WHATSAPP (OPCIÓN B) */
+    /* BOTONERA DUAL WHATSAPP */
     .contenedor-wpp-dual {
       display: flex;
       gap: 8px;
@@ -241,6 +327,41 @@
       background-color: var(--color-wpp);
       color: var(--color-blanco);
       transform: scale(1.05);
+    }
+
+    /* BOTON FLOTANTE SCROLL-TO-TOP */
+    .btn-subir {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: var(--color-oscuro);
+      color: var(--color-blanco);
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 90;
+      pointer-events: none;
+    }
+
+    .btn-subir.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .btn-subir:hover {
+      background-color: var(--color-acento);
+      transform: scale(1.1);
     }
 
     /* MODAL ZOOM */
@@ -278,6 +399,7 @@
       transform: scale(1);
     }
 
+    /* ANIMACIONES NEURALES Y CINEMÁTICAS */
     @keyframes aparecerTop {
       0% { opacity: 0; transform: translateY(-15px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -287,6 +409,20 @@
       0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes pulsoCorazon {
+      0% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0.4); }
+      15% { box-shadow: 0 0 0 8px rgba(153, 27, 27, 0); }
+      30% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0.4); }
+      45% { box-shadow: 0 0 0 8px rgba(153, 27, 27, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0); }
+    }
+
+    @keyframes pulsoRespiracion {
+      0% { box-shadow: 0 0 4px rgba(15, 118, 110, 0.2); }
+      50% { box-shadow: 0 0 14px rgba(15, 118, 110, 0.6); }
+      100% { box-shadow: 0 0 4px rgba(15, 118, 110, 0.2); }
+    }
   </style>
 </head>
 <body>
@@ -294,18 +430,26 @@
   <div class="interfaz-fija">
     <h1 class="titulo-marca">NIVENI</h1>
     
-    <div class="bloque-buscador">
-      <i class="fas fa-search"></i>
-      <input type="text" id="buscador-vivo" placeholder="Buscar flor artesanal...">
+    <div class="hud-wrapper">
+      <nav id="contenedor-hud" class="contenedor-hud"></nav>
+      
+      <div class="bloque-buscador">
+        <i class="fas fa-search"></i>
+        <input type="text" id="buscador-vivo" placeholder="Buscar flor artesanal...">
+      </div>
     </div>
-
-    <nav id="contenedor-hud" class="contenedor-hud"></nav>
   </div>
 
-  <main class="panel-catalogo">
+  <main class="panel-catalogo" id="panel-scroll">
     <div id="contenedor-matriz" class="matriz-simetrica">
+      <div id="estado-vacio" class="estado-vacio">
+        <i class="fas fa-seedling"></i>
+        <p>No encontramos esta flor. Explora nuestro catálogo.</p>
       </div>
+    </div>
   </main>
+
+  <button id="btn-subir" class="btn-subir"><i class="fas fa-chevron-up"></i></button>
 
   <div id="zoom-modal" class="modal-zoom">
     <img id="imagen-ampliada" class="imagen-zoom" src="">
@@ -321,10 +465,9 @@
     ConfiguracionFirebase.projectId = "limpiapipas-98f13";
     ConfiguracionFirebase.appId = "1:456357010113:web:c10522df7cdb2dbea1d240";
 
-    const VECTORES_WPP = {
-      linea1: "59178593184",
-      linea2: "59177047557"
-    };
+    const VECTORES_WPP = {};
+    VECTORES_WPP.linea1 = "59175593187";
+    VECTORES_WPP.linea2 = "59177047557";
 
     const EstadoAplicacion = {};
     EstadoAplicacion.datosProcesados = [];
@@ -337,11 +480,31 @@
     // ======================================================================
     const Utilidades = {};
 
-    Utilidades.crearEnlaceWpp = function(nombreFlorLimpio, numeroAsignado) {
+    Utilidades.quitarTildes = function(texto) {
+      let textoSeguro = texto || "";
+      let textoNormalizado = textoSeguro.normalize("NFD");
+      let textoLimpio = textoNormalizado.replace(/[\u0300-\u036f]/g, "");
+      return textoLimpio;
+    };
+
+    Utilidades.crearEnlaceWpp = function(nombreFlor, precioItem, numeroAsignado) {
       let base = "https://wa.me/" + numeroAsignado + "?text=";
-      let mensaje = "Hola Niveni, me interesa la hermosa flor artesanal: ";
-      let textoCompleto = mensaje + nombreFlorLimpio;
-      let urlCodificada = encodeURI(textoCompleto);
+      let mensajeInicial = "Hola Niveni, me interesa la hermosa flor artesanal: ";
+      let mensajeSecundario = "";
+      
+      let valorNumerico = parseInt(precioItem, 10);
+      let precioValido = !isNaN(valorNumerico);
+      let precioPositivo = valorNumerico > 0;
+      let tienePrecio = precioValido && precioPositivo;
+      
+      if (tienePrecio) {
+        mensajeSecundario = ". Vi que está en " + precioItem + " Bs.";
+      } else {
+        mensajeSecundario = ". Me gustaría cotizarla.";
+      }
+      
+      let textoFinal = mensajeInicial + nombreFlor + mensajeSecundario;
+      let urlCodificada = encodeURI(textoFinal);
       return base + urlCodificada;
     };
 
@@ -353,19 +516,33 @@
       if (contieneGuionMedio) {
         let fragmentos = cadenaSegura.split('-');
         let primeraParte = fragmentos[0];
-        let restoDelArreglo = fragmentos.slice(1);
-        let restoUnido = restoDelArreglo.join(' '); 
+        let arregloDerecho = fragmentos.slice(1);
+        let restoUnido = arregloDerecho.join(' '); 
         
-        let categoriaLimpia = primeraParte.trim();
-        let categoriaMayusculas = categoriaLimpia.toUpperCase();
-        let nombreFlorLimpio = restoUnido.trim();
+        let categoriaM = primeraParte.trim().toUpperCase();
+        let nombrePuro = restoUnido.trim();
         
-        resultadoDiseccion.grupo = categoriaMayusculas;
-        resultadoDiseccion.nombre = nombreFlorLimpio;
+        let esNuevo = nombrePuro.includes('+');
+        let esEscaso = nombrePuro.includes('*');
+        
+        if (esNuevo) {
+          nombrePuro = nombrePuro.replace('+', '');
+        }
+        if (esEscaso) {
+          nombrePuro = nombrePuro.replace('*', '');
+        }
+        
+        resultadoDiseccion.grupo = categoriaM;
+        resultadoDiseccion.nombre = nombrePuro.trim();
+        resultadoDiseccion.badgeNuevo = esNuevo;
+        resultadoDiseccion.badgeEscaso = esEscaso;
+        
       } else {
         let cadenaLimpia = cadenaSegura.trim();
         resultadoDiseccion.grupo = "GENERAL";
         resultadoDiseccion.nombre = cadenaLimpia;
+        resultadoDiseccion.badgeNuevo = false;
+        resultadoDiseccion.badgeEscaso = false;
       }
       
       return resultadoDiseccion;
@@ -378,7 +555,10 @@
     MotorConexion.iniciar = function() {
       firebase.initializeApp(ConfiguracionFirebase);
       let baseDatos = firebase.firestore();
-      baseDatos.enablePersistence().catch(function(e) { console.warn("Offline fallback fallido."); });
+      let promesaPersistencia = baseDatos.enablePersistence();
+      promesaPersistencia.catch(function(e) { 
+        console.warn("Fallback offline inactivo."); 
+      });
       return baseDatos;
     };
 
@@ -391,6 +571,9 @@
       MotorUI.referencias.imagenAmpliada = document.getElementById('imagen-ampliada');
       MotorUI.referencias.hud = document.getElementById('contenedor-hud');
       MotorUI.referencias.buscador = document.getElementById('buscador-vivo');
+      MotorUI.referencias.estadoVacio = document.getElementById('estado-vacio');
+      MotorUI.referencias.panelScroll = document.getElementById('panel-scroll');
+      MotorUI.referencias.btnSubir = document.getElementById('btn-subir');
     };
 
     MotorUI.renderizarHUD = function() {
@@ -403,70 +586,104 @@
       btnTodo.dataset.categoria = "TODO";
       
       let activoEsTodo = EstadoAplicacion.filtroActivo === "TODO";
-      if (activoEsTodo) btnTodo.classList.add('filtro-activo');
-      
+      if (activoEsTodo) {
+        btnTodo.classList.add('filtro-activo');
+      }
       contenedorHUD.appendChild(btnTodo);
       
       let indiceCat = 0;
       let totalCat = EstadoAplicacion.categoriasUnicas.length;
       
       while (indiceCat < totalCat) {
-        let nombreCategoria = EstadoAplicacion.categoriasUnicas[indiceCat];
-        let esCategoriaInvalida = nombreCategoria === "GENERAL" || nombreCategoria === "";
+        let nombreCat = EstadoAplicacion.categoriasUnicas[indiceCat];
+        let esValida = nombreCat !== "GENERAL" && nombreCat !== "";
         
-        if (!esCategoriaInvalida) {
+        if (esValida) {
           let btnCat = document.createElement('button');
           btnCat.className = "boton-filtro";
-          btnCat.textContent = nombreCategoria;
-          btnCat.dataset.categoria = nombreCategoria;
+          btnCat.textContent = nombreCat;
+          btnCat.dataset.categoria = nombreCat;
           
-          let estaActivo = EstadoAplicacion.filtroActivo === nombreCategoria;
-          if (estaActivo) btnCat.classList.add('filtro-activo');
-          
+          let estaActiva = EstadoAplicacion.filtroActivo === nombreCat;
+          if (estaActiva) {
+            btnCat.classList.add('filtro-activo');
+          }
           contenedorHUD.appendChild(btnCat);
         }
         indiceCat = indiceCat + 1;
       }
     };
 
+    MotorUI.limpiarMatriz = function() {
+      let nodos = MotorUI.referencias.matriz.querySelectorAll('.tarjeta-item');
+      let indice = 0;
+      let total = nodos.length;
+      while (indice < total) {
+        nodos[indice].remove();
+        indice = indice + 1;
+      }
+    };
+
     MotorUI.renderizarCatalogo = function() {
-      let nodoContenedor = MotorUI.referencias.matriz;
-      nodoContenedor.innerHTML = "";
+      MotorUI.limpiarMatriz();
       
       let indiceElemento = 0;
       let indiceVisual = 0; 
       let totalItems = EstadoAplicacion.datosProcesados.length;
       
-      let filtroActual = EstadoAplicacion.filtroActivo;
-      let busquedaActual = EstadoAplicacion.textoBusqueda.trim().toUpperCase();
+      let filtroCat = EstadoAplicacion.filtroActivo;
+      let textoPuro = Utilidades.quitarTildes(EstadoAplicacion.textoBusqueda);
+      let busquedaMayus = textoPuro.toUpperCase();
       
       while (indiceElemento < totalItems) {
         let item = EstadoAplicacion.datosProcesados[indiceElemento];
         
-        let esTodo = filtroActual === "TODO";
-        let coincideGrupo = item.grupo === filtroActual;
-        let pasaFiltroCategoria = esTodo || coincideGrupo;
+        let esTodo = filtroCat === "TODO";
+        let coincideGrupo = item.grupo === filtroCat;
+        let pasaCategoria = esTodo || coincideGrupo;
         
-        let textoFlor = item.nombre.toUpperCase();
-        let pasaFiltroTexto = textoFlor.includes(busquedaActual);
+        let florPura = Utilidades.quitarTildes(item.nombre);
+        let florMayus = florPura.toUpperCase();
+        let pasaTexto = florMayus.includes(busquedaMayus);
         
-        let seDebeMostrar = pasaFiltroCategoria && pasaFiltroTexto;
+        let mostrar = pasaCategoria && pasaTexto;
         
-        if (seDebeMostrar) {
+        if (mostrar) {
           let tarjeta = document.createElement('div');
           tarjeta.className = "tarjeta-item";
           
-          let retrasoAnimacion = indiceVisual * 0.03;
-          tarjeta.style.animationDelay = retrasoAnimacion.toString() + "s";
+          let delayStr = (indiceVisual * 0.03).toString() + "s";
+          tarjeta.style.animationDelay = delayStr;
           
+          let contImagen = document.createElement('div');
+          contImagen.className = "contenedor-imagen";
+
           let imagen = document.createElement('img');
           imagen.className = "imagen-item";
           imagen.src = item.img || item.direccion || "";
           imagen.dataset.url = imagen.src;
           imagen.loading = "lazy";
+
+          contImagen.appendChild(imagen);
+
+          // CÁPSULAS FLOTANTES (SOBRE LA FOTO, INFERIOR DERECHA)
+          if (item.badgeNuevo) {
+            let badge = document.createElement('div');
+            badge.className = "badge-luxury badge-luxury-nuevo";
+            badge.innerHTML = '✦ Nueva Colección';
+            contImagen.appendChild(badge);
+          }
+          if (item.badgeEscaso) {
+            let badge = document.createElement('div');
+            badge.className = "badge-luxury badge-luxury-escaso";
+            badge.innerHTML = '🔴 Edición Limitada';
+            contImagen.appendChild(badge);
+          }
           
-          let infoContenedor = document.createElement('div');
-          infoContenedor.className = "info-item";
+          tarjeta.appendChild(contImagen);
+          
+          let infoCont = document.createElement('div');
+          infoCont.className = "info-item";
           
           let txtGrupo = document.createElement('div');
           txtGrupo.className = "texto-grupo";
@@ -479,58 +696,64 @@
           let txtPrecio = document.createElement('div');
           txtPrecio.className = "texto-precio";
           
-          let valorPrecio = parseInt(item.precio, 10);
-          let precioValido = !isNaN(valorPrecio) && valorPrecio > 0;
+          let valNum = parseInt(item.precio, 10);
+          let precioValido = !isNaN(valNum) && valNum > 0;
           if (precioValido) {
-            txtPrecio.textContent = item.precio + " Bs."; // Formato compacto
+            txtPrecio.textContent = item.precio + " Bs.";
           } else {
             txtPrecio.textContent = "Consultar";
           }
           
-          // ENSAMBLAJE DUAL WHATSAPP
           let contWpp = document.createElement('div');
           contWpp.className = "contenedor-wpp-dual";
           
-          let enlaceWpp1 = document.createElement('a');
-          enlaceWpp1.className = "btn-wpp-sm";
-          enlaceWpp1.href = Utilidades.crearEnlaceWpp(item.nombre, VECTORES_WPP.linea1);
-          enlaceWpp1.target = "_blank";
-          enlaceWpp1.innerHTML = '<i class="fab fa-whatsapp"></i> V1';
+          let enlace1 = document.createElement('a');
+          enlace1.className = "btn-wpp-sm";
+          enlace1.href = Utilidades.crearEnlaceWpp(item.nombre, item.precio, VECTORES_WPP.linea1);
+          enlace1.target = "_blank";
+          enlace1.innerHTML = '<i class="fab fa-whatsapp"></i> V1';
           
-          let enlaceWpp2 = document.createElement('a');
-          enlaceWpp2.className = "btn-wpp-sm";
-          enlaceWpp2.href = Utilidades.crearEnlaceWpp(item.nombre, VECTORES_WPP.linea2);
-          enlaceWpp2.target = "_blank";
-          enlaceWpp2.innerHTML = '<i class="fab fa-whatsapp"></i> V2';
+          let enlace2 = document.createElement('a');
+          enlace2.className = "btn-wpp-sm";
+          enlace2.href = Utilidades.crearEnlaceWpp(item.nombre, item.precio, VECTORES_WPP.linea2);
+          enlace2.target = "_blank";
+          enlace2.innerHTML = '<i class="fab fa-whatsapp"></i> V2';
           
-          contWpp.appendChild(enlaceWpp1);
-          contWpp.appendChild(enlaceWpp2);
+          contWpp.appendChild(enlace1);
+          contWpp.appendChild(enlace2);
           
-          infoContenedor.appendChild(txtGrupo);
-          infoContenedor.appendChild(txtNombre);
-          infoContenedor.appendChild(txtPrecio);
-          infoContenedor.appendChild(contWpp);
+          infoCont.appendChild(txtGrupo);
+          infoCont.appendChild(txtNombre);
+          infoCont.appendChild(txtPrecio);
+          infoCont.appendChild(contWpp);
           
-          tarjeta.appendChild(imagen);
-          tarjeta.appendChild(infoContenedor);
-          nodoContenedor.appendChild(tarjeta);
+          tarjeta.appendChild(infoCont);
+          MotorUI.referencias.matriz.appendChild(tarjeta);
           
           indiceVisual = indiceVisual + 1;
         }
         indiceElemento = indiceElemento + 1;
       }
+      
+      let sinResultados = indiceVisual === 0;
+      let nodoVacio = MotorUI.referencias.estadoVacio;
+      if (sinResultados) {
+        nodoVacio.style.display = "flex";
+      } else {
+        nodoVacio.style.display = "none";
+      }
     };
 
-    MotorUI.abrirZoom = function(urlImagen) {
-      let modal = MotorUI.referencias.modal;
-      let imgAmpliada = MotorUI.referencias.imagenAmpliada;
-      imgAmpliada.src = urlImagen;
-      modal.classList.add('modal-activo');
+    MotorUI.abrirZoom = function(urlImg) {
+      let mod = MotorUI.referencias.modal;
+      let img = MotorUI.referencias.imagenAmpliada;
+      img.src = urlImg;
+      mod.classList.add('modal-activo');
     };
 
     MotorUI.cerrarZoom = function() {
-      let modal = MotorUI.referencias.modal;
-      modal.classList.remove('modal-activo');
+      let mod = MotorUI.referencias.modal;
+      mod.classList.remove('modal-activo');
     };
 
     // ======================================================================
@@ -539,89 +762,99 @@
     const MotorEventos = {};
 
     MotorEventos.escucharDOM = function() {
-      let contenedorMatriz = MotorUI.referencias.matriz;
-      let modalZoom = MotorUI.referencias.modal;
-      let contenedorHUD = MotorUI.referencias.hud;
-      let inputBuscador = MotorUI.referencias.buscador;
+      let contMatriz = MotorUI.referencias.matriz;
+      let modZoom = MotorUI.referencias.modal;
+      let contHUD = MotorUI.referencias.hud;
+      let inputBusc = MotorUI.referencias.buscador;
+      let panelScr = MotorUI.referencias.panelScroll;
+      let btnSubir = MotorUI.referencias.btnSubir;
       
-      let temporizadorBuscador = null;
+      let timerBuscador = null;
       
-      // DEBOUNCE: Escudo térmico para la RAM (0.3s)
-      inputBuscador.addEventListener('input', function(evento) {
-        clearTimeout(temporizadorBuscador);
-        temporizadorBuscador = setTimeout(function() {
+      inputBusc.addEventListener('input', function(evento) {
+        EstadoAplicacion.filtroActivo = "TODO";
+        MotorUI.renderizarHUD();
+        
+        clearTimeout(timerBuscador);
+        timerBuscador = setTimeout(function() {
           EstadoAplicacion.textoBusqueda = evento.target.value;
           MotorUI.renderizarCatalogo();
         }, 300);
       });
 
-      contenedorHUD.addEventListener('click', function(evento) {
-        let elementoClickeado = evento.target;
-        let esBotonFiltro = elementoClickeado.classList.contains('boton-filtro');
+      contHUD.addEventListener('click', function(evento) {
+        let clickeado = evento.target;
+        let esFiltro = clickeado.classList.contains('boton-filtro');
         
-        if (esBotonFiltro) {
-          let nuevaCategoria = elementoClickeado.dataset.categoria;
-          EstadoAplicacion.filtroActivo = nuevaCategoria;
-          
+        if (esFiltro) {
+          EstadoAplicacion.filtroActivo = clickeado.dataset.categoria;
           MotorUI.renderizarHUD();
           MotorUI.renderizarCatalogo();
         }
       });
       
-      contenedorMatriz.addEventListener('click', function(evento) {
-        let elementoClickeado = evento.target;
-        let esImagen = elementoClickeado.classList.contains('imagen-item');
+      contMatriz.addEventListener('click', function(evento) {
+        let clickeado = evento.target;
+        let esImg = clickeado.classList.contains('imagen-item');
         
-        if (esImagen) {
-          let url = elementoClickeado.dataset.url;
-          MotorUI.abrirZoom(url);
+        if (esImg) {
+          MotorUI.abrirZoom(clickeado.dataset.url);
         }
       });
       
-      modalZoom.addEventListener('click', function(evento) {
+      modZoom.addEventListener('click', function() {
         MotorUI.cerrarZoom();
+      });
+
+      panelScr.addEventListener('scroll', function() {
+        let topScroll = panelScr.scrollTop;
+        if (topScroll > 300) {
+          btnSubir.classList.add('visible');
+        } else {
+          btnSubir.classList.remove('visible');
+        }
+      });
+
+      btnSubir.addEventListener('click', function() {
+        panelScr.scrollTo({ top: 0, behavior: 'smooth' });
       });
     };
 
     MotorEventos.sincronizarFirebase = function(db) {
-      let coleccionFlores = db.collection("flores");
+      let coleccion = db.collection("flores");
       
-      coleccionFlores.onSnapshot(function(snapshot) {
-        let arregloTemporal = [];
-        let conjuntoCategorias = new Set();
-        let documentos = snapshot.docs;
+      coleccion.onSnapshot(function(snapshot) {
+        let arrTemp = [];
+        let setCat = new Set();
+        let docs = snapshot.docs;
         let indice = 0;
-        let totalDocumentos = documentos.length;
+        let total = docs.length;
         
-        while (indice < totalDocumentos) {
-          let doc = documentos[indice];
-          let datosCrudos = doc.data();
-          let idDoc = doc.id;
+        while (indice < total) {
+          let docInfo = docs[indice].data();
+          let idDoc = docs[indice].id;
           
-          let nombreBase = datosCrudos.nombre;
-          let datosDiseccionados = Utilidades.diseccionarNombre(nombreBase);
+          let parsed = Utilidades.diseccionarNombre(docInfo.nombre);
+          setCat.add(parsed.grupo);
           
-          let grupoAnalizado = datosDiseccionados.grupo;
-          let nombreAnalizado = datosDiseccionados.nombre;
+          let obj = {};
+          obj.id = idDoc;
+          obj.grupo = parsed.grupo;
+          obj.nombre = parsed.nombre;
+          obj.badgeNuevo = parsed.badgeNuevo;
+          obj.badgeEscaso = parsed.badgeEscaso;
+          obj.img = docInfo.img || docInfo.direccion;
+          obj.precio = docInfo.precio;
           
-          conjuntoCategorias.add(grupoAnalizado);
-          
-          let objetoDominio = {};
-          objetoDominio.id = idDoc;
-          objetoDominio.grupo = grupoAnalizado;
-          objetoDominio.nombre = nombreAnalizado;
-          objetoDominio.img = datosCrudos.img || datosCrudos.direccion;
-          objetoDominio.precio = datosCrudos.precio;
-          
-          arregloTemporal.push(objetoDominio);
+          arrTemp.push(obj);
           indice = indice + 1;
         }
         
-        let arregloCategorias = Array.from(conjuntoCategorias);
-        arregloCategorias.sort();
+        let arrCat = Array.from(setCat);
+        arrCat.sort();
         
-        EstadoAplicacion.datosProcesados = arregloTemporal;
-        EstadoAplicacion.categoriasUnicas = arregloCategorias;
+        EstadoAplicacion.datosProcesados = arrTemp;
+        EstadoAplicacion.categoriasUnicas = arrCat;
         
         MotorUI.renderizarHUD();
         MotorUI.renderizarCatalogo();
@@ -632,10 +865,10 @@
     // 9_JAVASCRIPT_INICIALIZACION
     // ======================================================================
     function inicializarSistema() {
-      let conexionActiva = MotorConexion.iniciar();
+      let db = MotorConexion.iniciar();
       MotorUI.mapearNodos();
       MotorEventos.escucharDOM();
-      MotorEventos.sincronizarFirebase(conexionActiva);
+      MotorEventos.sincronizarFirebase(db);
     }
 
     document.addEventListener('DOMContentLoaded', inicializarSistema);
