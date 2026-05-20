@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NiveLu | Catálogo Premium de Flores Artesanales</title>
+  <title>Niveni | Catálogo Premium de Flores Artesanales</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -17,17 +17,18 @@
       --color-acento: #c5a8a0;
       --color-oscuro: #4a4543;
       --color-wpp: #25d366;
+      --color-wpp-fondo: #f0fdf4;
+      --color-wpp-borde: #bbf7d0;
       --color-blanco: #ffffff;
+      --color-cristal: rgba(255, 255, 255, 0.85);
       --fuente-principal: 'Segoe UI', sans-serif;
-      --sombra-tarjeta: 0 15px 35px rgba(0,0,0,0.05);
-      --sombra-neon-acento: 0 0 15px rgba(197, 168, 160, 0.5);
-      --radio-borde: 30px;
-      --radio-borde-hud: 25px;
-      --tiempo-animacion: 0.4s;
+      --sombra-tarjeta: 0 10px 20px rgba(0,0,0,0.03);
+      --radio-borde: 20px;
+      --radio-borde-hud: 20px;
     }
 
     /* ====================================================================== */
-    /* 3_ESTILOS_CSS_COMPONENTES (GEOMETRÍA Y CINEMÁTICA)                     */
+    /* 3_ESTILOS_CSS_COMPONENTES (MINIMALISMO Y RENDIMIENTO)                  */
     /* ====================================================================== */
     * {
       box-sizing: border-box;
@@ -36,7 +37,9 @@
     }
 
     body {
-      background-color: var(--color-crema);
+      /* FONDO SUAVE Y MINIMALISTA: Gradiente radial que simula luz de estudio */
+      background: radial-gradient(circle at top center, #ffffff 0%, var(--color-crema) 100%);
+      background-attachment: fixed;
       color: var(--color-oscuro);
       font-family: var(--fuente-principal);
       width: 100vw;
@@ -46,169 +49,213 @@
       flex-direction: column;
     }
 
-    .cabecera-sistema {
-      padding: 30px 20px 10px 20px;
-      text-align: center;
+    /* CAPA SUPERIOR FIXED - INTERFAZ CRISTAL COMPACTA */
+    .interfaz-fija {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--color-cristal);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(197, 168, 160, 0.15);
+      padding: 15px 15px 10px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       flex-shrink: 0;
-      animation: aparecerTop 0.6s ease-out;
+      animation: aparecerTop 0.5s ease-out;
     }
 
     .titulo-marca {
       font-weight: 200;
-      letter-spacing: 8px;
-      font-size: 2.5rem;
+      letter-spacing: 10px;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
     }
 
-    /* HUD DE FILTRADO INTERACTIVO */
+    .bloque-buscador {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .bloque-buscador input {
+      width: 100%;
+      padding: 10px 15px 10px 35px;
+      border-radius: var(--radio-borde-hud);
+      border: 1px solid rgba(197, 168, 160, 0.4);
+      background-color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .bloque-buscador input:focus {
+      border-color: var(--color-acento);
+      box-shadow: 0 4px 15px rgba(197, 168, 160, 0.1);
+    }
+
+    .bloque-buscador i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-acento);
+      font-size: 0.9rem;
+    }
+
     .contenedor-hud {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 12px;
-      padding: 10px 20px 25px 20px;
-      flex-shrink: 0;
+      gap: 8px;
       flex-wrap: wrap;
-      animation: aparecerTop 0.8s ease-out;
     }
 
     .boton-filtro {
-      padding: 10px 28px;
+      padding: 6px 18px;
       border-radius: var(--radio-borde-hud);
       border: 1px solid var(--color-acento);
       background-color: transparent;
       color: var(--color-acento);
       font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
+      font-size: 0.75rem;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: all 0.2s ease;
       text-transform: uppercase;
     }
 
     .boton-filtro:hover {
       background-color: rgba(197, 168, 160, 0.08);
-      transform: translateY(-2px);
-      box-shadow: var(--sombra-neon-acento);
     }
 
     .filtro-activo {
       background-color: var(--color-acento) !important;
       color: var(--color-blanco) !important;
-      box-shadow: 0 8px 20px rgba(197, 168, 160, 0.35);
-      transform: scale(1.05);
     }
 
-    /* MATRIZ DE PRODUCTOS CON SCROLL INTEGRADO */
+    /* MATRIZ SIMÉTRICA (40% MÁS COMPACTA) */
     .panel-catalogo {
       flex-grow: 1;
       overflow-y: auto;
-      padding: 10px 20px 40px 20px;
+      padding: 20px 15px;
       scroll-behavior: smooth;
     }
 
-    .panel-catalogo::-webkit-scrollbar {
-      width: 6px;
-    }
-    .panel-catalogo::-webkit-scrollbar-thumb {
-      background-color: rgba(197, 168, 160, 0.4);
-      border-radius: 10px;
-    }
+    .panel-catalogo::-webkit-scrollbar { width: 5px; }
+    .panel-catalogo::-webkit-scrollbar-thumb { background-color: rgba(197, 168, 160, 0.3); border-radius: 5px; }
 
     .matriz-simetrica {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 30px;
+      /* REDUCCIÓN DE ESCALA APLICADA AQUÍ */
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 15px;
       max-width: 1200px;
       margin: 0 auto;
     }
 
+    /* TARJETAS MINIATURIZADAS */
     .tarjeta-item {
       background-color: var(--color-blanco);
       border-radius: var(--radio-borde);
-      padding: 12px;
+      padding: 10px;
       box-shadow: var(--sombra-tarjeta);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
       opacity: 0;
-      animation: entradaCascada 0.5s forwards ease-out;
+      animation: entradaCascada 0.4s forwards ease-out;
     }
 
     .tarjeta-item:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 22px 40px rgba(0,0,0,0.08);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.06);
     }
 
     .imagen-item {
       width: 100%;
-      height: 340px;
+      height: 180px; /* Reducción de 350px a 180px */
       object-fit: cover;
-      border-radius: 20px;
+      border-radius: 15px;
       cursor: zoom-in;
-      transition: transform 0.5s ease;
-    }
-
-    .tarjeta-item:hover .imagen-item {
-      transform: scale(1.02);
     }
 
     .info-item {
-      padding: 15px 10px 8px 10px;
+      padding: 10px 5px 5px 5px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      flex-grow: 1;
     }
 
     .texto-grupo {
-      font-size: 0.75rem;
-      color: #b5b5b5;
+      font-size: 0.65rem;
+      color: #bfa39b;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 4px;
-      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+      font-weight: bold;
     }
 
     .texto-nombre {
       font-weight: 700;
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       color: var(--color-oscuro);
-      line-height: 1.3;
-      text-transform: capitalize;
+      line-height: 1.2;
+      flex-grow: 1;
     }
 
     .texto-precio {
-      font-weight: 700;
+      font-weight: 800;
       color: var(--color-acento);
       font-size: 1.1rem;
-      margin-top: 4px;
+      margin-top: 5px;
     }
 
-    .boton-wpp {
-      font-size: 2.2rem;
+    /* BOTONERA DUAL DE WHATSAPP (OPCIÓN B) */
+    .contenedor-wpp-dual {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-wpp-sm {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      background-color: var(--color-wpp-fondo);
       color: var(--color-wpp);
+      border: 1px solid var(--color-wpp-borde);
+      padding: 8px 0;
+      border-radius: 10px;
       text-decoration: none;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      animation: pulsoMagnetico 2.5s infinite;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: all 0.2s;
     }
 
-    .boton-wpp:hover {
-      transform: scale(1.25);
-      animation: none;
+    .btn-wpp-sm:hover {
+      background-color: var(--color-wpp);
+      color: var(--color-blanco);
+      transform: scale(1.05);
     }
 
-    /* MODAL DE AMPLIFICACIÓN VISUAL */
+    /* MODAL ZOOM */
     .modal-zoom {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.92);
+      background-color: rgba(10, 10, 10, 0.94);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(10px);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -219,46 +266,41 @@
     }
 
     .imagen-zoom {
-      max-width: 88%;
-      max-height: 88%;
+      max-width: 90%;
+      max-height: 90%;
       border-radius: 20px;
-      box-shadow: 0 0 60px rgba(0,0,0,0.6);
-      transform: scale(0.85);
-      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+      transform: scale(0.8);
+      transition: transform 0.3s ease-out;
     }
 
     .modal-activo .imagen-zoom {
       transform: scale(1);
     }
 
-    /* ====================================================================== */
-    /* KEYFRAMES CINEMÁTICOS                                                  */
-    /* ====================================================================== */
     @keyframes aparecerTop {
       0% { opacity: 0; transform: translateY(-15px); }
       100% { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes entradaCascada {
-      0% { opacity: 0; transform: translateY(30px); }
+      0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulsoMagnetico {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-      50% { transform: scale(1.06); }
-      100% { transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
-  <header class="cabecera-sistema">
-    <h1 class="titulo-marca">NIVELU</h1>
-  </header>
+  <div class="interfaz-fija">
+    <h1 class="titulo-marca">NIVENI</h1>
+    
+    <div class="bloque-buscador">
+      <i class="fas fa-search"></i>
+      <input type="text" id="buscador-vivo" placeholder="Buscar flor artesanal...">
+    </div>
 
-  <nav id="contenedor-hud" class="contenedor-hud">
-    </nav>
+    <nav id="contenedor-hud" class="contenedor-hud"></nav>
+  </div>
 
   <main class="panel-catalogo">
     <div id="contenedor-matriz" class="matriz-simetrica">
@@ -273,27 +315,31 @@
     // Señor de la vida®
     // ======================================================================
     // 5_JAVASCRIPT_ESTADO_GLOBAL
-    // Documentación: Encapsulación de variables de entorno y control HUD.
     // ======================================================================
     const ConfiguracionFirebase = {};
     ConfiguracionFirebase.apiKey = "AIzaSyBqsTxi2PoFjPgvre4QqZvWHczUoO5sqU8";
     ConfiguracionFirebase.projectId = "limpiapipas-98f13";
     ConfiguracionFirebase.appId = "1:456357010113:web:c10522df7cdb2dbea1d240";
 
+    const VECTORES_WPP = {
+      linea1: "59178593184",
+      linea2: "59177047557"
+    };
+
     const EstadoAplicacion = {};
     EstadoAplicacion.datosProcesados = [];
     EstadoAplicacion.categoriasUnicas = [];
     EstadoAplicacion.filtroActivo = "TODO";
+    EstadoAplicacion.textoBusqueda = "";
 
     // ======================================================================
-    // 6_JAVASCRIPT_UTILIDADES_Y_MATEMATICAS
-    // Documentación: Parser de cadenas quirúrgico optimizado para guion medio.
+    // 6_JAVASCRIPT_UTILIDADES
     // ======================================================================
     const Utilidades = {};
 
-    Utilidades.crearEnlaceWpp = function(nombreFlorLimpio) {
-      let base = "https://wa.me/59173162007?text=";
-      let mensaje = "Hola, me interesa la hermosa flor artesanal: ";
+    Utilidades.crearEnlaceWpp = function(nombreFlorLimpio, numeroAsignado) {
+      let base = "https://wa.me/" + numeroAsignado + "?text=";
+      let mensaje = "Hola Niveni, me interesa la hermosa flor artesanal: ";
       let textoCompleto = mensaje + nombreFlorLimpio;
       let urlCodificada = encodeURI(textoCompleto);
       return base + urlCodificada;
@@ -308,8 +354,6 @@
         let fragmentos = cadenaSegura.split('-');
         let primeraParte = fragmentos[0];
         let restoDelArreglo = fragmentos.slice(1);
-        
-        // Convierte el resto de guiones en espacios limpios para estética del cliente
         let restoUnido = restoDelArreglo.join(' '); 
         
         let categoriaLimpia = primeraParte.trim();
@@ -320,7 +364,6 @@
         resultadoDiseccion.nombre = nombreFlorLimpio;
       } else {
         let cadenaLimpia = cadenaSegura.trim();
-        
         resultadoDiseccion.grupo = "GENERAL";
         resultadoDiseccion.nombre = cadenaLimpia;
       }
@@ -329,19 +372,13 @@
     };
 
     // ======================================================================
-    // 7_JAVASCRIPT_MOTORES_LOGICOS
-    // Documentación: Controladores de persistencia de datos y renderizadores.
+    // 7_JAVASCRIPT_MOTORES_LOGICOS Y RENDER
     // ======================================================================
     const MotorConexion = {};
     MotorConexion.iniciar = function() {
       firebase.initializeApp(ConfiguracionFirebase);
       let baseDatos = firebase.firestore();
-      
-      let promesaPersistencia = baseDatos.enablePersistence();
-      promesaPersistencia.catch(function(error) {
-        console.warn("Modo Offline-First activo sin caché local previa:", error.code);
-      });
-      
+      baseDatos.enablePersistence().catch(function(e) { console.warn("Offline fallback fallido."); });
       return baseDatos;
     };
 
@@ -353,6 +390,7 @@
       MotorUI.referencias.modal = document.getElementById('zoom-modal');
       MotorUI.referencias.imagenAmpliada = document.getElementById('imagen-ampliada');
       MotorUI.referencias.hud = document.getElementById('contenedor-hud');
+      MotorUI.referencias.buscador = document.getElementById('buscador-vivo');
     };
 
     MotorUI.renderizarHUD = function() {
@@ -365,9 +403,8 @@
       btnTodo.dataset.categoria = "TODO";
       
       let activoEsTodo = EstadoAplicacion.filtroActivo === "TODO";
-      if (activoEsTodo) {
-        btnTodo.classList.add('filtro-activo');
-      }
+      if (activoEsTodo) btnTodo.classList.add('filtro-activo');
+      
       contenedorHUD.appendChild(btnTodo);
       
       let indiceCat = 0;
@@ -384,9 +421,8 @@
           btnCat.dataset.categoria = nombreCategoria;
           
           let estaActivo = EstadoAplicacion.filtroActivo === nombreCategoria;
-          if (estaActivo) {
-            btnCat.classList.add('filtro-activo');
-          }
+          if (estaActivo) btnCat.classList.add('filtro-activo');
+          
           contenedorHUD.appendChild(btnCat);
         }
         indiceCat = indiceCat + 1;
@@ -400,21 +436,27 @@
       let indiceElemento = 0;
       let indiceVisual = 0; 
       let totalItems = EstadoAplicacion.datosProcesados.length;
+      
       let filtroActual = EstadoAplicacion.filtroActivo;
+      let busquedaActual = EstadoAplicacion.textoBusqueda.trim().toUpperCase();
       
       while (indiceElemento < totalItems) {
         let item = EstadoAplicacion.datosProcesados[indiceElemento];
         
         let esTodo = filtroActual === "TODO";
         let coincideGrupo = item.grupo === filtroActual;
-        let seDebeMostrar = esTodo || coincideGrupo;
+        let pasaFiltroCategoria = esTodo || coincideGrupo;
+        
+        let textoFlor = item.nombre.toUpperCase();
+        let pasaFiltroTexto = textoFlor.includes(busquedaActual);
+        
+        let seDebeMostrar = pasaFiltroCategoria && pasaFiltroTexto;
         
         if (seDebeMostrar) {
           let tarjeta = document.createElement('div');
           tarjeta.className = "tarjeta-item";
           
-          // Efecto escalonado dinámico para la animación de entrada
-          let retrasoAnimacion = indiceVisual * 0.04;
+          let retrasoAnimacion = indiceVisual * 0.03;
           tarjeta.style.animationDelay = retrasoAnimacion.toString() + "s";
           
           let imagen = document.createElement('img');
@@ -425,8 +467,6 @@
           
           let infoContenedor = document.createElement('div');
           infoContenedor.className = "info-item";
-          
-          let bloqueTexto = document.createElement('div');
           
           let txtGrupo = document.createElement('div');
           txtGrupo.className = "texto-grupo";
@@ -442,25 +482,35 @@
           let valorPrecio = parseInt(item.precio, 10);
           let precioValido = !isNaN(valorPrecio) && valorPrecio > 0;
           if (precioValido) {
-            txtPrecio.textContent = "Bs. " + item.precio;
+            txtPrecio.textContent = item.precio + " Bs."; // Formato compacto
           } else {
-            txtPrecio.textContent = "Bs. Cotizar";
+            txtPrecio.textContent = "Consultar";
           }
           
-          let enlaceWpp = document.createElement('a');
-          enlaceWpp.className = "boton-wpp";
-          enlaceWpp.href = Utilidades.crearEnlaceWpp(item.nombre);
-          enlaceWpp.target = "_blank";
+          // ENSAMBLAJE DUAL WHATSAPP
+          let contWpp = document.createElement('div');
+          contWpp.className = "contenedor-wpp-dual";
           
-          let iconoWpp = document.createElement('i');
-          iconoWpp.className = "fab fa-whatsapp";
+          let enlaceWpp1 = document.createElement('a');
+          enlaceWpp1.className = "btn-wpp-sm";
+          enlaceWpp1.href = Utilidades.crearEnlaceWpp(item.nombre, VECTORES_WPP.linea1);
+          enlaceWpp1.target = "_blank";
+          enlaceWpp1.innerHTML = '<i class="fab fa-whatsapp"></i> V1';
           
-          enlaceWpp.appendChild(iconoWpp);
-          bloqueTexto.appendChild(txtGrupo);
-          bloqueTexto.appendChild(txtNombre);
-          bloqueTexto.appendChild(txtPrecio);
-          infoContenedor.appendChild(bloqueTexto);
-          infoContenedor.appendChild(enlaceWpp);
+          let enlaceWpp2 = document.createElement('a');
+          enlaceWpp2.className = "btn-wpp-sm";
+          enlaceWpp2.href = Utilidades.crearEnlaceWpp(item.nombre, VECTORES_WPP.linea2);
+          enlaceWpp2.target = "_blank";
+          enlaceWpp2.innerHTML = '<i class="fab fa-whatsapp"></i> V2';
+          
+          contWpp.appendChild(enlaceWpp1);
+          contWpp.appendChild(enlaceWpp2);
+          
+          infoContenedor.appendChild(txtGrupo);
+          infoContenedor.appendChild(txtNombre);
+          infoContenedor.appendChild(txtPrecio);
+          infoContenedor.appendChild(contWpp);
+          
           tarjeta.appendChild(imagen);
           tarjeta.appendChild(infoContenedor);
           nodoContenedor.appendChild(tarjeta);
@@ -484,8 +534,7 @@
     };
 
     // ======================================================================
-    // 8_JAVASCRIPT_EVENT_LISTENERS
-    // Documentación: Intercepción de acciones de usuario y control de burbujeo.
+    // 8_JAVASCRIPT_EVENT_LISTENERS CON ESCUDO DEBOUNCE
     // ======================================================================
     const MotorEventos = {};
 
@@ -493,7 +542,19 @@
       let contenedorMatriz = MotorUI.referencias.matriz;
       let modalZoom = MotorUI.referencias.modal;
       let contenedorHUD = MotorUI.referencias.hud;
+      let inputBuscador = MotorUI.referencias.buscador;
       
+      let temporizadorBuscador = null;
+      
+      // DEBOUNCE: Escudo térmico para la RAM (0.3s)
+      inputBuscador.addEventListener('input', function(evento) {
+        clearTimeout(temporizadorBuscador);
+        temporizadorBuscador = setTimeout(function() {
+          EstadoAplicacion.textoBusqueda = evento.target.value;
+          MotorUI.renderizarCatalogo();
+        }, 300);
+      });
+
       contenedorHUD.addEventListener('click', function(evento) {
         let elementoClickeado = evento.target;
         let esBotonFiltro = elementoClickeado.classList.contains('boton-filtro');
@@ -537,7 +598,6 @@
           let datosCrudos = doc.data();
           let idDoc = doc.id;
           
-          // Aplicación automática del Parser sobre el nombre almacenado
           let nombreBase = datosCrudos.nombre;
           let datosDiseccionados = Utilidades.diseccionarNombre(nombreBase);
           
@@ -570,7 +630,6 @@
 
     // ======================================================================
     // 9_JAVASCRIPT_INICIALIZACION
-    // Documentación: Arranque seguro del ecosistema.
     // ======================================================================
     function inicializarSistema() {
       let conexionActiva = MotorConexion.iniciar();
