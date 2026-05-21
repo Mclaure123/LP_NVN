@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nivani | Boutique de Flores Artesanales</title>
+  <title>Nivani | Atelier de Flores en Chenilla</title>
   
   <!-- Tailwind CSS para diseño fluido y ultra responsivo -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Iconos FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Fuentes de Google: Playfair Display para títulos elegantes e Inter para UI -->
+  <!-- Fuentes de Google: Playfair Display e Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,450&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,450&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Configuración de Tailwind Personalizada -->
   <script>
@@ -99,16 +99,13 @@
       50% { opacity: 0.4; transform: scale(1.02); }
     }
 
-    /* Scroll Personalizado de Lujo */
     .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scroll::-webkit-scrollbar-track { background: transparent; }
     .custom-scroll::-webkit-scrollbar-thumb {
       background-color: var(--color-acento);
       border-radius: 20px;
-      opacity: 0.4;
     }
 
-    /* Estilos del Cajón de Carrito (Slide Over) */
     .carrito-drawer {
       transform: translateX(100%);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -132,7 +129,6 @@
     .badge-luxury-nuevo { animation: pulsoRespiracion 3s infinite ease-in-out; }
     .badge-luxury-escaso { animation: pulsoCorazon 1.8s infinite; }
 
-    /* Estilo del Toast elegante */
     .toast-container {
       position: fixed;
       top: 24px;
@@ -150,6 +146,15 @@
       transform: translateY(0);
       opacity: 1;
     }
+
+    /* Partícula de flor volando al carrito */
+    .particula-vuelo {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      transition: all 0.85s cubic-bezier(0.19, 1, 0.22, 1);
+      transform: scale(1.6);
+    }
   </style>
 </head>
 <body class="bg-[#fdfcf8] dark:bg-[#121110] transition-colors duration-300">
@@ -157,34 +162,29 @@
   <div id="pantalla-arranque" class="pantalla-arranque">
     <div class="text-center">
       <h1 class="titulo-arranque">NIVANI</h1>
-      <p class="text-[0.65rem] tracking-[6px] text-stone-400 dark:text-stone-500 uppercase mt-2">Flores de Alta Costura</p>
+      <p class="text-[0.65rem] tracking-[6px] text-stone-400 dark:text-stone-500 uppercase mt-2">Atelier de Modelado en Chenilla</p>
     </div>
   </div>
 
-  <!-- Alerta de Conexión Offline Sutil -->
   <div id="alerta-offline" class="fixed bottom-0 left-0 w-full bg-red-700 text-white text-center py-2 px-4 text-xs font-semibold tracking-wide transition-transform duration-300 translate-y-full z-[999]">
     <i class="fas fa-wifi mr-2"></i> Conexión débil o nula. Visualizando catálogo offline.
   </div>
 
   <div class="sticky top-0 z-40 bg-[var(--color-cristal)] backdrop-blur-md border-b border-stone-200/10 px-4 py-4 md:px-8 md:py-6 flex flex-col items-center flex-shrink-0">
-    <!-- Logotipo Principal -->
     <h1 class="text-2xl md:text-4xl font-light tracking-[16px] text-[var(--color-texto)] uppercase mr-[-16px] mb-4 select-none cursor-default">NIVANI</h1>
     
     <div class="w-full max-w-6xl flex flex-col md:flex-row gap-4 items-center justify-between">
-      <!-- Navegación y Filtros de Categorías -->
       <nav id="contenedor-hud" class="flex gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 custom-scroll select-none"></nav>
 
-      <!-- Buscador y Clasificador de Precios -->
+      <!-- Buscador, ordenador y bolsa de compra -->
       <div class="flex gap-2 w-full md:w-auto items-center flex-wrap sm:flex-nowrap">
-        <!-- Buscador -->
-        <div class="relative w-full sm:w-[240px]">
+        <div id="wrapper-buscador" class="relative w-full sm:w-[240px]">
           <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-acento)] text-xs"></i>
-          <input type="text" id="buscador-vivo" placeholder="Buscar flor artesanal..." 
+          <input type="text" id="buscador-vivo" placeholder="Buscar flor en chenilla..." 
                  class="w-full pl-10 pr-4 py-2 text-sm rounded-[var(--radio-borde-hud)] border border-stone-200/20 dark:border-stone-800/20 bg-[var(--color-recuadro)] text-[var(--color-texto)] outline-none focus:border-[var(--color-acento)] focus:ring-1 focus:ring-[var(--color-acento)]/30 transition-all duration-300">
         </div>
 
-        <!-- Clasificador de precios -->
-        <div class="relative w-full sm:w-[180px]">
+        <div id="wrapper-ordenador" class="relative w-full sm:w-[180px]">
           <i class="fas fa-sort absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-acento)] text-xs"></i>
           <select id="orden-precio" class="w-full pl-10 pr-8 py-2 text-sm rounded-[var(--radio-borde-hud)] border border-stone-200/20 dark:border-stone-800/20 bg-[var(--color-recuadro)] text-[var(--color-texto)] appearance-none outline-none focus:border-[var(--color-acento)] transition-all duration-300 cursor-pointer">
             <option value="default">Relevancia</option>
@@ -194,10 +194,9 @@
           <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-acento)] text-[10px] pointer-events-none"></i>
         </div>
 
-        <!-- Botón flotante para abrir el Carrito en móviles/desktops -->
         <button id="btn-abrir-carrito" class="relative min-h-[44px] min-w-[44px] bg-[var(--color-recuadro)] text-[var(--color-texto)] hover:bg-[var(--color-acento)] hover:text-white border border-stone-200/10 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm">
-          <i class="fas fa-shopping-bag text-base"></i>
-          <span id="badge-carrito-contador" class="absolute -top-1 -right-1 bg-[var(--color-acento)] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center scale-0 transition-transform duration-300">0</span>
+          <i id="icono-carrito-bolsa" class="fas fa-shopping-bag text-base transition-transform duration-300"></i>
+          <span id="badge-carrito-contador" class="absolute -top-1 -right-1 bg-[var(--color-acento)] text-stone-900 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center scale-0 transition-transform duration-300">0</span>
         </button>
       </div>
     </div>
@@ -205,7 +204,6 @@
 
   <main class="panel-catalogo flex-grow overflow-y-auto custom-scroll px-4 md:px-8 py-6" id="panel-scroll">
     <div id="contenedor-matriz" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 max-w-6xl mx-auto">
-      <!-- Mensaje cuando no hay resultados -->
       <div id="estado-vacio" class="col-span-full hidden flex-col items-center justify-center py-20 text-center animate-fade-in">
         <i class="fas fa-seedling text-4xl text-[var(--color-acento)] opacity-50 mb-4"></i>
         <p class="text-lg text-[var(--color-texto)] font-medium mb-1">Sin coincidencias florales</p>
@@ -214,20 +212,18 @@
     </div>
   </main>
 
-  <!-- Botón de retorno al inicio -->
   <button id="btn-subir" class="fixed bottom-6 right-6 w-11 h-11 bg-[var(--color-texto)] text-[var(--color-fondo)] hover:opacity-90 rounded-full flex items-center justify-center shadow-lg cursor-pointer transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 z-30">
     <i class="fas fa-chevron-up"></i>
   </button>
 
   <div id="carrito-capa-oscura" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1000] hidden opacity-0 transition-opacity duration-300"></div>
-  <aside id="carrito-drawer" class="carrito-drawer fixed top-0 right-0 h-full w-full sm:w-[420px] bg-[var(--color-tarjeta)] border-l border-stone-200/10 shadow-2xl flex flex-col z-[1001]">
-    <!-- Encabezado del cajón -->
+  <aside id="carrito-drawer" class="carrito-drawer fixed top-0 right-0 h-full w-full sm:w-[440px] bg-[var(--color-tarjeta)] border-l border-stone-200/10 shadow-2xl flex flex-col z-[1001]">
     <div class="px-6 py-5 border-b border-stone-200/10 flex justify-between items-center bg-[var(--color-recuadro)]">
       <div class="flex items-center gap-3">
         <i class="fas fa-shopping-bag text-lg text-[var(--color-acento)]"></i>
         <div>
           <h2 class="font-serif italic text-lg font-semibold text-[var(--color-texto)]">Tu Pedido</h2>
-          <p class="text-[10px] text-[var(--color-texto-sec)] tracking-wider uppercase">Memoria temporal del pedido</p>
+          <p class="text-[10px] text-[var(--color-texto-sec)] tracking-wider uppercase">Memoria de compra</p>
         </div>
       </div>
       <button id="btn-cerrar-carrito" class="w-8 h-8 rounded-full bg-stone-200/10 flex items-center justify-center text-[var(--color-texto)] hover:bg-stone-200/30 transition-all">
@@ -235,19 +231,58 @@
       </button>
     </div>
 
-    <!-- Lista de artículos en el carrito -->
-    <div id="carrito-articulos" class="flex-grow overflow-y-auto px-6 py-4 custom-scroll space-y-4">
-      <!-- El sistema inyectará aquí los items de manera reactiva -->
+    <!-- Lista de artículos -->
+    <div id="carrito-articulos" class="flex-grow overflow-y-auto px-6 py-4 custom-scroll space-y-4"></div>
+
+    <!-- Pilar 2: Tarjeta de Dedicatoria de Lujo -->
+    <div class="px-6 py-4 border-t border-stone-200/10 bg-[var(--color-recuadro)] space-y-3">
+      <div class="flex items-center justify-between">
+        <label class="text-[10px] uppercase tracking-wider text-[var(--color-texto-sec)] font-bold flex items-center gap-2">
+          <i class="fas fa-feather-alt text-[var(--color-acento)]"></i> ¿Deseas añadir dedicatoria?
+        </label>
+        <input type="checkbox" id="check-dedicatoria-activa" class="accent-[var(--color-acento)] h-4 w-4 cursor-pointer" onchange="MotorUI.toggleDedicatoriaForm()">
+      </div>
+      
+      <div id="modulo-dedicatoria-inputs" class="hidden space-y-3 pt-2 border-t border-stone-200/10 animate-fade-in">
+        <div>
+          <span class="text-[9px] font-semibold text-stone-400 dark:text-stone-500 uppercase block mb-1">Estilo de la tarjeta</span>
+          <div class="grid grid-cols-3 gap-1">
+            <button onclick="MotorUI.cambiarEstiloDedicatoria('dorado')" id="btn-estilo-dorado" class="p-1.5 border border-[var(--color-acento)] rounded-lg text-[9px] bg-[var(--color-tarjeta)] font-bold text-stone-900 dark:text-white transition-all text-center">PAN DE ORO</button>
+            <button onclick="MotorUI.cambiarEstiloDedicatoria('acuarela')" id="btn-estilo-acuarela" class="p-1.5 border border-stone-200 dark:border-stone-700 rounded-lg text-[9px] bg-transparent text-stone-400 transition-all text-center">ACUARELA</button>
+            <button onclick="MotorUI.cambiarEstiloDedicatoria('marfil')" id="btn-estilo-marfil" class="p-1.5 border border-stone-200 dark:border-stone-700 rounded-lg text-[9px] bg-transparent text-stone-400 transition-all text-center">MARFIL CLÁS.</button>
+          </div>
+        </div>
+
+        <div>
+          <textarea id="texto-dedicatoria" placeholder="Escribe aquí tu dedicatoria de amor, felicitación o agradecimiento..." maxlength="100" oninput="MotorUI.actualizarPreviewDedicatoria()" class="w-full h-16 p-2 text-xs border border-stone-200 dark:border-stone-800 bg-[var(--color-tarjeta)] text-[var(--color-texto)] rounded-xl resize-none outline-none focus:border-[var(--color-acento)]"></textarea>
+          <div class="flex justify-between text-[8px] text-stone-400 uppercase mt-0.5 font-medium">
+            <span>Máximo 100 letras</span>
+            <span><span id="char-dedicatoria-count">0</span>/100</span>
+          </div>
+        </div>
+
+        <!-- Render visual de la tarjeta de lujo en el carrito -->
+        <div id="mini-tarjeta-preview" class="w-full aspect-[16/9] rounded-xl border border-amber-200/40 shadow-md bg-gradient-to-br from-yellow-50 via-amber-50 to-orange-50 p-4 flex flex-col justify-between text-stone-800 transition-all duration-300">
+          <div class="flex justify-between items-center border-b border-amber-900/10 pb-1">
+            <span id="preview-badge-estilo" class="text-[7px] tracking-[3px] uppercase font-semibold text-amber-800">PAN DE ORO EXCLUSIVO</span>
+            <i class="fas fa-feather-alt text-[9px] text-amber-800/60"></i>
+          </div>
+          <p id="preview-texto-tarjeta" class="font-serif italic text-[10px] leading-relaxed text-center text-amber-950 my-auto">
+            "Tu hermoso mensaje aparecerá aquí..."
+          </p>
+          <div class="text-center border-t border-amber-900/10 pt-1">
+            <span class="text-[6px] tracking-[4px] uppercase font-light text-stone-500">NIVANI BOUTIQUE</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Contenedor del pie y cálculo total -->
     <div class="p-6 border-t border-stone-200/10 bg-[var(--color-recuadro)]">
       <div class="flex justify-between items-center mb-4">
         <span class="text-xs uppercase tracking-widest text-[var(--color-texto-sec)] font-semibold">Total Estimado</span>
         <span id="carrito-precio-total" class="font-bold text-xl text-[var(--color-texto)]">0 Bs.</span>
       </div>
       
-      <!-- Selector de línea para WhatsApp -->
       <div class="mb-4">
         <label class="text-[10px] uppercase tracking-wider text-[var(--color-texto-sec)] font-bold block mb-1">Enviar pedido a:</label>
         <div class="grid grid-cols-2 gap-2">
@@ -262,19 +297,18 @@
         </div>
       </div>
 
-      <!-- Botón unificado de finalización -->
       <button id="btn-enviar-pedido" class="w-full bg-[#16a34a] hover:bg-emerald-700 text-white py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300">
         <i class="fab fa-whatsapp text-lg"></i> Enviar Pedido por WhatsApp
       </button>
     </div>
   </aside>
 
+  <!-- Modal zoom de imágenes -->
   <div id="zoom-modal" class="fixed inset-0 bg-black/95 z-[9999] hidden items-center justify-center opacity-0 transition-opacity duration-300 backdrop-blur-md">
     <button class="absolute top-6 right-6 text-white text-2xl hover:scale-110 transition-transform"><i class="fas fa-times"></i></button>
     <img id="imagen-ampliada" class="max-w-[90vw] max-h-[85vh] md:max-h-[90vh] object-contain rounded-2xl shadow-2xl scale-95 transition-transform duration-300" src="" alt="Ampliada">
   </div>
 
-  <!-- Contenedor de notificaciones Toast -->
   <div id="toast-container" class="toast-container flex flex-col gap-2"></div>
 
   <script type="module">
@@ -292,18 +326,42 @@
       linea2: "59177047557"
     };
 
+    const MENSAJES_CARGA_ATELIER = [
+      "Hilando la chenilla...",
+      "Moldeando el terciopelo...",
+      "Tejiendo pétalo a pétalo...",
+      "Esculpiendo con precisión...",
+      "Curvando filamento suave...",
+      "Peinando el tallo de felpa...",
+      "Abriendo el taller de felpa..."
+    ];
+
     const EstadoAplicacion = {
       datosProcesados: [],
       categoriasUnicas: [],
       filtroActivo: "TODO",
-      ordenPrecio: "default", // default | asc | desc
+      ordenPrecio: "default",
       textoBusqueda: "",
       primeraCarga: true,
-      carrito: [], // Memoria temporal del Carrito de Pedidos
-      favoritos: JSON.parse(localStorage.getItem('nivani_favoritos')) || [] // Sistema de favoritos por localStorage
+      carrito: [],
+      favoritos: JSON.parse(localStorage.getItem('nivani_favoritos')) || [],
+      // Pilar 2: Almacena la dedicatoria
+      dedicatoria: {
+        activa: false,
+        estilo: "dorado",
+        texto: ""
+      },
+      // Pilar 3: Almacena configuración del ramo interactivo
+      simuladorRamo: {
+        envoltura: "terciopelo",
+        envolturaNombre: "Caja de Terciopelo Burdeos",
+        envolturaPrecio: 35,
+        cantidadFlores: 3,
+        follajeGipso: false,
+        follajeOrganza: false
+      }
     };
 
-    // Instancia del observador perezoso para animaciones
     const ObserverAnimacion = new IntersectionObserver((entradas, observador) => {
       entradas.forEach(entrada => {
         if (entrada.isIntersecting) {
@@ -320,8 +378,10 @@
       vibrar: function() {
         if (navigator.vibrate) navigator.vibrate(15);
       },
+      obtenerMensajeCargaAleatorio: function() {
+        return MENSAJES_CARGA_ATELIER[Math.floor(Math.random() * MENSAJES_CARGA_ATELIER.length)];
+      },
       
-      // Notificaciones Toast Flotantes para Feedback Inmediato
       mostrarToast: function(mensaje, tipo = "success") {
         const cont = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -332,17 +392,14 @@
           iconHtml = '<i class="fas fa-heart text-red-500"></i>';
         } else if (tipo === "trash") {
           iconHtml = '<i class="fas fa-trash-alt text-amber-500"></i>';
+        } else if (tipo === "spark") {
+          iconHtml = '<i class="fas fa-sparkles text-amber-500"></i>';
         }
         
-        toast.innerHTML = `
-          ${iconHtml}
-          <span class="text-xs font-semibold tracking-wide">${mensaje}</span>
-        `;
-        
+        toast.innerHTML = `${iconHtml} <span class="text-xs font-semibold tracking-wide">${mensaje}</span>`;
         cont.appendChild(toast);
         setTimeout(() => toast.classList.add('active'), 50);
         
-        // Auto eliminar después de 2.5 segundos
         setTimeout(() => {
           toast.classList.remove('active');
           toast.classList.add('translate-y-[-10px]', 'opacity-0');
@@ -350,7 +407,6 @@
         }, 2500);
       },
 
-      // Alternar favoritos guardando en disco local del cliente
       toggleFavorito: function(id, nombre) {
         this.vibrar();
         const index = EstadoAplicacion.favoritos.indexOf(id);
@@ -362,31 +418,19 @@
           this.mostrarToast(`"${nombre}" eliminada de favoritos.`, "trash");
         }
         localStorage.setItem('nivani_favoritos', JSON.stringify(EstadoAplicacion.favoritos));
-        
-        // Renderizado reactivo instantáneo para actualizar el corazón y las vistas de favoritos
         MotorUI.renderizarCatalogo();
       },
 
-      // Compartir nativo del dispositivo móvil
       compartirNativo: async function(nombre) {
         if (navigator.share) {
           try {
             await navigator.share({
               title: 'Nivani | ' + nombre,
-              text: `¡Mira esta hermosa flor artesanal de Nivani: ${nombre}!`,
+              text: `¡Mira esta hermosa flor moldeada a mano de Nivani: ${nombre}!`,
               url: window.location.href
             });
           } catch (err) { console.log('Share cancelado', err); }
         }
-      },
-
-      // Canal de Consultas Individuales (WhatsApp VIP)
-      crearEnlaceWpp: function(nombreFlor, precioItem, numeroAsignado) {
-        let base = "https://wa.me/" + numeroAsignado + "?text=";
-        let p = parseInt(precioItem, 10);
-        let sec = (!isNaN(p) && p > 0) ? `. Vi que está en ${precioItem} Bs.` : ". Me gustaría cotizarla.";
-        let upsell = " ¿Tienen opciones de tarjetas o chocolates para acompañarlo?";
-        return base + encodeURIComponent(`Hola Nivani, me interesa la flor artesanal: ${nombreFlor}${sec}${upsell}`);
       },
 
       crearEnlaceCarritoWpp: function(carrito, numeroAsignado) {
@@ -398,19 +442,32 @@
           let p = parseInt(item.precio, 10);
           let subtotal = p * item.cantidad;
           total += subtotal;
-          listaText += `• ${item.cantidad}x ${item.nombre} (${p} Bs. c/u) \n`;
+          
+          if (item.isCustom) {
+            listaText += `• ${item.cantidad}x ${item.nombre}\n  - Envoltura: ${item.detalles.envoltura}\n  - Flores: ${item.detalles.flores} Tulipanes de Chenilla\n  - Extras: ${item.detalles.extras || "Ninguno"}\n  - Precio: ${p} Bs. c/u\n`;
+          } else {
+            listaText += `• ${item.cantidad}x ${item.nombre} (${p} Bs. c/u) \n`;
+          }
         });
 
-        let mensaje = `Hola Nivani, me gustaría realizar el siguiente pedido artesanal: \n\n${listaText}\n*Total Estimado: ${total} Bs.*\n\n¿Me confirman disponibilidad y tiempo de entrega?`;
+        let mensaje = `Hola Nivani, me gustaría realizar el siguiente pedido modelado a mano: \n\n${listaText}\n`;
+        
+        // Pilar 2: Agregar información de la Tarjeta Dedicatoria si está activa
+        if (EstadoAplicacion.dedicatoria.activa && EstadoAplicacion.dedicatoria.texto.trim() !== "") {
+          let estiloNombre = "PAN DE ORO";
+          if (EstadoAplicacion.dedicatoria.estilo === 'acuarela') estiloNombre = "ACUARELA ROMÁNTICA";
+          else if (EstadoAplicacion.dedicatoria.estilo === 'marfil') estiloNombre = "MINIMALISMO MARFIL";
+          
+          mensaje += `\n✦ *Tarjeta de Dedicatoria Incluida:*\n  - Estilo: ${estiloNombre}\n  - Mensaje: "${EstadoAplicacion.dedicatoria.texto.trim()}"\n`;
+        }
+
+        mensaje += `\n*Total Estimado: ${total} Bs.*\n\n¿Me confirman disponibilidad y tiempo de entrega?`;
         return base + encodeURIComponent(mensaje);
       },
       
-      // Extractor inteligente: el guion medio (-) y el guion bajo (_) actúan igual
       diseccionarNombre: function(cadenaCruda) {
         let cadena = cadenaCruda || "";
         let res = { grupo: "GENERAL", nombre: cadena.trim(), badgeNuevo: false, badgeEscaso: false };
-        
-        // Buscamos el primer separador que sea '-' o '_'
         let matchSeparador = cadena.match(/[-_]/);
         let indiceSeparador = matchSeparador ? matchSeparador.index : -1;
         
@@ -433,18 +490,14 @@
       iniciar: async function() {
         try {
           const app = initializeApp(ConfiguracionFirebase);
-          
-          // Inicializamos Firestore directamente con persistencia en caché local
           const db = initializeFirestore(app, {
             localCache: persistentLocalCache({
               tabManager: persistentMultipleTabManager()
             })
           });
-          
           return db;
         } catch (error) {
           console.error("Fallo de inicialización de Firebase:", error);
-          // Visualizar alerta sutil de modo offline
           document.getElementById('alerta-offline').classList.remove('translate-y-full');
           return null;
         }
@@ -462,12 +515,12 @@
           imagenAmpliada: document.getElementById('imagen-ampliada'),
           hud: document.getElementById('contenedor-hud'),
           buscador: document.getElementById('buscador-vivo'),
+          wrapperBuscador: document.getElementById('wrapper-buscador'),
           ordenador: document.getElementById('orden-precio'),
+          wrapperOrdenador: document.getElementById('wrapper-ordenador'),
           estadoVacio: document.getElementById('estado-vacio'),
           panelScroll: document.getElementById('panel-scroll'),
           btnSubir: document.getElementById('btn-subir'),
-          
-          // Nodos del Carrito de Pedidos
           btnAbrirCarrito: document.getElementById('btn-abrir-carrito'),
           btnCerrarCarrito: document.getElementById('btn-cerrar-carrito'),
           carritoCapaOscura: document.getElementById('carrito-capa-oscura'),
@@ -479,15 +532,14 @@
         };
       },
 
-      // Renderizador de los botones del HUD superior
       renderizarHUD: function() {
         let cont = this.referencias.hud;
         cont.innerHTML = "";
-        
         let arrFiltros = [{ id: "TODO", texto: "Todo", icono: "fa-layer-group" }];
+        arrFiltros.push({ id: "FAV", texto: "Favoritos ♥", icono: "fa-heart text-red-500" });
         
-        // Inyectamos la opción de Favoritos personalizada
-        arrFiltros.push({ id: "FAV", texto: "Mis Favoritos", icono: "fa-heart text-red-500" });
+        // Pilar 3: Botón de diseño "Arma tu Ramo"
+        arrFiltros.push({ id: "DISENO", texto: "Diseña tu Ramo 🎨", icono: "fa-magic text-amber-500" });
 
         EstadoAplicacion.categoriasUnicas.forEach(cat => {
           if (cat !== "GENERAL" && cat !== "") {
@@ -510,43 +562,37 @@
 
       renderizarCatalogo: function() {
         let contenedor = this.referencias.matriz;
-        let tarjetasPrevias = contenedor.querySelectorAll('.tarjeta-item');
+        let tarjetasPrevias = contenedor.querySelectorAll('.tarjeta-item, #panel-simulador-ramo');
         tarjetasPrevias.forEach(n => { ObserverAnimacion.unobserve(n); n.remove(); });
         
+        // Ocultar buscador y ordenador si estamos en modo Diseño
+        if (EstadoAplicacion.filtroActivo === "DISENO") {
+          this.referencias.wrapperBuscador.classList.add('hidden');
+          this.referencias.wrapperOrdenador.classList.add('hidden');
+          this.renderizarSimuladorRamo();
+          return;
+        } else {
+          this.referencias.wrapperBuscador.classList.remove('hidden');
+          this.referencias.wrapperOrdenador.classList.remove('hidden');
+        }
+
         let filtroCat = EstadoAplicacion.filtroActivo;
         let busqueda = Utilidades.quitarTildes(EstadoAplicacion.textoBusqueda).toUpperCase();
-        
-        // Creamos una copia de trabajo de la matriz para no alterar la persistencia
         let itemsProcesar = [...EstadoAplicacion.datosProcesados];
 
-        // Lógica de Ordenación de Precios
         if (EstadoAplicacion.ordenPrecio === "asc") {
-          itemsProcesar.sort((a, b) => {
-            let pA = parseInt(a.precio, 10) || 0;
-            let pB = parseInt(b.precio, 10) || 0;
-            return pA - pB;
-          });
+          itemsProcesar.sort((a, b) => (parseInt(a.precio, 10) || 0) - (parseInt(b.precio, 10) || 0));
         } else if (EstadoAplicacion.ordenPrecio === "desc") {
-          itemsProcesar.sort((a, b) => {
-            let pA = parseInt(a.precio, 10) || 0;
-            let pB = parseInt(b.precio, 10) || 0;
-            return pB - pA;
-          });
+          itemsProcesar.sort((a, b) => (parseInt(b.precio, 10) || 0) - (parseInt(a.precio, 10) || 0));
         }
 
         let contadorVisual = 0;
         
         itemsProcesar.forEach((item) => {
           let pasaFiltro = false;
-          let pVal = parseInt(item.precio, 10);
-          
-          if (filtroCat === "TODO") {
-            pasaFiltro = true;
-          } else if (filtroCat === "FAV") {
-            pasaFiltro = EstadoAplicacion.favoritos.includes(item.id);
-          } else {
-            pasaFiltro = (item.grupo === filtroCat);
-          }
+          if (filtroCat === "TODO") pasaFiltro = true;
+          else if (filtroCat === "FAV") pasaFiltro = EstadoAplicacion.favoritos.includes(item.id);
+          else pasaFiltro = (item.grupo === filtroCat);
 
           let pasaTex = Utilidades.quitarTildes(item.nombre).toUpperCase().includes(busqueda);
           
@@ -554,36 +600,46 @@
             let tarjeta = document.createElement('div');
             tarjeta.className = "tarjeta-item bg-[var(--color-tarjeta)] rounded-[var(--radio-borde)] p-2 shadow-sm transition-all duration-300 flex flex-col justify-between relative border border-stone-200/5 hover:-translate-y-1 hover:shadow-lg opacity-0 translate-y-6";
             
-            // Contenedor de Imagen y Badges
             let contImg = document.createElement('div');
-            contImg.className = "contenedor-imagen relative w-full h-44 rounded-2xl overflow-hidden bg-[var(--color-recuadro)] flex-shrink-0";
+            contImg.className = "contenedor-imagen relative w-full h-44 rounded-2xl overflow-hidden bg-[var(--color-recuadro)] flex-shrink-0 flex items-center justify-center";
+
+            // Animación y micro-narrativa de carga aleatoria (Atelier)
+            let txtAleatorioCarga = Utilidades.obtenerMensajeCargaAleatorio();
+            let loaderAtelier = document.createElement('div');
+            loaderAtelier.className = "absolute inset-0 z-10 bg-[var(--color-recuadro)] flex flex-col items-center justify-center p-3 text-center transition-all duration-500";
+            loaderAtelier.innerHTML = `
+              <i class="fas fa-fingerprint text-xl text-[var(--color-acento)]/60 animate-pulse mb-2"></i>
+              <span class="text-[9px] tracking-wider text-[var(--color-texto-sec)] font-medium uppercase animate-pulse select-none">${txtAleatorioCarga}</span>
+            `;
+            contImg.appendChild(loaderAtelier);
 
             let img = document.createElement('img');
-            img.className = "imagen-item w-full h-full object-cover cursor-zoom-in opacity-0 transition-opacity duration-500 hover:scale-105 duration-500";
+            img.className = "imagen-item w-full h-full object-cover cursor-zoom-in absolute inset-0 opacity-0 transition-opacity duration-700 hover:scale-105";
             img.src = item.img || "https://placehold.co/400x400/fdfcf8/c5a8a0?text=Nivani";
             img.dataset.url = img.src;
             
-            // Control de errores al cargar imagen (Placeholder elegante)
-            img.onerror = function() {
-              this.src = "https://placehold.co/400x400/fdfcf8/c5a8a0?text=Nivani+Flor";
+            img.onerror = function() { 
+              this.src = "https://placehold.co/400x400/fdfcf8/c5a8a0?text=Modelado+Chenilla"; 
+              loaderAtelier.classList.add('opacity-0');
+              setTimeout(() => loaderAtelier.remove(), 500);
             };
-
-            img.onload = function() {
-              img.classList.remove('opacity-0');
-              img.classList.add('opacity-100');
+            img.onload = function() { 
+              img.classList.remove('opacity-0'); 
+              img.classList.add('opacity-100'); 
+              loaderAtelier.classList.add('opacity-0');
+              setTimeout(() => loaderAtelier.remove(), 500);
             };
             contImg.appendChild(img);
 
-            // Badges Exclusivos
             if (item.badgeNuevo) {
               let b = document.createElement('div');
               b.className = "badge-luxury badge-luxury-nuevo absolute bottom-3 left-3 px-3 py-1 bg-teal-50/95 dark:bg-teal-950/90 text-teal-700 dark:text-teal-300 text-[9px] font-bold tracking-wider rounded-full border border-teal-200/10";
-              b.innerHTML = '✦ Nueva'; contImg.appendChild(b);
+              b.innerHTML = '✦ Nuevo'; contImg.appendChild(b);
             }
             if (item.badgeEscaso) {
               let b = document.createElement('div');
               b.className = "badge-luxury badge-luxury-escaso absolute bottom-3 left-3 px-3 py-1 bg-red-50/95 dark:bg-red-950/90 text-red-700 dark:text-red-300 text-[9px] font-bold tracking-wider rounded-full border border-red-200/10";
-              b.innerHTML = '🔴 Limitada'; contImg.appendChild(b);
+              b.innerHTML = '🔴 Limitado'; contImg.appendChild(b);
             }
 
             let esFav = EstadoAplicacion.favoritos.includes(item.id);
@@ -595,13 +651,10 @@
               Utilidades.toggleFavorito(item.id, item.nombre);
             });
             contImg.appendChild(btnFav);
-
             tarjeta.appendChild(contImg);
             
-            // Recuadro de Info e Integración
             let recuadro = document.createElement('div');
             recuadro.className = "recuadro-info bg-[var(--color-recuadro)] border border-stone-200/5 rounded-2xl p-3 mt-2 flex flex-col justify-between flex-grow";
-            
             let valNum = parseInt(item.precio, 10);
             let pTxt = (!isNaN(valNum) && valNum > 0) ? `${item.precio} Bs.` : "Consultar";
 
@@ -612,27 +665,18 @@
               </div>
               <h3 class="font-serif italic font-medium text-sm text-[var(--color-texto)] line-clamp-1 flex-grow mb-1">${item.nombre}</h3>
               <div class="font-bold text-sm text-[var(--color-texto)] mb-2">${pTxt}</div>
-              
-              <!-- Botón Añadir al Pedido (Carrito de pedidos) -->
-              <button class="btn-add-pedido w-full bg-[var(--color-texto)] text-[var(--color-fondo)] hover:opacity-90 py-1.5 rounded-xl text-xs font-semibold tracking-wider flex items-center justify-center gap-2 mb-2 transition-transform active:scale-95">
+              <button class="btn-add-pedido w-full bg-[var(--color-texto)] text-[var(--color-fondo)] hover:opacity-90 py-2.5 rounded-xl text-xs font-semibold tracking-wider flex items-center justify-center gap-2 transition-transform active:scale-95">
                 <i class="fas fa-shopping-bag text-[10px]"></i> Añadir al Pedido
               </button>
-
-              <div class="grid grid-cols-2 gap-1">
-                <a href="${Utilidades.crearEnlaceWpp(item.nombre, item.precio, VECTORES_WPP.linea1)}" class="btn-wpp-sm text-[10px] font-bold text-center py-1 rounded-lg border border-stone-200/10 text-stone-600 dark:text-stone-300 bg-stone-100/10 hover:bg-stone-100/30 transition-all flex items-center justify-center gap-1" target="_blank"><i class="fab fa-whatsapp"></i> VIP 1</a>
-                <a href="${Utilidades.crearEnlaceWpp(item.nombre, item.precio, VECTORES_WPP.linea2)}" class="btn-wpp-sm text-[10px] font-bold text-center py-1 rounded-lg border border-stone-200/10 text-stone-600 dark:text-stone-300 bg-stone-100/10 hover:bg-stone-100/30 transition-all flex items-center justify-center gap-1" target="_blank"><i class="fab fa-whatsapp"></i> VIP 2</a>
-              </div>
             `;
             
-            // Asignación de Eventos Internos
             recuadro.querySelector('.btn-share').addEventListener('click', function(e) {
-              e.stopPropagation();
-              Utilidades.vibrar(); Utilidades.compartirNativo(this.dataset.nombre);
+              e.stopPropagation(); Utilidades.vibrar(); Utilidades.compartirNativo(this.dataset.nombre);
             });
 
             recuadro.querySelector('.btn-add-pedido').addEventListener('click', function(e) {
               e.stopPropagation();
-              MotorUI.agregarAlCarrito(item);
+              MotorUI.simularVueloYAgregar(e, item);
             });
 
             tarjeta.appendChild(recuadro);
@@ -645,15 +689,193 @@
         this.referencias.estadoVacio.style.display = (contadorVisual === 0) ? "flex" : "none";
 
         if (EstadoAplicacion.primeraCarga) {
-          setTimeout(() => {
-            if(this.referencias.arranque) this.referencias.arranque.classList.add('pantalla-oculta');
-          }, 600);
+          setTimeout(() => { if(this.referencias.arranque) this.referencias.arranque.classList.add('pantalla-oculta'); }, 600);
           EstadoAplicacion.primeraCarga = false;
         }
       },
 
-      agregarAlCarrito: function(item) {
+      renderizarSimuladorRamo: function() {
+        let contenedor = this.referencias.matriz;
+        let panelSim = document.createElement('div');
+        panelSim.id = "panel-simulador-ramo";
+        panelSim.className = "col-span-full max-w-4xl mx-auto w-full bg-[var(--color-tarjeta)] border border-stone-200/10 p-6 md:p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in";
+        
+        panelSim.innerHTML = `
+          <div class="flex flex-col gap-5">
+            <div>
+              <span class="text-[9px] font-bold tracking-widest text-[var(--color-acento)] uppercase">Taller de Diseño // Chenilla de Autor</span>
+              <h2 class="font-serif italic text-2xl text-[var(--color-texto)] mt-1">Arma tu Ramo "Mix & Match"</h2>
+              <p class="text-xs text-[var(--color-texto-sec)] leading-relaxed mt-2">
+                Combina envolturas de autor coreanas, selecciona tulipanes modelados en chenilla de alta densidad y personaliza cada detalle decorativo al instante.
+              </p>
+            </div>
+
+            <!-- Selector de papel de envoltura -->
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold uppercase text-stone-400 block">Envoltura de lujo</label>
+              <select id="sim-select-envoltura" class="w-full p-3 bg-[var(--color-recuadro)] border border-stone-200/20 dark:border-stone-800 rounded-xl text-xs outline-none focus:border-[var(--color-acento)]">
+                <option value="terciopelo" data-precio="35" ${EstadoAplicacion.simuladorRamo.envoltura === 'terciopelo' ? 'selected' : ''}>Caja de Terciopelo Burdeos (+35 Bs.)</option>
+                <option value="coreano" data-precio="20" ${EstadoAplicacion.simuladorRamo.envoltura === 'coreano' ? 'selected' : ''}>Papel Coreano Rosa Pastel (+20 Bs.)</option>
+                <option value="kraft" data-precio="15" ${EstadoAplicacion.simuladorRamo.envoltura === 'kraft' ? 'selected' : ''}>Papel Kraft Texturizado Natural (+15 Bs.)</option>
+              </select>
+            </div>
+
+            <!-- Cantidad de tulipanes -->
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold uppercase text-stone-400 block">Flor Principal: Tulipán en Chenilla</label>
+              <div class="flex items-center gap-4">
+                <button id="btn-sim-menos" class="w-10 h-10 rounded-xl border border-stone-200/25 bg-[var(--color-recuadro)] flex items-center justify-center font-bold text-sm text-[var(--color-texto)] hover:bg-[var(--color-acento)] hover:text-white transition-all">-</button>
+                <span id="sim-cant-flores" class="text-base font-bold w-6 text-center">${EstadoAplicacion.simuladorRamo.cantidadFlores}</span>
+                <button id="btn-sim-mas" class="w-10 h-10 rounded-xl border border-stone-200/25 bg-[var(--color-recuadro)] flex items-center justify-center font-bold text-sm text-[var(--color-texto)] hover:bg-[var(--color-acento)] hover:text-white transition-all">+</button>
+                <span class="text-xs text-[var(--color-texto-sec)]">(35 Bs. c/u)</span>
+              </div>
+            </div>
+
+            <!-- Complementos de follaje -->
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold uppercase text-stone-400 block">Complementos y Detalles</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="flex items-center gap-2 p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-xl cursor-pointer">
+                  <input type="checkbox" id="sim-check-gipso" ${EstadoAplicacion.simuladorRamo.follajeGipso ? 'checked' : ''} class="accent-[var(--color-acento)] h-4 w-4">
+                  <span class="text-[10px] font-semibold text-[var(--color-texto)]">Gipsófila (+15 Bs.)</span>
+                </label>
+                <label class="flex items-center gap-2 p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-xl cursor-pointer">
+                  <input type="checkbox" id="sim-check-organza" ${EstadoAplicacion.simuladorRamo.follajeOrganza ? 'checked' : ''} class="accent-[var(--color-acento)] h-4 w-4">
+                  <span class="text-[10px] font-semibold text-[var(--color-texto)]">Cinta Organza (+10)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Previsualizador del Ramo -->
+          <div class="flex flex-col items-center justify-center bg-[var(--color-recuadro)] border border-stone-200/15 p-6 rounded-3xl text-center">
+            <span class="text-[9px] font-bold text-[var(--color-acento)] tracking-widest uppercase">MODELADO EXCLUSIVO</span>
+            <h3 id="sim-nombre-ramo" class="font-serif italic text-lg text-[var(--color-texto)] font-semibold mt-1">Ramo Personalizado Burdeos</h3>
+            
+            <div class="my-6">
+              <span class="text-[10px] text-[var(--color-texto-sec)] uppercase block">Total de tu Combinación</span>
+              <span id="sim-precio-ramo" class="text-4xl font-bold text-[var(--color-texto)]">140 Bs.</span>
+            </div>
+
+            <button id="btn-sim-agregar-pedido" class="w-full bg-[var(--color-texto)] hover:opacity-90 text-[var(--color-fondo)] py-3.5 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95">
+              <i class="fas fa-magic"></i> Añadir mi Ramo al Pedido
+            </button>
+          </div>
+        `;
+
+        contenedor.appendChild(panelSim);
+
+        // Controladores de eventos del simulador
+        const selEnv = document.getElementById('sim-select-envoltura');
+        const checkGipso = document.getElementById('sim-check-gipso');
+        const checkOrganza = document.getElementById('sim-check-organza');
+        const btnMenos = document.getElementById('btn-sim-menos');
+        const btnMas = document.getElementById('btn-sim-mas');
+        const btnAgregar = document.getElementById('btn-sim-agregar-pedido');
+
+        const recualcularSim = () => {
+          const selOpt = selEnv.options[selEnv.selectedIndex];
+          EstadoAplicacion.simuladorRamo.envoltura = selEnv.value;
+          EstadoAplicacion.simuladorRamo.envolturaNombre = selOpt.text.split('(')[0].trim();
+          EstadoAplicacion.simuladorRamo.envolturaPrecio = parseInt(selOpt.dataset.precio, 10);
+          EstadoAplicacion.simuladorRamo.follajeGipso = checkGipso.checked;
+          EstadoAplicacion.simuladorRamo.follajeOrganza = checkOrganza.checked;
+
+          let baseFlores = EstadoAplicacion.simuladorRamo.cantidadFlores * 35;
+          let total = baseFlores + EstadoAplicacion.simuladorRamo.envolturaPrecio;
+          if (EstadoAplicacion.simuladorRamo.follajeGipso) total += 15;
+          if (EstadoAplicacion.simuladorRamo.follajeOrganza) total += 10;
+
+          document.getElementById('sim-cant-flores').innerText = EstadoAplicacion.simuladorRamo.cantidadFlores;
+          document.getElementById('sim-nombre-ramo').innerText = `Ramo Personalizado ${EstadoAplicacion.simuladorRamo.envolturaNombre}`;
+          document.getElementById('sim-precio-ramo').innerText = `${total} Bs.`;
+        };
+
+        selEnv.addEventListener('change', recualcularSim);
+        checkGipso.addEventListener('change', recualcularSim);
+        checkOrganza.addEventListener('change', recualcularSim);
+
+        btnMenos.addEventListener('click', () => {
+          if (EstadoAplicacion.simuladorRamo.cantidadFlores > 1) {
+            Utilidades.vibrar();
+            EstadoAplicacion.simuladorRamo.cantidadFlores--;
+            recualcularSim();
+          }
+        });
+
+        btnMas.addEventListener('click', () => {
+          if (EstadoAplicacion.simuladorRamo.cantidadFlores < 12) {
+            Utilidades.vibrar();
+            EstadoAplicacion.simuladorRamo.cantidadFlores++;
+            recualcularSim();
+          }
+        });
+
+        btnAgregar.addEventListener('click', (e) => {
+          let baseFlores = EstadoAplicacion.simuladorRamo.cantidadFlores * 35;
+          let total = baseFlores + EstadoAplicacion.simuladorRamo.envolturaPrecio;
+          if (EstadoAplicacion.simuladorRamo.follajeGipso) total += 15;
+          if (EstadoAplicacion.simuladorRamo.follajeOrganza) total += 10;
+
+          let extrasList = [];
+          if (EstadoAplicacion.simuladorRamo.follajeGipso) extrasList.push("Gipsófila");
+          if (EstadoAplicacion.simuladorRamo.follajeOrganza) extrasList.push("Cinta Organza");
+
+          const customBouquet = {
+            id: `custom-ramo-${Date.now()}`,
+            nombre: `Diseño: Ramo ${EstadoAplicacion.simuladorRamo.envolturaNombre}`,
+            precio: total,
+            img: "https://placehold.co/400x400/fdfcf8/c5a8a0?text=Ramo+Elegante",
+            isCustom: true,
+            detalles: {
+              envoltura: EstadoAplicacion.simuladorRamo.envolturaNombre,
+              flores: EstadoAplicacion.simuladorRamo.cantidadFlores,
+              extras: extrasList.join(', ')
+            }
+          };
+
+          MotorUI.simularVueloYAgregar(e, customBouquet);
+        });
+
+        recualcularSim();
+      },
+
+      simularVueloYAgregar: function(event, item) {
         Utilidades.vibrar();
+        const origenBtn = event.currentTarget;
+        const rectOrigen = origenBtn.getBoundingClientRect();
+        const destinoCarrito = document.getElementById('icono-carrito-bolsa');
+        const rectDestino = destinoCarrito.getBoundingClientRect();
+
+        // Crear elemento flotante
+        const florParticula = document.createElement('div');
+        florParticula.className = "particula-vuelo";
+        florParticula.innerHTML = "🌸";
+        florParticula.style.left = `${rectOrigen.left + rectOrigen.width / 2}px`;
+        florParticula.style.top = `${rectOrigen.top}px`;
+        document.body.appendChild(florParticula);
+
+        // Forzar recalculo de flujo de estilos para animar
+        florParticula.offsetHeight;
+
+        setTimeout(() => {
+          florParticula.style.left = `${rectDestino.left}px`;
+          florParticula.style.top = `${rectDestino.top}px`;
+          florParticula.style.transform = "scale(0.3) rotate(360deg)";
+          florParticula.style.opacity = "0.2";
+        }, 50);
+
+        setTimeout(() => {
+          florParticula.remove();
+          
+          destinoCarrito.classList.add('scale-125', 'text-[var(--color-acento)]');
+          setTimeout(() => { destinoCarrito.classList.remove('scale-125', 'text-[var(--color-acento)]'); }, 300);
+
+          MotorUI.agregarAlCarrito(item);
+        }, 850);
+      },
+
+      agregarAlCarrito: function(item) {
         const itemExistente = EstadoAplicacion.carrito.find(c => c.id === item.id);
         
         if (itemExistente) {
@@ -664,6 +886,8 @@
             nombre: item.nombre,
             precio: item.precio,
             img: item.img,
+            isCustom: item.isCustom || false,
+            detalles: item.detalles || null,
             cantidad: 1
           });
         }
@@ -681,7 +905,7 @@
 
         if (EstadoAplicacion.carrito[index].cantidad <= 0) {
           const borrado = EstadoAplicacion.carrito.splice(index, 1);
-          Utilidades.mostrarToast(`"${borrado[0].nombre}" eliminada del carrito.`, "trash");
+          Utilidades.mostrarToast(`"${borrado[0].nombre}" eliminada del pedido.`, "trash");
         }
 
         this.actualizarReactivoCarrito();
@@ -711,6 +935,7 @@
 
             let row = document.createElement('div');
             row.className = "flex items-center gap-3 p-2 bg-[var(--color-recuadro)] border border-stone-200/5 rounded-xl animate-fade-in";
+            
             row.innerHTML = `
               <img src="${item.img}" class="w-12 h-12 rounded-lg object-cover bg-stone-200/20" onerror="this.src='https://placehold.co/400x400/fdfcf8/c5a8a0?text=Flor'">
               <div class="flex-grow">
@@ -730,13 +955,76 @@
             contenedor.appendChild(row);
           });
 
-          // Animamos y actualizamos el globo indicador de items del Carrito
           this.referencias.badgeContador.innerText = totalArticulos;
           this.referencias.badgeContador.classList.remove('scale-0');
           this.referencias.badgeContador.classList.add('scale-100');
         }
 
         this.referencias.carritoPrecioTotal.innerText = `${total} Bs.`;
+      },
+
+      toggleDedicatoriaForm: function() {
+        const checkbox = document.getElementById('check-dedicatoria-activa');
+        const formDiv = document.getElementById('modulo-dedicatoria-inputs');
+        EstadoAplicacion.dedicatoria.activa = checkbox.checked;
+        
+        if (checkbox.checked) {
+          formDiv.classList.remove('hidden');
+          this.actualizarPreviewDedicatoria();
+        } else {
+          formDiv.classList.add('hidden');
+        }
+      },
+
+      cambiarEstiloDedicatoria: function(estilo) {
+        EstadoAplicacion.dedicatoria.estilo = estilo;
+        const btnDorado = document.getElementById('btn-estilo-dorado');
+        const btnAcuarela = document.getElementById('btn-estilo-acuarela');
+        const btnMarfil = document.getElementById('btn-estilo-marfil');
+
+        // Reset classes
+        [btnDorado, btnAcuarela, btnMarfil].forEach(btn => {
+          btn.className = "p-1.5 border border-stone-200 dark:border-stone-700 rounded-lg text-[9px] bg-transparent text-stone-400 transition-all text-center";
+        });
+
+        // Activar seleccionado
+        const seleccionado = document.getElementById(`btn-estilo-${estilo}`);
+        seleccionado.className = "p-1.5 border border-[var(--color-acento)] rounded-lg text-[9px] bg-[var(--color-tarjeta)] font-bold text-stone-900 dark:text-white transition-all text-center";
+
+        this.actualizarPreviewDedicatoria();
+        Utilidades.vibrar();
+      },
+
+      actualizarPreviewDedicatoria: function() {
+        const textarea = document.getElementById('texto-dedicatoria');
+        const previewText = document.getElementById('preview-texto-tarjeta');
+        const badge = document.getElementById('preview-badge-estilo');
+        const cardDiv = document.getElementById('mini-tarjeta-preview');
+        const charCount = document.getElementById('char-dedicatoria-count');
+
+        EstadoAplicacion.dedicatoria.texto = textarea.value;
+        charCount.innerText = textarea.value.length;
+
+        // Render del texto
+        previewText.innerText = textarea.value.trim() !== "" ? `"${textarea.value}"` : '"Tu hermoso mensaje aparecerá aquí..."';
+
+        // Estilos visuales
+        if (EstadoAplicacion.dedicatoria.estilo === 'dorado') {
+          cardDiv.className = "w-full aspect-[16/9] rounded-xl border border-amber-200/40 shadow-md bg-gradient-to-br from-yellow-50 via-amber-50 to-orange-50 p-4 flex flex-col justify-between text-stone-800 transition-all duration-300";
+          badge.innerText = "PAN DE ORO EXCLUSIVO";
+          badge.className = "text-[7px] tracking-[3px] uppercase font-semibold text-amber-800";
+          previewText.className = "font-serif italic text-[10px] leading-relaxed text-center text-amber-950 my-auto";
+        } else if (EstadoAplicacion.dedicatoria.estilo === 'acuarela') {
+          cardDiv.className = "w-full aspect-[16/9] rounded-xl border border-pink-200/40 shadow-md bg-gradient-to-br from-rose-50 via-pink-50 to-emerald-50 p-4 flex flex-col justify-between text-stone-800 transition-all duration-300";
+          badge.innerText = "COLECCIÓN ROMÁNTICA";
+          badge.className = "text-[7px] tracking-[3px] uppercase font-semibold text-rose-700";
+          previewText.className = "font-serif italic text-[10px] leading-relaxed text-center text-rose-950 my-auto";
+        } else if (EstadoAplicacion.dedicatoria.estilo === 'marfil') {
+          cardDiv.className = "w-full aspect-[16/9] rounded-xl border border-stone-200 shadow-md bg-neutral-100/95 dark:bg-stone-800 p-4 flex flex-col justify-between text-stone-800 dark:text-stone-100 transition-all duration-300";
+          badge.innerText = "MINIMALISMO CLÁSICO";
+          badge.className = "text-[7px] tracking-[3px] uppercase font-semibold text-stone-500 dark:text-stone-400";
+          previewText.className = "font-serif italic text-[10px] leading-relaxed text-center text-stone-800 dark:text-stone-200 my-auto";
+        }
       },
 
       abrirZoom: function(url) {
@@ -772,9 +1060,7 @@
         this.referencias.carritoDrawer.classList.remove('abierto');
         this.referencias.carritoCapaOscura.classList.remove('opacity-100');
         this.referencias.carritoCapaOscura.classList.add('opacity-0');
-        setTimeout(() => {
-          this.referencias.carritoCapaOscura.classList.add('hidden');
-        }, 300);
+        setTimeout(() => { this.referencias.carritoCapaOscura.classList.add('hidden'); }, 300);
       }
     };
 
@@ -783,7 +1069,6 @@
         let r = MotorUI.referencias; 
         let timer = null;
         
-        // Entrada del Buscador reactivo con control de demora (Debounce)
         r.buscador.addEventListener('input', e => {
           clearTimeout(timer);
           timer = setTimeout(() => {
@@ -792,13 +1077,11 @@
           }, 250);
         });
 
-        // Clasificador de orden de precio reactivo
         r.ordenador.addEventListener('change', e => {
           EstadoAplicacion.ordenPrecio = e.target.value;
           MotorUI.renderizarCatalogo();
         });
 
-        // Click en el HUD de categorías
         r.hud.addEventListener('click', e => {
           let target = e.target.closest('.boton-filtro');
           if (target) {
@@ -809,7 +1092,6 @@
           }
         });
         
-        // Evento Delegado en Catálogo para zoom de imágenes
         r.matriz.addEventListener('click', e => {
           if (e.target.classList.contains('imagen-item')) {
             MotorUI.abrirZoom(e.target.dataset.url);
@@ -818,12 +1100,10 @@
         
         r.modal.addEventListener('click', () => MotorUI.cerrarZoom());
 
-        // Controladores de apertura y cierre de Carrito Drawer
         r.btnAbrirCarrito.addEventListener('click', () => MotorUI.abrirCarritoDrawer());
         r.btnCerrarCarrito.addEventListener('click', () => MotorUI.cerrarCarritoDrawer());
         r.carritoCapaOscura.addEventListener('click', () => MotorUI.cerrarCarritoDrawer());
 
-        // Gestión de Scroll y flecha superior
         r.panelScroll.addEventListener('scroll', () => {
           if (r.panelScroll.scrollTop > 300) {
             r.btnSubir.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
@@ -833,36 +1113,30 @@
             r.btnSubir.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
           }
         });
+
         r.btnSubir.addEventListener('click', () => {
           Utilidades.vibrar(); 
           r.panelScroll.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Evento de checkout unificado del pedido
         r.btnEnviarPedido.addEventListener('click', () => {
           if (EstadoAplicacion.carrito.length === 0) {
-            Utilidades.mostrarToast("No hay elementos para enviar.", "trash");
+            Utilidades.mostrarToast("No hay elementos en tu bolsa.", "trash");
             return;
           }
           Utilidades.vibrar();
-          
-          // Captura de línea seleccionada
           const lineaSeleccionada = document.querySelector('input[name="wpp-linea-destino"]:checked').value;
           const numeroWpp = VECTORES_WPP[lineaSeleccionada] || VECTORES_WPP.linea1;
-          
           const link = Utilidades.crearEnlaceCarritoWpp(EstadoAplicacion.carrito, numeroWpp);
           window.open(link, '_blank');
         });
 
-        // Escuchadores de estado de conectividad de Red
         window.addEventListener('offline', () => r.offline.classList.remove('translate-y-full'));
         window.addEventListener('online', () => r.offline.classList.add('translate-y-full'));
       },
 
-      // Sincronización en tiempo real de Firestore con control de fallos
       sincronizarFirebase: function(db) {
         if (!db) return;
-        
         const coleccion = collection(db, "flores");
         
         onSnapshot(coleccion, (snapshot) => {
@@ -893,23 +1167,19 @@
           MotorUI.actualizarReactivoCarrito();
         }, (error) => {
           console.error("Fallo de sincronización en tiempo real:", error);
-          Utilidades.mostrarToast("Fallo al conectar con el servidor. Modo Offline.", "trash");
+          Utilidades.mostrarToast("Fallo al conectar con el servidor. Catálogo offline.", "trash");
         });
       }
     };
 
     document.addEventListener('DOMContentLoaded', async () => {
-      // 1. Mapeamos nodos e iniciamos controladores de interacción de UI
+      window.MotorUI = MotorUI; // Exportación global para poder usar onclick inline en HTML
       MotorUI.mapearNodos();
       MotorEventos.escucharDOM();
       
-      // 2. Conexión de base de datos asíncrona
       let db = await MotorConexion.iniciar();
-      
-      // 3. Sincronización activa
       MotorEventos.sincronizarFirebase(db);
       
-      // Verificación de redundancia offline inmediata
       if (!navigator.onLine) {
         MotorUI.referencias.offline.classList.remove('translate-y-full');
       }
