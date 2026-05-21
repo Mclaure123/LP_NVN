@@ -4,93 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nivani | Atelier de Flores en Chenilla</title>
-  
-  <!-- Tailwind CSS para diseño fluido y ultra responsivo -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Iconos FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Fuentes de Google: Playfair Display e Inter -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,450&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   
-  <!-- Configuración de Tailwind Personalizada -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"Playfair Display"', 'serif'],
-            sans: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
   <style>
     :root {
       --color-fondo: #fdfcf8;
       --color-acento: #c5a8a0;
-      --color-acento-hover: #b3948c;
-      --color-texto: #1c1a19;
-      --color-texto-sec: #706a66;
+      --color-texto: #2a2a2a;
+      --color-texto-sec: #888888;
       --color-wpp: #16a34a;
       --color-wpp-fondo: #f0fdf4;
       --color-wpp-borde: #bbf7d0;
       --color-tarjeta: #ffffff;
-      --color-recuadro: #faf9f5;
-      --color-cristal: rgba(253, 252, 248, 0.85);
-      --sombra-tarjeta: 0 10px 30px rgba(28, 26, 25, 0.03);
+      --color-recuadro: #fdfdfd;
+      --color-cristal: rgba(253, 252, 248, 0.9);
+      --sombra-tarjeta: 0 10px 20px rgba(0,0,0,0.04);
       --radio-borde: 24px;
       --radio-borde-hud: 20px;
+      --fuente-ui: 'Inter', sans-serif;
+      --fuente-lujo: 'Playfair Display', serif;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --color-fondo: #121110;
+        --color-fondo: #121212;
         --color-acento: #e5c8c0;
-        --color-acento-hover: #f3dad3;
-        --color-texto: #f5f3f2;
-        --color-texto-sec: #9e9590;
+        --color-texto: #f5f5f5;
+        --color-texto-sec: #aaaaaa;
         --color-wpp: #22c55e;
-        --color-wpp-fondo: rgba(34, 197, 94, 0.08);
+        --color-wpp-fondo: rgba(34, 197, 94, 0.1);
         --color-wpp-borde: rgba(34, 197, 94, 0.2);
-        --color-tarjeta: #1c1a19;
-        --color-recuadro: #262322;
-        --color-cristal: rgba(18, 17, 16, 0.88);
-        --sombra-tarjeta: 0 10px 30px rgba(0,0,0,0.25);
+        --color-tarjeta: #1e1e1e;
+        --color-recuadro: #242424;
+        --color-cristal: rgba(18, 18, 18, 0.85);
+        --sombra-tarjeta: 0 10px 30px rgba(0,0,0,0.3);
       }
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: radial-gradient(circle at top center, var(--color-tarjeta) 0%, var(--color-fondo) 100%);
       background-attachment: fixed;
       color: var(--color-texto);
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      font-family: var(--fuente-ui);
+      width: 100%; height: 100vh;
+      overflow-x: hidden; overflow-y: hidden; display: flex; flex-direction: column;
     }
 
     .pantalla-arranque {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: var(--color-fondo); z-index: 99999;
       display: flex; justify-content: center; align-items: center;
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
     .pantalla-oculta { opacity: 0; visibility: hidden; }
     
     .titulo-arranque {
-      font-family: 'Inter', sans-serif; font-weight: 200; letter-spacing: 15px;
+      font-family: var(--fuente-ui); font-weight: 200; letter-spacing: 15px;
       font-size: 3rem; text-transform: uppercase; color: var(--color-texto);
       margin-right: -15px; animation: pulsoArranque 2.5s infinite ease-in-out;
     }
@@ -99,21 +76,186 @@
       50% { opacity: 0.4; transform: scale(1.02); }
     }
 
-    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background-color: var(--color-acento);
-      border-radius: 20px;
+    .alerta-offline {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: #b91c1c; color: white; text-align: center;
+      padding: 10px; font-size: 0.85rem; font-weight: 600;
+      transform: translateY(100%); transition: transform 0.4s ease; z-index: 999;
+    }
+    .alerta-offline.visible { transform: translateY(0); }
+
+    .interfaz-fija {
+      position: sticky; top: 0; z-index: 100;
+      background-color: var(--color-cristal);
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(197, 168, 160, 0.1);
+      padding: 20px 25px 15px 25px;
+      display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
     }
 
-    .carrito-drawer {
-      transform: translateX(100%);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .carrito-drawer.abierto {
-      transform: translateX(0);
+    .titulo-marca {
+      font-family: var(--fuente-ui); font-weight: 200; letter-spacing: 15px;
+      font-size: 2.6rem; margin-bottom: 15px; text-transform: uppercase;
+      color: var(--color-texto); text-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-right: -15px;
     }
 
+    .hud-wrapper {
+      display: flex; justify-content: space-between; align-items: center;
+      width: 100%; max-width: 1200px; gap: 20px; flex-wrap: wrap;
+    }
+
+    .contenedor-hud { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; align-items: center; }
+
+    .boton-filtro {
+      padding: 8px 16px; border-radius: var(--radio-borde-hud);
+      border: 1px solid var(--color-acento); background-color: transparent;
+      color: var(--color-acento); font-weight: 600; font-size: 0.75rem;
+      cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-transform: uppercase; display: flex; align-items: center; gap: 6px;
+    }
+    .boton-filtro:hover { background-color: rgba(197, 168, 160, 0.08); transform: translateY(-2px); }
+    .filtro-activo { background-color: var(--color-acento) !important; color: var(--color-fondo) !important; box-shadow: 0 4px 15px rgba(197, 168, 160, 0.3); }
+
+    .bloque-buscador { width: 100%; max-width: 300px; position: relative; }
+    .bloque-buscador input {
+      width: 100%; padding: 10px 15px 10px 35px; border-radius: var(--radio-borde-hud);
+      border: 1px solid rgba(197, 168, 160, 0.4); background-color: var(--color-recuadro);
+      color: var(--color-texto); font-size: 0.9rem; outline: none; transition: all 0.3s ease;
+    }
+    .bloque-buscador input:focus { border-color: var(--color-acento); box-shadow: 0 4px 15px rgba(197, 168, 160, 0.15); }
+    .bloque-buscador i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-acento); font-size: 0.9rem; }
+
+    .panel-catalogo { flex-grow: 1; overflow-y: auto; padding: 25px 20px 80px 20px; scroll-behavior: smooth; }
+    .panel-catalogo::-webkit-scrollbar { width: 5px; }
+    .panel-catalogo::-webkit-scrollbar-thumb { background-color: rgba(197, 168, 160, 0.3); border-radius: 5px; }
+
+    .matriz-simetrica {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 15px; max-width: 1200px; margin: 0 auto; position: relative;
+    }
+
+    .estado-vacio {
+      grid-column: 1 / -1; text-align: center; padding: 60px 20px;
+      display: none; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease-out;
+    }
+    .estado-vacio i { font-size: 3rem; color: var(--color-acento); opacity: 0.5; margin-bottom: 15px; }
+    .estado-vacio p { font-size: 1.1rem; color: var(--color-texto-sec); font-weight: 300; }
+
+    .tarjeta-item {
+      background-color: var(--color-tarjeta); border-radius: var(--radio-borde); padding: 8px;
+      box-shadow: var(--sombra-tarjeta); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+      display: flex; flex-direction: column; position: relative;
+      content-visibility: auto; contain-intrinsic-size: 340px;
+      opacity: 0; transform: translateY(30px);
+    }
+    .tarjeta-item.revelado { opacity: 1; transform: translateY(0); }
+    .tarjeta-item:hover { transform: translateY(-6px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+
+    .contenedor-imagen {
+      position: relative; width: 100%; height: 160px; border-radius: 16px; overflow: hidden;
+      background-color: var(--color-recuadro);
+    }
+    
+    /* CARGADOR ATELIER CON HUELLA EN CHENILLA */
+    .cargador-atelier {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      gap: 8px; background-color: var(--color-recuadro); z-index: 5;
+    }
+    .icono-huella-pulso {
+      font-size: 1.8rem; color: var(--color-acento);
+      animation: pulsoRespiracion 2s infinite ease-in-out;
+    }
+    .texto-espera-narrativo {
+      font-size: 0.55rem; text-transform: uppercase; letter-spacing: 1px;
+      font-weight: 600; color: var(--color-texto-sec); text-align: center;
+      padding: 0 10px;
+    }
+
+    .imagen-item {
+      width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;
+      opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .imagen-cargada { opacity: 1; }
+    .tarjeta-item:hover .imagen-cargada { transform: scale(1.06); }
+
+    .badge-luxury {
+      position: absolute; bottom: 8px; right: 8px; padding: 5px 12px;
+      border-radius: 20px; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; z-index: 10; backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; gap: 5px;
+    }
+    .badge-luxury-nuevo { background: rgba(240, 253, 244, 0.8); color: #0f766e; border: 1px solid rgba(15, 118, 110, 0.2); animation: pulsoRespiracion 3s infinite ease-in-out; }
+    .badge-luxury-escaso { background: rgba(254, 242, 242, 0.8); color: #991b1b; border: 1px solid rgba(153, 27, 27, 0.2); animation: pulsoCorazon 1.8s infinite; }
+
+    .recuadro-info {
+      background: var(--color-recuadro); border: 1px solid rgba(197, 168, 160, 0.1); border-radius: 18px;
+      padding: 12px; margin-top: 8px; display: flex; flex-direction: column; flex-grow: 1; gap: 4px;
+    }
+    
+    .cabecera-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .texto-grupo { font-size: 0.55rem; color: var(--color-acento); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+    .btn-share { background: transparent; border: none; color: var(--color-texto-sec); cursor: pointer; transition: color 0.2s; font-size: 0.9rem; }
+    .btn-share:hover { color: var(--color-acento); transform: scale(1.1); }
+
+    .texto-nombre {
+      font-family: var(--fuente-lujo); font-weight: 400; font-size: 0.85rem;
+      color: var(--color-texto); line-height: 1.3; flex-grow: 1; font-style: italic;
+      letter-spacing: 0.5px; opacity: 0.9;
+    }
+    .texto-precio { font-weight: 700; color: var(--color-texto); font-size: 1.05rem; margin-top: 4px; }
+
+    .btn-subir {
+      position: fixed; bottom: 30px; right: 30px; background-color: var(--color-texto);
+      color: var(--color-fondo); width: 45px; height: 45px; border-radius: 50%;
+      border: none; display: flex; justify-content: center; align-items: center;
+      font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      opacity: 0; transform: translateY(20px); transition: all 0.3s; z-index: 90; pointer-events: none;
+    }
+    .btn-subir.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    .modal-zoom {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9);
+      display: none; justify-content: center; align-items: center; z-index: 9999;
+      backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-activo { display: flex !important; opacity: 1 !important; }
+    .imagen-zoom { max-width: 90%; max-height: 90%; border-radius: 24px; box-shadow: 0 0 50px rgba(0,0,0,0.6); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .modal-activo .imagen-zoom { transform: scale(1); }
+
+    /* ====================================================================== */
+    /* MINI TEXTURAS DINÁMICAS EN EL PREVISUALIZADOR DEL RAMO                  */
+    /* ====================================================================== */
+    .textura-terciopelo {
+      background: radial-gradient(circle at 50% 30%, #5c0620 0%, #3b0212 70%, #1e0008 100%);
+      box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.85), 0 10px 25px rgba(0, 0, 0, 0.45);
+      border: 1.5px solid rgba(212, 163, 115, 0.25);
+    }
+    
+    .textura-coreano {
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+      opacity: 0.95;
+      box-shadow: inset 0 0 25px rgba(219, 39, 119, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 30px 30px 40px 40px;
+    }
+    
+    .textura-kraft {
+      background: linear-gradient(150deg, #d2b48c 0%, #b59068 50%, #8b653f 100%);
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.25), 0 8px 20px rgba(0, 0, 0, 0.15);
+      border-radius: 12px;
+    }
+
+    /* TULIPANES TEXTURA CHENILLA EN PREVISUALIZADOR */
+    .tulipan-chenilla {
+      background: radial-gradient(circle at 35% 35%, #f43f5e 15%, #be123c 65%, #6c041d 100%);
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.3);
+      filter: drop-shadow(0 0 1px rgba(244, 63, 94, 0.8));
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      position: absolute;
+      transform-origin: bottom center;
+    }
+
+    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
     @keyframes pulsoCorazon {
       0% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0.4); }
       15% { box-shadow: 0 0 0 8px rgba(153, 27, 27, 0); }
@@ -122,42 +264,14 @@
       100% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0); }
     }
     @keyframes pulsoRespiracion {
-      0% { box-shadow: 0 0 4px rgba(15, 118, 110, 0.2); }
-      50% { box-shadow: 0 0 14px rgba(15, 118, 110, 0.5); }
-      100% { box-shadow: 0 0 4px rgba(15, 118, 110, 0.2); }
-    }
-    .badge-luxury-nuevo { animation: pulsoRespiracion 3s infinite ease-in-out; }
-    .badge-luxury-escaso { animation: pulsoCorazon 1.8s infinite; }
-
-    .toast-container {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 100000;
-      pointer-events: none;
-    }
-    .toast-notif {
-      pointer-events: auto;
-      transform: translateY(-20px);
-      opacity: 0;
-      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .toast-notif.active {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    /* Partícula de flor volando al carrito */
-    .particula-vuelo {
-      position: fixed;
-      pointer-events: none;
-      z-index: 99999;
-      transition: all 0.85s cubic-bezier(0.19, 1, 0.22, 1);
-      transform: scale(1.6);
+      0% { box-shadow: 0 0 4px rgba(15, 118, 110, 0.2); transform: scale(1); }
+      50% { box-shadow: 0 0 14px rgba(15, 118, 110, 0.6); transform: scale(1.05); }
+      100% { box-shadow: 0 0 4px rgba(15, 118, 110, 0.2); transform: scale(1); }
     }
   </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#fdfcf8] dark:bg-[#121110] transition-colors duration-300">
+<body class="transition-colors duration-300">
 
   <div id="pantalla-arranque" class="pantalla-arranque">
     <div class="text-center">
@@ -166,117 +280,166 @@
     </div>
   </div>
 
-  <div id="alerta-offline" class="fixed bottom-0 left-0 w-full bg-red-700 text-white text-center py-2 px-4 text-xs font-semibold tracking-wide transition-transform duration-300 translate-y-full z-[999]">
+  <div id="alerta-offline" class="alerta-offline">
     <i class="fas fa-wifi mr-2"></i> Conexión débil o nula. Visualizando catálogo offline.
   </div>
 
-  <div class="sticky top-0 z-40 bg-[var(--color-cristal)] backdrop-blur-md border-b border-stone-200/10 px-4 py-4 md:px-8 md:py-6 flex flex-col items-center flex-shrink-0">
-    <h1 class="text-2xl md:text-4xl font-light tracking-[16px] text-[var(--color-texto)] uppercase mr-[-16px] mb-4 select-none cursor-default">NIVANI</h1>
-    
-    <div class="w-full max-w-6xl flex flex-col md:flex-row gap-4 items-center justify-between">
-      <nav id="contenedor-hud" class="flex gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 custom-scroll select-none"></nav>
-
-      <!-- Buscador, ordenador y bolsa de compra -->
+  <!-- HEADER HUD FLOTANTE -->
+  <div class="interfaz-fija">
+    <h1 class="titulo-marca select-none">NIVANI</h1>
+    <div class="hud-wrapper">
+      <nav id="contenedor-hud" class="contenedor-hud select-none"></nav>
+      
+      <!-- Buscador y Acciones -->
       <div class="flex gap-2 w-full md:w-auto items-center flex-wrap sm:flex-nowrap">
-        <div id="wrapper-buscador" class="relative w-full sm:w-[240px]">
-          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-acento)] text-xs"></i>
-          <input type="text" id="buscador-vivo" placeholder="Buscar flor en chenilla..." 
-                 class="w-full pl-10 pr-4 py-2 text-sm rounded-[var(--radio-borde-hud)] border border-stone-200/20 dark:border-stone-800/20 bg-[var(--color-recuadro)] text-[var(--color-texto)] outline-none focus:border-[var(--color-acento)] focus:ring-1 focus:ring-[var(--color-acento)]/30 transition-all duration-300">
+        <div class="bloque-buscador flex-grow sm:flex-grow-0">
+          <i class="fas fa-search"></i>
+          <input type="text" id="buscador-vivo" placeholder="Buscar en el atelier...">
         </div>
-
-        <div id="wrapper-ordenador" class="relative w-full sm:w-[180px]">
-          <i class="fas fa-sort absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-acento)] text-xs"></i>
-          <select id="orden-precio" class="w-full pl-10 pr-8 py-2 text-sm rounded-[var(--radio-borde-hud)] border border-stone-200/20 dark:border-stone-800/20 bg-[var(--color-recuadro)] text-[var(--color-texto)] appearance-none outline-none focus:border-[var(--color-acento)] transition-all duration-300 cursor-pointer">
-            <option value="default">Relevancia</option>
-            <option value="asc">Precio: Bajo a Alto</option>
-            <option value="desc">Precio: Alto a Bajo</option>
-          </select>
-          <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-acento)] text-[10px] pointer-events-none"></i>
-        </div>
-
-        <button id="btn-abrir-carrito" class="relative min-h-[44px] min-w-[44px] bg-[var(--color-recuadro)] text-[var(--color-texto)] hover:bg-[var(--color-acento)] hover:text-white border border-stone-200/10 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm">
-          <i id="icono-carrito-bolsa" class="fas fa-shopping-bag text-base transition-transform duration-300"></i>
-          <span id="badge-carrito-contador" class="absolute -top-1 -right-1 bg-[var(--color-acento)] text-stone-900 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center scale-0 transition-transform duration-300">0</span>
+        
+        <!-- Botón de Abrir Carrito -->
+        <button id="btn-bolsa-abrir" class="relative bg-[var(--color-recuadro)] border border-stone-200/10 hover:border-[var(--color-acento)] px-4 py-2.5 rounded-full flex items-center gap-2 text-xs font-semibold tracking-wide transition-all duration-300 select-none">
+          <i id="icono-bolsa-compras" class="fas fa-shopping-bag text-[var(--color-acento)] transition-all"></i>
+          <span class="hidden sm:inline">Mi Pedido</span>
+          <span id="contador-pedido" class="bg-[var(--color-acento)] text-stone-900 font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center scale-100 transition-all">0</span>
         </button>
       </div>
     </div>
   </div>
 
-  <main class="panel-catalogo flex-grow overflow-y-auto custom-scroll px-4 md:px-8 py-6" id="panel-scroll">
-    <div id="contenedor-matriz" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 max-w-6xl mx-auto">
-      <div id="estado-vacio" class="col-span-full hidden flex-col items-center justify-center py-20 text-center animate-fade-in">
-        <i class="fas fa-seedling text-4xl text-[var(--color-acento)] opacity-50 mb-4"></i>
-        <p class="text-lg text-[var(--color-texto)] font-medium mb-1">Sin coincidencias florales</p>
-        <p class="text-sm text-[var(--color-texto-sec)] font-light max-w-sm">Intenta cambiando el filtro de categorías o ajustando la búsqueda.</p>
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="panel-catalogo" id="panel-scroll">
+    <div id="contenedor-matriz" class="matriz-simetrica">
+      <div id="estado-vacio" class="estado-vacio">
+        <i class="fas fa-seedling"></i>
+        <p>No encontramos esta flor. Explora nuestro catálogo.</p>
       </div>
     </div>
   </main>
 
-  <button id="btn-subir" class="fixed bottom-6 right-6 w-11 h-11 bg-[var(--color-texto)] text-[var(--color-fondo)] hover:opacity-90 rounded-full flex items-center justify-center shadow-lg cursor-pointer transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 z-30">
-    <i class="fas fa-chevron-up"></i>
-  </button>
+  <button id="btn-subir" class="btn-subir"><i class="fas fa-chevron-up"></i></button>
 
-  <div id="carrito-capa-oscura" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1000] hidden opacity-0 transition-opacity duration-300"></div>
-  <aside id="carrito-drawer" class="carrito-drawer fixed top-0 right-0 h-full w-full sm:w-[440px] bg-[var(--color-tarjeta)] border-l border-stone-200/10 shadow-2xl flex flex-col z-[1001]">
-    <div class="px-6 py-5 border-b border-stone-200/10 flex justify-between items-center bg-[var(--color-recuadro)]">
-      <div class="flex items-center gap-3">
-        <i class="fas fa-shopping-bag text-lg text-[var(--color-acento)]"></i>
-        <div>
-          <h2 class="font-serif italic text-lg font-semibold text-[var(--color-texto)]">Tu Pedido</h2>
-          <p class="text-[10px] text-[var(--color-texto-sec)] tracking-wider uppercase">Memoria de compra</p>
-        </div>
+  <div id="zoom-modal" class="modal-zoom">
+    <img id="imagen-ampliada" class="imagen-zoom" src="">
+  </div>
+
+  <!-- TOASTS DE CONFIRMACIÓN -->
+  <div id="toast-contenedor" class="fixed top-6 right-6 z-[10000] flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ====================================================================== */
+  /* DRAWER: PANEL DE PEDIDOS Y TALLER DE DISEÑO DE RAMO                    */
+  /* ====================================================================== -->
+  <div id="pedido-drawer" class="fixed inset-y-0 right-0 w-full sm:max-w-md bg-[var(--color-cristal)] backdrop-blur-xl border-l border-stone-200/10 shadow-2xl z-[500] transform translate-x-full transition-transform duration-500 ease-out flex flex-col">
+    <!-- Header Drawer -->
+    <div class="p-6 border-b border-stone-200/10 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-magic text-[var(--color-acento)]"></i>
+        <h2 class="font-serif italic text-lg font-semibold text-[var(--color-texto)]">Mi Carrito & Taller</h2>
       </div>
-      <button id="btn-cerrar-carrito" class="w-8 h-8 rounded-full bg-stone-200/10 flex items-center justify-center text-[var(--color-texto)] hover:bg-stone-200/30 transition-all">
-        <i class="fas fa-times text-sm"></i>
-      </button>
+      <button id="btn-bolsa-cerrar" class="w-8 h-8 rounded-full bg-[var(--color-recuadro)] border border-stone-200/10 flex items-center justify-center text-sm text-[var(--color-texto-sec)] hover:text-[var(--color-texto)] transition-all">&times;</button>
     </div>
 
-    <!-- Lista de artículos -->
-    <div id="carrito-articulos" class="flex-grow overflow-y-auto px-6 py-4 custom-scroll space-y-4"></div>
+    <!-- Pestañas: 1. Mi Carrito | 2. Diseña tu Ramo -->
+    <div class="flex border-b border-stone-200/10 bg-[var(--color-recuadro)] text-xs font-bold uppercase tracking-wider select-none">
+      <button id="tab-carrito" class="flex-1 py-4 text-center border-b-2 border-[var(--color-acento)] text-[var(--color-texto)]">Carrito de Flores</button>
+      <button id="tab-taller" class="flex-1 py-4 text-center border-b-2 border-transparent text-[var(--color-texto-sec)] hover:text-[var(--color-texto)]">Diseña tu Ramo 🎨</button>
+    </div>
 
-    <!-- Pilar 2: Tarjeta de Dedicatoria de Lujo -->
-    <div class="px-6 py-4 border-t border-stone-200/10 bg-[var(--color-recuadro)] space-y-3">
-      <div class="flex items-center justify-between">
-        <label class="text-[10px] uppercase tracking-wider text-[var(--color-texto-sec)] font-bold flex items-center gap-2">
-          <i class="fas fa-feather-alt text-[var(--color-acento)]"></i> ¿Deseas añadir dedicatoria?
-        </label>
-        <input type="checkbox" id="check-dedicatoria-activa" class="accent-[var(--color-acento)] h-4 w-4 cursor-pointer" onchange="MotorUI.toggleDedicatoriaForm()">
-      </div>
+    <!-- Cuerpo Scrolleable -->
+    <div id="drawer-contenido" class="flex-grow overflow-y-auto p-6 space-y-6 custom-scroll">
       
-      <div id="modulo-dedicatoria-inputs" class="hidden space-y-3 pt-2 border-t border-stone-200/10 animate-fade-in">
-        <div>
-          <span class="text-[9px] font-semibold text-stone-400 dark:text-stone-500 uppercase block mb-1">Estilo de la tarjeta</span>
-          <div class="grid grid-cols-3 gap-1">
-            <button onclick="MotorUI.cambiarEstiloDedicatoria('dorado')" id="btn-estilo-dorado" class="p-1.5 border border-[var(--color-acento)] rounded-lg text-[9px] bg-[var(--color-tarjeta)] font-bold text-stone-900 dark:text-white transition-all text-center">PAN DE ORO</button>
-            <button onclick="MotorUI.cambiarEstiloDedicatoria('acuarela')" id="btn-estilo-acuarela" class="p-1.5 border border-stone-200 dark:border-stone-700 rounded-lg text-[9px] bg-transparent text-stone-400 transition-all text-center">ACUARELA</button>
-            <button onclick="MotorUI.cambiarEstiloDedicatoria('marfil')" id="btn-estilo-marfil" class="p-1.5 border border-stone-200 dark:border-stone-700 rounded-lg text-[9px] bg-transparent text-stone-400 transition-all text-center">MARFIL CLÁS.</button>
-          </div>
+      <!-- CONTENIDO PESTAÑA 1: Carrito ordinario -->
+      <div id="seccion-tab-carrito" class="space-y-4">
+        <div id="carrito-lista" class="space-y-3">
+          <!-- Items generados dinámicamente -->
         </div>
-
-        <div>
-          <textarea id="texto-dedicatoria" placeholder="Escribe aquí tu dedicatoria de amor, felicitación o agradecimiento..." maxlength="100" oninput="MotorUI.actualizarPreviewDedicatoria()" class="w-full h-16 p-2 text-xs border border-stone-200 dark:border-stone-800 bg-[var(--color-tarjeta)] text-[var(--color-texto)] rounded-xl resize-none outline-none focus:border-[var(--color-acento)]"></textarea>
-          <div class="flex justify-between text-[8px] text-stone-400 uppercase mt-0.5 font-medium">
-            <span>Máximo 100 letras</span>
-            <span><span id="char-dedicatoria-count">0</span>/100</span>
-          </div>
-        </div>
-
-        <!-- Render visual de la tarjeta de lujo en el carrito -->
-        <div id="mini-tarjeta-preview" class="w-full aspect-[16/9] rounded-xl border border-amber-200/40 shadow-md bg-gradient-to-br from-yellow-50 via-amber-50 to-orange-50 p-4 flex flex-col justify-between text-stone-800 transition-all duration-300">
-          <div class="flex justify-between items-center border-b border-amber-900/10 pb-1">
-            <span id="preview-badge-estilo" class="text-[7px] tracking-[3px] uppercase font-semibold text-amber-800">PAN DE ORO EXCLUSIVO</span>
-            <i class="fas fa-feather-alt text-[9px] text-amber-800/60"></i>
-          </div>
-          <p id="preview-texto-tarjeta" class="font-serif italic text-[10px] leading-relaxed text-center text-amber-950 my-auto">
-            "Tu hermoso mensaje aparecerá aquí..."
-          </p>
-          <div class="text-center border-t border-amber-900/10 pt-1">
-            <span class="text-[6px] tracking-[4px] uppercase font-light text-stone-500">NIVANI BOUTIQUE</span>
-          </div>
+        <div id="carrito-vacio-msg" class="text-center py-12 text-stone-400 dark:text-stone-500 flex flex-col items-center justify-center gap-3">
+          <i class="fas fa-shopping-basket text-3xl opacity-40"></i>
+          <p class="text-xs font-light">Tu bolsa de Atelier está vacía.</p>
         </div>
       </div>
+
+      <!-- CONTENIDO PESTAÑA 2: Diseña tu Ramo -->
+      <div id="seccion-tab-taller" class="hidden space-y-6">
+        <!-- Renderizador Realista Dinámico de la Textura y Combinación -->
+        <div class="relative w-full aspect-[4/3] rounded-3xl overflow-hidden flex flex-col items-center justify-center p-4 border border-stone-200/10 transition-all duration-500" id="simulador-lienzo-textura">
+          <!-- Capa de Gipsófila (Nube Flotante en Chenilla) -->
+          <div id="lienzo-gipso" class="absolute inset-0 bg-transparent opacity-0 transition-opacity duration-500 pointer-events-none z-10" style="background-image: radial-gradient(rgba(255,255,255,0.9) 2px, transparent 3px); background-size: 16px 16px;"></div>
+          
+          <!-- Contenedor del Ramillete (Tulipanes) -->
+          <div id="lienzo-contenedor-tulipanes" class="relative w-full h-2/3 flex items-center justify-center z-20">
+            <!-- Flores generadas dinámicamente -->
+          </div>
+
+          <!-- Lazo o Cinta de Organza -->
+          <div id="lienzo-organza" class="absolute bottom-[35%] w-16 h-8 bg-white/40 border border-white/60 backdrop-blur-[2px] rounded-full scale-0 transition-all duration-500 shadow-sm flex items-center justify-center z-30 pointer-events-none">
+            <span class="text-[8px] font-bold text-amber-800/80 tracking-widest uppercase">ORGANZA</span>
+          </div>
+
+          <!-- Información Dinámica Base del Lienzo -->
+          <div class="absolute bottom-4 left-4 right-4 bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/15 dark:border-white/5 p-2 rounded-xl text-center z-40">
+            <span id="txt-textura-envoltura" class="text-[9px] font-bold text-white tracking-widest uppercase block drop-shadow-md">Textura Cargada</span>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Selector de Envolturas -->
+          <div>
+            <label class="text-[10px] font-bold uppercase text-stone-400 block mb-1">Envoltura de Terciopelo o Papel</label>
+            <select id="sim-envoltorio" class="w-full p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-xl text-xs outline-none text-[var(--color-texto)]">
+              <option value="terciopelo" data-precio="35">Caja de Terciopelo Burdeos (+35 Bs.)</option>
+              <option value="coreano" data-precio="20">Papel Coreano Rosa Pastel (+20 Bs.)</option>
+              <option value="kraft" data-precio="15">Papel Kraft Texturizado Natural (+15 Bs.)</option>
+            </select>
+          </div>
+
+          <!-- Cantidad de Tulipanes -->
+          <div>
+            <label class="text-[10px] font-bold uppercase text-stone-400 block mb-1">Flor Principal: Tulipán en Chenilla</label>
+            <div class="flex items-center gap-4">
+              <button id="btn-sim-menos" class="w-10 h-10 rounded-xl border border-stone-200/25 bg-[var(--color-recuadro)] flex items-center justify-center font-bold text-sm text-[var(--color-texto)] hover:bg-[var(--color-acento)] hover:text-white transition-all">-</button>
+              <span id="sim-cant-flores" class="text-base font-bold w-6 text-center">3</span>
+              <button id="btn-sim-mas" class="w-10 h-10 rounded-xl border border-stone-200/25 bg-[var(--color-recuadro)] flex items-center justify-center font-bold text-sm text-[var(--color-texto)] hover:bg-[var(--color-acento)] hover:text-white transition-all">+</button>
+              <span class="text-xs text-[var(--color-texto-sec)]">(35 Bs. c/u)</span>
+            </div>
+          </div>
+
+          <!-- Complementos -->
+          <div class="space-y-2">
+            <label class="text-[10px] font-bold uppercase text-stone-400 block">Complementos y Detalles</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-xl cursor-pointer">
+                <input type="checkbox" id="sim-check-gipso" class="accent-[var(--color-acento)] h-4 w-4">
+                <span class="text-[10px] font-semibold text-[var(--color-texto)]">Gipsófila (+15)</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-xl cursor-pointer">
+                <input type="checkbox" id="sim-check-organza" class="accent-[var(--color-acento)] h-4 w-4">
+                <span class="text-[10px] font-semibold text-[var(--color-texto)]">Cinta Organza (+10)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Botón Añadir Ramo Personalizado -->
+          <button id="btn-aniadir-ramo-personalizado" class="w-full bg-[var(--color-acento)] hover:opacity-90 text-stone-900 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">Añadir este Ramo al Pedido</button>
+        </div>
+      </div>
+
+      <!-- SECCIÓN DEDICATORIA: Para Ambos Modos -->
+      <div class="border-t border-stone-200/10 pt-6 space-y-4">
+        <label class="text-[10px] font-bold uppercase text-stone-400 block">Escribe tu Dedicatoria (Tarjeta de Regalo)</label>
+        
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="cambiarEstiloDedicatoria('dorado')" class="p-2 border border-[var(--color-acento)] rounded-lg text-[9px] bg-[var(--color-recuadro)] hover:bg-[var(--color-acento)] hover:text-stone-900 font-bold tracking-wide transition-all">PAN DE ORO</button>
+          <button onclick="cambiarEstiloDedicatoria('acuarela')" class="p-2 border border-stone-300 dark:border-stone-700 rounded-lg text-[9px] bg-[var(--color-recuadro)] hover:bg-[var(--color-acento)] hover:text-stone-900 font-bold tracking-wide transition-all">ACUARELA</button>
+          <button onclick="cambiarEstiloDedicatoria('marfil')" class="p-2 border border-stone-300 dark:border-stone-700 rounded-lg text-[9px] bg-[var(--color-recuadro)] hover:bg-[var(--color-acento)] hover:text-stone-900 font-bold tracking-wide transition-all">MARFIL</button>
+        </div>
+
+        <textarea id="carrito-dedicatoria" maxlength="100" placeholder="Escribe aquí tu mensaje especial de amor, felicitación o agradecimiento..." class="w-full h-20 p-3 border border-stone-300 dark:border-stone-700 bg-[var(--color-recuadro)] rounded-xl text-xs outline-none focus:border-[var(--color-acento)] resize-none text-[var(--color-texto)]"></textarea>
+      </div>
+
     </div>
 
+    <!-- Footer Checkout -->
     <div class="p-6 border-t border-stone-200/10 bg-[var(--color-recuadro)]">
       <div class="flex justify-between items-center mb-4">
         <span class="text-xs uppercase tracking-widest text-[var(--color-texto-sec)] font-semibold">Total Estimado</span>
@@ -288,33 +451,22 @@
         <div class="grid grid-cols-2 gap-2">
           <label class="flex items-center gap-2 p-2 bg-[var(--color-tarjeta)] border border-stone-200/15 rounded-xl cursor-pointer">
             <input type="radio" name="wpp-linea-destino" value="linea1" checked class="accent-[var(--color-acento)]">
-            <span class="text-xs font-semibold text-[var(--color-texto)]">Línea VIP 1</span>
+            <span class="text-xs font-semibold text-[var(--color-texto)]">VIP 1</span>
           </label>
           <label class="flex items-center gap-2 p-2 bg-[var(--color-tarjeta)] border border-stone-200/15 rounded-xl cursor-pointer">
             <input type="radio" name="wpp-linea-destino" value="linea2" class="accent-[var(--color-acento)]">
-            <span class="text-xs font-semibold text-[var(--color-texto)]">Línea VIP 2</span>
+            <span class="text-xs font-semibold text-[var(--color-texto)]">VIP 2</span>
           </label>
         </div>
       </div>
 
       <button id="btn-enviar-pedido" class="w-full bg-[#16a34a] hover:bg-emerald-700 text-white py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300">
-        <i class="fab fa-whatsapp text-lg"></i> Enviar Pedido por WhatsApp
+        <i class="fab fa-whatsapp text-base"></i> Enviar Pedido Completo
       </button>
     </div>
-  </aside>
-
-  <!-- Modal zoom de imágenes -->
-  <div id="zoom-modal" class="fixed inset-0 bg-black/95 z-[9999] hidden items-center justify-center opacity-0 transition-opacity duration-300 backdrop-blur-md">
-    <button class="absolute top-6 right-6 text-white text-2xl hover:scale-110 transition-transform"><i class="fas fa-times"></i></button>
-    <img id="imagen-ampliada" class="max-w-[90vw] max-h-[85vh] md:max-h-[90vh] object-contain rounded-2xl shadow-2xl scale-95 transition-transform duration-300" src="" alt="Ampliada">
   </div>
 
-  <div id="toast-container" class="toast-container flex flex-col gap-2"></div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+  <script>
     const ConfiguracionFirebase = {
       apiKey: "AIzaSyBqsTxi2PoFjPgvre4QqZvWHczUoO5sqU8",
       projectId: "limpiapipas-98f13",
@@ -326,46 +478,42 @@
       linea2: "59177047557"
     };
 
-    const MENSAJES_CARGA_ATELIER = [
+    // Biblioteca de Frases de Espera Aleatorias del Oficio
+    const FRASES_ESPERA = [
       "Hilando la chenilla...",
       "Moldeando el terciopelo...",
       "Tejiendo pétalo a pétalo...",
-      "Esculpiendo con precisión...",
-      "Curvando filamento suave...",
-      "Peinando el tallo de felpa...",
-      "Abriendo el taller de felpa..."
+      "Esculpiendo el tallo de felpa...",
+      "Peinando fibras suaves...",
+      "Moldeando con precisión...",
+      "Abriendo el Atelier..."
     ];
 
     const EstadoAplicacion = {
       datosProcesados: [],
       categoriasUnicas: [],
       filtroActivo: "TODO",
-      ordenPrecio: "default",
       textoBusqueda: "",
       primeraCarga: true,
+      
+      // Carrito integrado con persistencia de Favoritos
+      favoritos: JSON.parse(localStorage.getItem('nivani_favs')) || [],
       carrito: [],
-      favoritos: JSON.parse(localStorage.getItem('nivani_favoritos')) || [],
-      // Pilar 2: Almacena la dedicatoria
-      dedicatoria: {
-        activa: false,
-        estilo: "dorado",
-        texto: ""
-      },
-      // Pilar 3: Almacena configuración del ramo interactivo
+      
       simuladorRamo: {
-        envoltura: "terciopelo",
-        envolturaNombre: "Caja de Terciopelo Burdeos",
-        envolturaPrecio: 35,
+        envoltura: 'terciopelo',
         cantidadFlores: 3,
         follajeGipso: false,
         follajeOrganza: false
-      }
+      },
+      estiloTarjetaDedicatoria: 'dorado'
     };
 
+    // Animación de entrada de elementos
     const ObserverAnimacion = new IntersectionObserver((entradas, observador) => {
       entradas.forEach(entrada => {
         if (entrada.isIntersecting) {
-          entrada.target.classList.add('revelado', 'opacity-100', 'translate-y-0');
+          entrada.target.classList.add('revelado');
           observador.unobserve(entrada.target);
         }
       });
@@ -378,102 +526,71 @@
       vibrar: function() {
         if (navigator.vibrate) navigator.vibrate(15);
       },
-      obtenerMensajeCargaAleatorio: function() {
-        return MENSAJES_CARGA_ATELIER[Math.floor(Math.random() * MENSAJES_CARGA_ATELIER.length)];
+      obtenerFraseEsperaAleatoria: function() {
+        const index = Math.floor(Math.random() * FRASES_ESPERA.length);
+        return FRASES_ESPERA[index];
       },
-      
-      mostrarToast: function(mensaje, tipo = "success") {
-        const cont = document.getElementById('toast-container');
+      mostrarToast: function(mensaje, esExitoso = true) {
+        const container = document.getElementById('toast-contenedor');
         const toast = document.createElement('div');
-        toast.className = "toast-notif bg-[var(--color-tarjeta)] border border-stone-200/10 text-[var(--color-texto)] px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 max-w-sm pointer-events-auto transition-all duration-300";
+        toast.className = "pointer-events-auto bg-[var(--color-tarjeta)] border border-stone-200/10 text-[var(--color-texto)] px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 max-w-xs transition-all duration-300 opacity-0 transform translate-y-[-10px]";
         
-        let iconHtml = '<i class="fas fa-check-circle text-emerald-500"></i>';
-        if (tipo === "heart") {
-          iconHtml = '<i class="fas fa-heart text-red-500"></i>';
-        } else if (tipo === "trash") {
-          iconHtml = '<i class="fas fa-trash-alt text-amber-500"></i>';
-        } else if (tipo === "spark") {
-          iconHtml = '<i class="fas fa-sparkles text-amber-500"></i>';
-        }
-        
-        toast.innerHTML = `${iconHtml} <span class="text-xs font-semibold tracking-wide">${mensaje}</span>`;
-        cont.appendChild(toast);
-        setTimeout(() => toast.classList.add('active'), 50);
-        
+        let icono = esExitoso ? '<i class="fas fa-check-circle text-emerald-500"></i>' : '<i class="fas fa-heart text-pink-500"></i>';
+        toast.innerHTML = `${icono} <span class="text-xs font-semibold">${mensaje}</span>`;
+        container.appendChild(toast);
+
         setTimeout(() => {
-          toast.classList.remove('active');
-          toast.classList.add('translate-y-[-10px]', 'opacity-0');
-          setTimeout(() => toast.remove(), 350);
+          toast.classList.remove('opacity-0', 'translate-y-[-10px]');
+          toast.classList.add('opacity-100', 'translate-y-0');
+        }, 50);
+
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'translate-y-[-10px]');
+          setTimeout(() => toast.remove(), 300);
         }, 2500);
       },
+      ejecutarEfectoVuelo: function(event) {
+        const rectOrigen = event.currentTarget.getBoundingClientRect();
+        const rectDestino = document.getElementById('icono-bolsa-compras').getBoundingClientRect();
 
-      toggleFavorito: function(id, nombre) {
-        this.vibrar();
-        const index = EstadoAplicacion.favoritos.indexOf(id);
-        if (index === -1) {
-          EstadoAplicacion.favoritos.push(id);
-          this.mostrarToast(`"${nombre}" guardada en favoritos.`, "heart");
-        } else {
-          EstadoAplicacion.favoritos.splice(index, 1);
-          this.mostrarToast(`"${nombre}" eliminada de favoritos.`, "trash");
-        }
-        localStorage.setItem('nivani_favoritos', JSON.stringify(EstadoAplicacion.favoritos));
-        MotorUI.renderizarCatalogo();
+        const particula = document.createElement('div');
+        particula.className = "fixed pointer-events-none z-[9999] transition-all duration-700 ease-out text-lg select-none";
+        particula.innerHTML = "🌸";
+        particula.style.left = `${rectOrigen.left + rectOrigen.width/2}px`;
+        particula.style.top = `${rectOrigen.top}px`;
+        document.body.appendChild(particula);
+
+        setTimeout(() => {
+          particula.style.left = `${rectDestino.left}px`;
+          particula.style.top = `${rectDestino.top}px`;
+          particula.style.transform = "scale(0.3) rotate(360deg)";
+          particula.style.opacity = "0.3";
+        }, 50);
+
+        setTimeout(() => {
+          particula.remove();
+          const bagIcon = document.getElementById('icono-bolsa-compras');
+          bagIcon.classList.add('scale-125', 'text-emerald-500');
+          setTimeout(() => bagIcon.classList.remove('scale-125', 'text-emerald-500'), 300);
+        }, 750);
       },
-
-      compartirNativo: async function(nombre) {
-        if (navigator.share) {
-          try {
-            await navigator.share({
-              title: 'Nivani | ' + nombre,
-              text: `¡Mira esta hermosa flor moldeada a mano de Nivani: ${nombre}!`,
-              url: window.location.href
-            });
-          } catch (err) { console.log('Share cancelado', err); }
-        }
-      },
-
-      crearEnlaceCarritoWpp: function(carrito, numeroAsignado) {
+      crearEnlaceWppIndividual: function(nombreFlor, precioItem, numeroAsignado) {
         let base = "https://wa.me/" + numeroAsignado + "?text=";
-        let listaText = "";
-        let total = 0;
-
-        carrito.forEach(item => {
-          let p = parseInt(item.precio, 10);
-          let subtotal = p * item.cantidad;
-          total += subtotal;
-          
-          if (item.isCustom) {
-            listaText += `• ${item.cantidad}x ${item.nombre}\n  - Envoltura: ${item.detalles.envoltura}\n  - Flores: ${item.detalles.flores} Tulipanes de Chenilla\n  - Extras: ${item.detalles.extras || "Ninguno"}\n  - Precio: ${p} Bs. c/u\n`;
-          } else {
-            listaText += `• ${item.cantidad}x ${item.nombre} (${p} Bs. c/u) \n`;
-          }
-        });
-
-        let mensaje = `Hola Nivani, me gustaría realizar el siguiente pedido modelado a mano: \n\n${listaText}\n`;
-        
-        // Pilar 2: Agregar información de la Tarjeta Dedicatoria si está activa
-        if (EstadoAplicacion.dedicatoria.activa && EstadoAplicacion.dedicatoria.texto.trim() !== "") {
-          let estiloNombre = "PAN DE ORO";
-          if (EstadoAplicacion.dedicatoria.estilo === 'acuarela') estiloNombre = "ACUARELA ROMÁNTICA";
-          else if (EstadoAplicacion.dedicatoria.estilo === 'marfil') estiloNombre = "MINIMALISMO MARFIL";
-          
-          mensaje += `\n✦ *Tarjeta de Dedicatoria Incluida:*\n  - Estilo: ${estiloNombre}\n  - Mensaje: "${EstadoAplicacion.dedicatoria.texto.trim()}"\n`;
-        }
-
-        mensaje += `\n*Total Estimado: ${total} Bs.*\n\n¿Me confirman disponibilidad y tiempo de entrega?`;
-        return base + encodeURIComponent(mensaje);
+        let p = parseInt(precioItem, 10);
+        let sec = (!isNaN(p) && p > 0) ? `. Vi que está en ${precioItem} Bs.` : ". Me gustaría cotizarla.";
+        let upsell = " ¿Tienen opciones de tarjetas para acompañarlo?";
+        return base + encodeURI(`Hola Nivani, me interesa la flor de Atelier: ${nombreFlor}${sec}${upsell}`);
       },
-      
       diseccionarNombre: function(cadenaCruda) {
         let cadena = cadenaCruda || "";
         let res = { grupo: "GENERAL", nombre: cadena.trim(), badgeNuevo: false, badgeEscaso: false };
-        let matchSeparador = cadena.match(/[-_]/);
-        let indiceSeparador = matchSeparador ? matchSeparador.index : -1;
+        let indiceSeparador = cadena.match(/[-_]/);
         
-        if (indiceSeparador !== -1) {
-          res.grupo = cadena.substring(0, indiceSeparador).trim().toUpperCase();
-          let nombrePuro = cadena.substring(indiceSeparador + 1).trim();
+        if (indiceSeparador) {
+          let pos = indiceSeparador.index;
+          res.grupo = cadena.substring(0, pos).trim().toUpperCase();
+          let nombrePuro = cadena.substring(pos + 1).trim();
+          
           res.badgeNuevo = nombrePuro.includes('+');
           res.badgeEscaso = nombrePuro.includes('*');
           res.nombre = nombrePuro.replace('+', '').replace('*', '').trim();
@@ -487,20 +604,11 @@
     };
 
     const MotorConexion = {
-      iniciar: async function() {
-        try {
-          const app = initializeApp(ConfiguracionFirebase);
-          const db = initializeFirestore(app, {
-            localCache: persistentLocalCache({
-              tabManager: persistentMultipleTabManager()
-            })
-          });
-          return db;
-        } catch (error) {
-          console.error("Fallo de inicialización de Firebase:", error);
-          document.getElementById('alerta-offline').classList.remove('translate-y-full');
-          return null;
-        }
+      iniciar: function() {
+        firebase.initializeApp(ConfiguracionFirebase);
+        let baseDatos = firebase.firestore();
+        baseDatos.enablePersistence().catch(e => console.warn("Persistence offline fallida."));
+        return baseDatos;
       }
     };
 
@@ -515,172 +623,154 @@
           imagenAmpliada: document.getElementById('imagen-ampliada'),
           hud: document.getElementById('contenedor-hud'),
           buscador: document.getElementById('buscador-vivo'),
-          wrapperBuscador: document.getElementById('wrapper-buscador'),
-          ordenador: document.getElementById('orden-precio'),
-          wrapperOrdenador: document.getElementById('wrapper-ordenador'),
           estadoVacio: document.getElementById('estado-vacio'),
           panelScroll: document.getElementById('panel-scroll'),
           btnSubir: document.getElementById('btn-subir'),
-          btnAbrirCarrito: document.getElementById('btn-abrir-carrito'),
-          btnCerrarCarrito: document.getElementById('btn-cerrar-carrito'),
-          carritoCapaOscura: document.getElementById('carrito-capa-oscura'),
-          carritoDrawer: document.getElementById('carrito-drawer'),
-          carritoArticulos: document.getElementById('carrito-articulos'),
+          
+          drawer: document.getElementById('pedido-drawer'),
+          btnBolsaAbrir: document.getElementById('btn-bolsa-abrir'),
+          btnBolsaCerrar: document.getElementById('btn-bolsa-cerrar'),
+          contadorPedido: document.getElementById('contador-pedido'),
+          carritoLista: document.getElementById('carrito-lista'),
+          carritoVacioMsg: document.getElementById('carrito-vacio-msg'),
           carritoPrecioTotal: document.getElementById('carrito-precio-total'),
           btnEnviarPedido: document.getElementById('btn-enviar-pedido'),
-          badgeContador: document.getElementById('badge-carrito-contador')
+          carritoDedicatoria: document.getElementById('carrito-dedicatoria'),
+          
+          tabCarrito: document.getElementById('tab-carrito'),
+          tabTaller: document.getElementById('tab-taller'),
+          seccionTabCarrito: document.getElementById('seccion-tab-carrito'),
+          seccionTabTaller: document.getElementById('seccion-tab-taller'),
+          
+          simEnvoltorio: document.getElementById('sim-envoltorio'),
+          simCantFlores: document.getElementById('sim-cant-flores'),
+          btnSimMenos: document.getElementById('btn-sim-menos'),
+          btnSimMas: document.getElementById('btn-sim-mas'),
+          simCheckGipso: document.getElementById('sim-check-gipso'),
+          simCheckOrganza: document.getElementById('sim-check-organza'),
+          btnAniadirRamo: document.getElementById('btn-aniadir-ramo-personalizado'),
+          simLienzoTextura: document.getElementById('simulador-lienzo-textura'),
+          txtTexturaEnvoltura: document.getElementById('txt-textura-envoltura')
         };
       },
-
       renderizarHUD: function() {
         let cont = this.referencias.hud;
         cont.innerHTML = "";
-        let arrFiltros = [{ id: "TODO", texto: "Todo", icono: "fa-layer-group" }];
-        arrFiltros.push({ id: "FAV", texto: "Favoritos ♥", icono: "fa-heart text-red-500" });
         
-        // Pilar 3: Botón de diseño "Arma tu Ramo"
-        arrFiltros.push({ id: "DISENO", texto: "Diseña tu Ramo 🎨", icono: "fa-magic text-amber-500" });
-
+        let arrFiltros = [
+          { id: "TODO", texto: "Todo", icono: "fa-layer-group" },
+          { id: "FAVORITOS", texto: "Favoritos", icono: "fa-heart" }
+        ];
+        
         EstadoAplicacion.categoriasUnicas.forEach(cat => {
-          if (cat !== "GENERAL" && cat !== "") {
-            arrFiltros.push({ id: cat, texto: cat, icono: "fa-seedling" });
-          }
+          if (cat !== "GENERAL" && cat !== "") arrFiltros.push({ id: cat, texto: cat, icono: "fa-seedling" });
         });
+        arrFiltros.push({ id: "PRECIO_BAJO", texto: "< 100 Bs", icono: "fa-wallet" });
+        arrFiltros.push({ id: "PRECIO_ALTO", texto: "Premium", icono: "fa-crown" });
 
         arrFiltros.forEach(f => {
           let btn = document.createElement('button');
-          btn.className = "boton-filtro px-4 py-2 rounded-[var(--radio-borde-hud)] border text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all duration-300 cursor-pointer flex-shrink-0 " + 
-            (EstadoAplicacion.filtroActivo === f.id 
-              ? "bg-[var(--color-acento)] border-[var(--color-acento)] text-white shadow-md shadow-[var(--color-acento)]/25" 
-              : "bg-[var(--color-recuadro)] border-stone-200/20 text-[var(--color-acento)] hover:bg-[var(--color-acento)]/10");
-          
+          btn.className = "boton-filtro" + (EstadoAplicacion.filtroActivo === f.id ? " filtro-activo" : "");
           btn.innerHTML = `<i class="fas ${f.icono}"></i> ${f.texto}`;
           btn.dataset.categoria = f.id;
           cont.appendChild(btn);
         });
       },
-
       renderizarCatalogo: function() {
-        let contenedor = this.referencias.matriz;
-        let tarjetasPrevias = contenedor.querySelectorAll('.tarjeta-item, #panel-simulador-ramo');
+        let tarjetasPrevias = this.referencias.matriz.querySelectorAll('.tarjeta-item');
         tarjetasPrevias.forEach(n => { ObserverAnimacion.unobserve(n); n.remove(); });
         
-        // Ocultar buscador y ordenador si estamos en modo Diseño
-        if (EstadoAplicacion.filtroActivo === "DISENO") {
-          this.referencias.wrapperBuscador.classList.add('hidden');
-          this.referencias.wrapperOrdenador.classList.add('hidden');
-          this.renderizarSimuladorRamo();
-          return;
-        } else {
-          this.referencias.wrapperBuscador.classList.remove('hidden');
-          this.referencias.wrapperOrdenador.classList.remove('hidden');
-        }
-
         let filtroCat = EstadoAplicacion.filtroActivo;
         let busqueda = Utilidades.quitarTildes(EstadoAplicacion.textoBusqueda).toUpperCase();
-        let itemsProcesar = [...EstadoAplicacion.datosProcesados];
-
-        if (EstadoAplicacion.ordenPrecio === "asc") {
-          itemsProcesar.sort((a, b) => (parseInt(a.precio, 10) || 0) - (parseInt(b.precio, 10) || 0));
-        } else if (EstadoAplicacion.ordenPrecio === "desc") {
-          itemsProcesar.sort((a, b) => (parseInt(b.precio, 10) || 0) - (parseInt(a.precio, 10) || 0));
-        }
-
         let contadorVisual = 0;
         
-        itemsProcesar.forEach((item) => {
+        EstadoAplicacion.datosProcesados.forEach((item) => {
           let pasaFiltro = false;
+          let pVal = parseInt(item.precio, 10);
+          
           if (filtroCat === "TODO") pasaFiltro = true;
-          else if (filtroCat === "FAV") pasaFiltro = EstadoAplicacion.favoritos.includes(item.id);
+          else if (filtroCat === "FAVORITOS") pasaFiltro = EstadoAplicacion.favoritos.includes(item.id);
+          else if (filtroCat === "PRECIO_BAJO") pasaFiltro = (!isNaN(pVal) && pVal < 100);
+          else if (filtroCat === "PRECIO_ALTO") pasaFiltro = (!isNaN(pVal) && pVal >= 100);
           else pasaFiltro = (item.grupo === filtroCat);
 
           let pasaTex = Utilidades.quitarTildes(item.nombre).toUpperCase().includes(busqueda);
           
           if (pasaFiltro && pasaTex) {
             let tarjeta = document.createElement('div');
-            tarjeta.className = "tarjeta-item bg-[var(--color-tarjeta)] rounded-[var(--radio-borde)] p-2 shadow-sm transition-all duration-300 flex flex-col justify-between relative border border-stone-200/5 hover:-translate-y-1 hover:shadow-lg opacity-0 translate-y-6";
+            tarjeta.className = "tarjeta-item";
             
             let contImg = document.createElement('div');
-            contImg.className = "contenedor-imagen relative w-full h-44 rounded-2xl overflow-hidden bg-[var(--color-recuadro)] flex-shrink-0 flex items-center justify-center";
+            contImg.className = "contenedor-imagen";
 
-            // Animación y micro-narrativa de carga aleatoria (Atelier)
-            let txtAleatorioCarga = Utilidades.obtenerMensajeCargaAleatorio();
-            let loaderAtelier = document.createElement('div');
-            loaderAtelier.className = "absolute inset-0 z-10 bg-[var(--color-recuadro)] flex flex-col items-center justify-center p-3 text-center transition-all duration-500";
-            loaderAtelier.innerHTML = `
-              <i class="fas fa-fingerprint text-xl text-[var(--color-acento)]/60 animate-pulse mb-2"></i>
-              <span class="text-[9px] tracking-wider text-[var(--color-texto-sec)] font-medium uppercase animate-pulse select-none">${txtAleatorioCarga}</span>
+            // CARGADOR ATELIER CON MODELADO DE CHENILLA Y HUELLA DACTILAR
+            let cargador = document.createElement('div');
+            cargador.className = "cargador-atelier";
+            cargador.innerHTML = `
+              <i class="fas fa-fingerprint icono-huella-pulso"></i>
+              <span class="texto-espera-narrativo">${Utilidades.obtenerFraseEsperaAleatoria()}</span>
             `;
-            contImg.appendChild(loaderAtelier);
+            contImg.appendChild(cargador);
 
             let img = document.createElement('img');
-            img.className = "imagen-item w-full h-full object-cover cursor-zoom-in absolute inset-0 opacity-0 transition-opacity duration-700 hover:scale-105";
-            img.src = item.img || "https://placehold.co/400x400/fdfcf8/c5a8a0?text=Nivani";
+            img.className = "imagen-item";
+            img.src = item.img || item.direccion || "";
             img.dataset.url = img.src;
             
-            img.onerror = function() { 
-              this.src = "https://placehold.co/400x400/fdfcf8/c5a8a0?text=Modelado+Chenilla"; 
-              loaderAtelier.classList.add('opacity-0');
-              setTimeout(() => loaderAtelier.remove(), 500);
-            };
-            img.onload = function() { 
-              img.classList.remove('opacity-0'); 
-              img.classList.add('opacity-100'); 
-              loaderAtelier.classList.add('opacity-0');
-              setTimeout(() => loaderAtelier.remove(), 500);
+            img.onload = function() {
+              img.classList.add('imagen-cargada');
+              cargador.remove();
             };
             contImg.appendChild(img);
 
             if (item.badgeNuevo) {
-              let b = document.createElement('div');
-              b.className = "badge-luxury badge-luxury-nuevo absolute bottom-3 left-3 px-3 py-1 bg-teal-50/95 dark:bg-teal-950/90 text-teal-700 dark:text-teal-300 text-[9px] font-bold tracking-wider rounded-full border border-teal-200/10";
+              let b = document.createElement('div'); b.className = "badge-luxury badge-luxury-nuevo";
               b.innerHTML = '✦ Nuevo'; contImg.appendChild(b);
             }
             if (item.badgeEscaso) {
-              let b = document.createElement('div');
-              b.className = "badge-luxury badge-luxury-escaso absolute bottom-3 left-3 px-3 py-1 bg-red-50/95 dark:bg-red-950/90 text-red-700 dark:text-red-300 text-[9px] font-bold tracking-wider rounded-full border border-red-200/10";
+              let b = document.createElement('div'); b.className = "badge-luxury badge-luxury-escaso";
               b.innerHTML = '🔴 Limitado'; contImg.appendChild(b);
             }
-
-            let esFav = EstadoAplicacion.favoritos.includes(item.id);
-            let btnFav = document.createElement('button');
-            btnFav.className = `btn-favorito absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${esFav ? 'bg-red-50 text-red-500 scale-105' : 'bg-white/80 dark:bg-black/60 text-stone-500 dark:text-stone-400 hover:text-red-500 hover:scale-110'}`;
-            btnFav.innerHTML = `<i class="${esFav ? 'fas' : 'far'} fa-heart text-xs"></i>`;
-            btnFav.addEventListener('click', (e) => {
-              e.stopPropagation();
-              Utilidades.toggleFavorito(item.id, item.nombre);
-            });
-            contImg.appendChild(btnFav);
             tarjeta.appendChild(contImg);
             
             let recuadro = document.createElement('div');
-            recuadro.className = "recuadro-info bg-[var(--color-recuadro)] border border-stone-200/5 rounded-2xl p-3 mt-2 flex flex-col justify-between flex-grow";
+            recuadro.className = "recuadro-info";
+            
             let valNum = parseInt(item.precio, 10);
             let pTxt = (!isNaN(valNum) && valNum > 0) ? `${item.precio} Bs.` : "Consultar";
 
+            let esFav = EstadoAplicacion.favoritos.includes(item.id);
+            let claseCorazon = esFav ? "fas fa-heart text-pink-500" : "far fa-heart";
+
             recuadro.innerHTML = `
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-[9px] font-bold text-[var(--color-acento)] tracking-widest uppercase">${item.grupo}</span>
-                <button class="btn-share text-stone-400 hover:text-[var(--color-acento)] transition-colors text-xs p-1" data-nombre="${item.nombre}" title="Sugerir como Regalo"><i class="fas fa-gift"></i></button>
+              <div class="cabecera-info select-none">
+                <div class="texto-grupo">${item.grupo}</div>
+                <div class="flex items-center gap-3">
+                  <button class="btn-favorito" data-id="${item.id}"><i class="${claseCorazon}"></i></button>
+                  <button class="btn-share" data-nombre="${item.nombre}" title="Sugerir como Regalo"><i class="fas fa-gift"></i></button>
+                </div>
               </div>
-              <h3 class="font-serif italic font-medium text-sm text-[var(--color-texto)] line-clamp-1 flex-grow mb-1">${item.nombre}</h3>
-              <div class="font-bold text-sm text-[var(--color-texto)] mb-2">${pTxt}</div>
-              <button class="btn-add-pedido w-full bg-[var(--color-texto)] text-[var(--color-fondo)] hover:opacity-90 py-2.5 rounded-xl text-xs font-semibold tracking-wider flex items-center justify-center gap-2 transition-transform active:scale-95">
-                <i class="fas fa-shopping-bag text-[10px]"></i> Añadir al Pedido
-              </button>
+              <div class="texto-nombre">${item.nombre}</div>
+              <button class="btn-agregar-carrito w-full mt-3 bg-stone-100 dark:bg-stone-800 hover:bg-[var(--color-acento)] hover:text-stone-900 text-[var(--color-texto)] py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-wider transition-all" data-id="${item.id}">Añadir al Pedido</button>
             `;
             
             recuadro.querySelector('.btn-share').addEventListener('click', function(e) {
-              e.stopPropagation(); Utilidades.vibrar(); Utilidades.compartirNativo(this.dataset.nombre);
+              Utilidades.vibrar(); Utilidades.compartirNativo(this.dataset.nombre);
             });
 
-            recuadro.querySelector('.btn-add-pedido').addEventListener('click', function(e) {
-              e.stopPropagation();
-              MotorUI.simularVueloYAgregar(e, item);
+            recuadro.querySelector('.btn-favorito').addEventListener('click', function(e) {
+              Utilidades.vibrar();
+              MotorEventos.alternarFavorito(item.id);
+            });
+
+            recuadro.querySelector('.btn-agregar-carrito').addEventListener('click', function(e) {
+              Utilidades.vibrar();
+              Utilidades.ejecutarEfectoVuelo(e);
+              MotorEventos.agregarAlCarrito(item);
             });
 
             tarjeta.appendChild(recuadro);
-            contenedor.appendChild(tarjeta);
+            this.referencias.matriz.appendChild(tarjeta);
             ObserverAnimacion.observe(tarjeta); 
             contadorVisual++;
           }
@@ -689,459 +779,245 @@
         this.referencias.estadoVacio.style.display = (contadorVisual === 0) ? "flex" : "none";
 
         if (EstadoAplicacion.primeraCarga) {
-          setTimeout(() => { if(this.referencias.arranque) this.referencias.arranque.classList.add('pantalla-oculta'); }, 600);
+          setTimeout(() => {
+            if(this.referencias.arranque) this.referencias.arranque.classList.add('pantalla-oculta');
+          }, 300);
           EstadoAplicacion.primeraCarga = false;
         }
       },
-
-      renderizarSimuladorRamo: function() {
-        let contenedor = this.referencias.matriz;
-        let panelSim = document.createElement('div');
-        panelSim.id = "panel-simulador-ramo";
-        panelSim.className = "col-span-full max-w-4xl mx-auto w-full bg-[var(--color-tarjeta)] border border-stone-200/10 p-6 md:p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in";
+      abrirZoom: function(url) {
+        Utilidades.vibrar(); this.referencias.imagenAmpliada.src = url;
+        this.referencias.modal.classList.add('modal-activo');
+      },
+      cerrarZoom: function() { this.referencias.modal.classList.remove('modal-activo'); },
+      
+      // CARRETE Y RENDERS DE CARRO DE COMPRAS
+      actualizarContadoresPedido: function() {
+        const count = EstadoAplicacion.carrito.reduce((acc, obj) => acc + obj.cantidad, 0);
+        this.referencias.contadorPedido.innerText = count;
+        this.referencias.contadorPedido.style.transform = "scale(1.3)";
+        setTimeout(() => this.referencias.contadorPedido.style.transform = "scale(1)", 200);
+      },
+      renderizarCarrito: function() {
+        let lista = this.referencias.carritoLista;
+        lista.innerHTML = "";
         
-        panelSim.innerHTML = `
-          <div class="flex flex-col gap-5">
-            <div>
-              <span class="text-[9px] font-bold tracking-widest text-[var(--color-acento)] uppercase">Taller de Diseño // Chenilla de Autor</span>
-              <h2 class="font-serif italic text-2xl text-[var(--color-texto)] mt-1">Arma tu Ramo "Mix & Match"</h2>
-              <p class="text-xs text-[var(--color-texto-sec)] leading-relaxed mt-2">
-                Combina envolturas de autor coreanas, selecciona tulipanes modelados en chenilla de alta densidad y personaliza cada detalle decorativo al instante.
-              </p>
-            </div>
-
-            <!-- Selector de papel de envoltura -->
-            <div class="space-y-1">
-              <label class="text-[10px] font-bold uppercase text-stone-400 block">Envoltura de lujo</label>
-              <select id="sim-select-envoltura" class="w-full p-3 bg-[var(--color-recuadro)] border border-stone-200/20 dark:border-stone-800 rounded-xl text-xs outline-none focus:border-[var(--color-acento)]">
-                <option value="terciopelo" data-precio="35" ${EstadoAplicacion.simuladorRamo.envoltura === 'terciopelo' ? 'selected' : ''}>Caja de Terciopelo Burdeos (+35 Bs.)</option>
-                <option value="coreano" data-precio="20" ${EstadoAplicacion.simuladorRamo.envoltura === 'coreano' ? 'selected' : ''}>Papel Coreano Rosa Pastel (+20 Bs.)</option>
-                <option value="kraft" data-precio="15" ${EstadoAplicacion.simuladorRamo.envoltura === 'kraft' ? 'selected' : ''}>Papel Kraft Texturizado Natural (+15 Bs.)</option>
-              </select>
-            </div>
-
-            <!-- Cantidad de tulipanes -->
-            <div class="space-y-1">
-              <label class="text-[10px] font-bold uppercase text-stone-400 block">Flor Principal: Tulipán en Chenilla</label>
-              <div class="flex items-center gap-4">
-                <button id="btn-sim-menos" class="w-10 h-10 rounded-xl border border-stone-200/25 bg-[var(--color-recuadro)] flex items-center justify-center font-bold text-sm text-[var(--color-texto)] hover:bg-[var(--color-acento)] hover:text-white transition-all">-</button>
-                <span id="sim-cant-flores" class="text-base font-bold w-6 text-center">${EstadoAplicacion.simuladorRamo.cantidadFlores}</span>
-                <button id="btn-sim-mas" class="w-10 h-10 rounded-xl border border-stone-200/25 bg-[var(--color-recuadro)] flex items-center justify-center font-bold text-sm text-[var(--color-texto)] hover:bg-[var(--color-acento)] hover:text-white transition-all">+</button>
-                <span class="text-xs text-[var(--color-texto-sec)]">(35 Bs. c/u)</span>
-              </div>
-            </div>
-
-            <!-- Complementos de follaje -->
-            <div class="space-y-2">
-              <label class="text-[10px] font-bold uppercase text-stone-400 block">Complementos y Detalles</label>
-              <div class="grid grid-cols-2 gap-2">
-                <label class="flex items-center gap-2 p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-xl cursor-pointer">
-                  <input type="checkbox" id="sim-check-gipso" ${EstadoAplicacion.simuladorRamo.follajeGipso ? 'checked' : ''} class="accent-[var(--color-acento)] h-4 w-4">
-                  <span class="text-[10px] font-semibold text-[var(--color-texto)]">Gipsófila (+15 Bs.)</span>
-                </label>
-                <label class="flex items-center gap-2 p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-xl cursor-pointer">
-                  <input type="checkbox" id="sim-check-organza" ${EstadoAplicacion.simuladorRamo.follajeOrganza ? 'checked' : ''} class="accent-[var(--color-acento)] h-4 w-4">
-                  <span class="text-[10px] font-semibold text-[var(--color-texto)]">Cinta Organza (+10)</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Previsualizador del Ramo -->
-          <div class="flex flex-col items-center justify-center bg-[var(--color-recuadro)] border border-stone-200/15 p-6 rounded-3xl text-center">
-            <span class="text-[9px] font-bold text-[var(--color-acento)] tracking-widest uppercase">MODELADO EXCLUSIVO</span>
-            <h3 id="sim-nombre-ramo" class="font-serif italic text-lg text-[var(--color-texto)] font-semibold mt-1">Ramo Personalizado Burdeos</h3>
-            
-            <div class="my-6">
-              <span class="text-[10px] text-[var(--color-texto-sec)] uppercase block">Total de tu Combinación</span>
-              <span id="sim-precio-ramo" class="text-4xl font-bold text-[var(--color-texto)]">140 Bs.</span>
-            </div>
-
-            <button id="btn-sim-agregar-pedido" class="w-full bg-[var(--color-texto)] hover:opacity-90 text-[var(--color-fondo)] py-3.5 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95">
-              <i class="fas fa-magic"></i> Añadir mi Ramo al Pedido
-            </button>
-          </div>
-        `;
-
-        contenedor.appendChild(panelSim);
-
-        // Controladores de eventos del simulador
-        const selEnv = document.getElementById('sim-select-envoltura');
-        const checkGipso = document.getElementById('sim-check-gipso');
-        const checkOrganza = document.getElementById('sim-check-organza');
-        const btnMenos = document.getElementById('btn-sim-menos');
-        const btnMas = document.getElementById('btn-sim-mas');
-        const btnAgregar = document.getElementById('btn-sim-agregar-pedido');
-
-        const recualcularSim = () => {
-          const selOpt = selEnv.options[selEnv.selectedIndex];
-          EstadoAplicacion.simuladorRamo.envoltura = selEnv.value;
-          EstadoAplicacion.simuladorRamo.envolturaNombre = selOpt.text.split('(')[0].trim();
-          EstadoAplicacion.simuladorRamo.envolturaPrecio = parseInt(selOpt.dataset.precio, 10);
-          EstadoAplicacion.simuladorRamo.follajeGipso = checkGipso.checked;
-          EstadoAplicacion.simuladorRamo.follajeOrganza = checkOrganza.checked;
-
-          let baseFlores = EstadoAplicacion.simuladorRamo.cantidadFlores * 35;
-          let total = baseFlores + EstadoAplicacion.simuladorRamo.envolturaPrecio;
-          if (EstadoAplicacion.simuladorRamo.follajeGipso) total += 15;
-          if (EstadoAplicacion.simuladorRamo.follajeOrganza) total += 10;
-
-          document.getElementById('sim-cant-flores').innerText = EstadoAplicacion.simuladorRamo.cantidadFlores;
-          document.getElementById('sim-nombre-ramo').innerText = `Ramo Personalizado ${EstadoAplicacion.simuladorRamo.envolturaNombre}`;
-          document.getElementById('sim-precio-ramo').innerText = `${total} Bs.`;
-        };
-
-        selEnv.addEventListener('change', recualcularSim);
-        checkGipso.addEventListener('change', recualcularSim);
-        checkOrganza.addEventListener('change', recualcularSim);
-
-        btnMenos.addEventListener('click', () => {
-          if (EstadoAplicacion.simuladorRamo.cantidadFlores > 1) {
-            Utilidades.vibrar();
-            EstadoAplicacion.simuladorRamo.cantidadFlores--;
-            recualcularSim();
-          }
-        });
-
-        btnMas.addEventListener('click', () => {
-          if (EstadoAplicacion.simuladorRamo.cantidadFlores < 12) {
-            Utilidades.vibrar();
-            EstadoAplicacion.simuladorRamo.cantidadFlores++;
-            recualcularSim();
-          }
-        });
-
-        btnAgregar.addEventListener('click', (e) => {
-          let baseFlores = EstadoAplicacion.simuladorRamo.cantidadFlores * 35;
-          let total = baseFlores + EstadoAplicacion.simuladorRamo.envolturaPrecio;
-          if (EstadoAplicacion.simuladorRamo.follajeGipso) total += 15;
-          if (EstadoAplicacion.simuladorRamo.follajeOrganza) total += 10;
-
-          let extrasList = [];
-          if (EstadoAplicacion.simuladorRamo.follajeGipso) extrasList.push("Gipsófila");
-          if (EstadoAplicacion.simuladorRamo.follajeOrganza) extrasList.push("Cinta Organza");
-
-          const customBouquet = {
-            id: `custom-ramo-${Date.now()}`,
-            nombre: `Diseño: Ramo ${EstadoAplicacion.simuladorRamo.envolturaNombre}`,
-            precio: total,
-            img: "https://placehold.co/400x400/fdfcf8/c5a8a0?text=Ramo+Elegante",
-            isCustom: true,
-            detalles: {
-              envoltura: EstadoAplicacion.simuladorRamo.envolturaNombre,
-              flores: EstadoAplicacion.simuladorRamo.cantidadFlores,
-              extras: extrasList.join(', ')
-            }
-          };
-
-          MotorUI.simularVueloYAgregar(e, customBouquet);
-        });
-
-        recualcularSim();
-      },
-
-      simularVueloYAgregar: function(event, item) {
-        Utilidades.vibrar();
-        const origenBtn = event.currentTarget;
-        const rectOrigen = origenBtn.getBoundingClientRect();
-        const destinoCarrito = document.getElementById('icono-carrito-bolsa');
-        const rectDestino = destinoCarrito.getBoundingClientRect();
-
-        // Crear elemento flotante
-        const florParticula = document.createElement('div');
-        florParticula.className = "particula-vuelo";
-        florParticula.innerHTML = "🌸";
-        florParticula.style.left = `${rectOrigen.left + rectOrigen.width / 2}px`;
-        florParticula.style.top = `${rectOrigen.top}px`;
-        document.body.appendChild(florParticula);
-
-        // Forzar recalculo de flujo de estilos para animar
-        florParticula.offsetHeight;
-
-        setTimeout(() => {
-          florParticula.style.left = `${rectDestino.left}px`;
-          florParticula.style.top = `${rectDestino.top}px`;
-          florParticula.style.transform = "scale(0.3) rotate(360deg)";
-          florParticula.style.opacity = "0.2";
-        }, 50);
-
-        setTimeout(() => {
-          florParticula.remove();
-          
-          destinoCarrito.classList.add('scale-125', 'text-[var(--color-acento)]');
-          setTimeout(() => { destinoCarrito.classList.remove('scale-125', 'text-[var(--color-acento)]'); }, 300);
-
-          MotorUI.agregarAlCarrito(item);
-        }, 850);
-      },
-
-      agregarAlCarrito: function(item) {
-        const itemExistente = EstadoAplicacion.carrito.find(c => c.id === item.id);
-        
-        if (itemExistente) {
-          itemExistente.cantidad += 1;
-        } else {
-          EstadoAplicacion.carrito.push({
-            id: item.id,
-            nombre: item.nombre,
-            precio: item.precio,
-            img: item.img,
-            isCustom: item.isCustom || false,
-            detalles: item.detalles || null,
-            cantidad: 1
-          });
-        }
-        
-        Utilidades.mostrarToast(`"${item.nombre}" añadida al pedido.`);
-        this.actualizarReactivoCarrito();
-      },
-
-      ajustarCantidadCarrito: function(id, cambio) {
-        Utilidades.vibrar();
-        const index = EstadoAplicacion.carrito.findIndex(c => c.id === id);
-        if (index === -1) return;
-
-        EstadoAplicacion.carrito[index].cantidad += cambio;
-
-        if (EstadoAplicacion.carrito[index].cantidad <= 0) {
-          const borrado = EstadoAplicacion.carrito.splice(index, 1);
-          Utilidades.mostrarToast(`"${borrado[0].nombre}" eliminada del pedido.`, "trash");
-        }
-
-        this.actualizarReactivoCarrito();
-      },
-
-      actualizarReactivoCarrito: function() {
-        let total = 0;
-        let totalArticulos = 0;
-        let contenedor = this.referencias.carritoArticulos;
-        contenedor.innerHTML = "";
-
         if (EstadoAplicacion.carrito.length === 0) {
-          contenedor.innerHTML = `
-            <div class="flex flex-col items-center justify-center py-16 text-center">
-              <i class="fas fa-shopping-bag text-3xl text-stone-300 dark:text-stone-700 mb-2"></i>
-              <p class="text-sm text-[var(--color-texto-sec)] font-light">Tu pedido temporal está vacío</p>
-            </div>
-          `;
-          this.referencias.badgeContador.classList.add('scale-0');
-          this.referencias.badgeContador.classList.remove('scale-100');
+          this.referencias.carritoVacioMsg.style.display = "flex";
         } else {
-          EstadoAplicacion.carrito.forEach(item => {
-            let p = parseInt(item.precio, 10) || 0;
-            let subtotal = p * item.cantidad;
-            total += subtotal;
-            totalArticulos += item.cantidad;
-
-            let row = document.createElement('div');
-            row.className = "flex items-center gap-3 p-2 bg-[var(--color-recuadro)] border border-stone-200/5 rounded-xl animate-fade-in";
+          this.referencias.carritoVacioMsg.style.display = "none";
+          
+          EstadoAplicacion.carrito.forEach((item, index) => {
+            let div = document.createElement('div');
+            div.className = "flex items-center justify-between p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-2xl gap-3 animate-fade-in";
             
-            row.innerHTML = `
-              <img src="${item.img}" class="w-12 h-12 rounded-lg object-cover bg-stone-200/20" onerror="this.src='https://placehold.co/400x400/fdfcf8/c5a8a0?text=Flor'">
-              <div class="flex-grow">
-                <h4 class="font-serif italic text-xs text-[var(--color-texto)] font-semibold line-clamp-1">${item.nombre}</h4>
-                <p class="text-[10px] text-[var(--color-texto-sec)]">${p} Bs. c/u</p>
+            // Imagen del item o icono si es personalizado
+            let imgHTML = `<div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-lg"><i class="fas fa-magic text-[var(--color-acento)]"></i></div>`;
+            if (item.img) {
+              imgHTML = `<img src="${item.img}" class="w-12 h-12 rounded-xl object-cover">`;
+            }
+
+            div.innerHTML = `
+              <div class="flex items-center gap-3">
+                ${imgHTML}
+                <div>
+                  <h4 class="text-xs font-bold text-[var(--color-texto)] leading-tight">${item.nombre}</h4>
+                  <p class="text-[10px] text-stone-400 font-semibold uppercase mt-0.5">${item.precio} Bs.</p>
+                </div>
               </div>
               <div class="flex items-center gap-2">
-                <button class="btn-menos w-6 h-6 rounded-full bg-[var(--color-tarjeta)] flex items-center justify-center border border-stone-200/10 text-[var(--color-texto)] hover:bg-stone-300/20" data-id="${item.id}">-</button>
-                <span class="text-xs font-bold text-[var(--color-texto)]">${item.cantidad}</span>
-                <button class="btn-mas w-6 h-6 rounded-full bg-[var(--color-tarjeta)] flex items-center justify-center border border-stone-200/10 text-[var(--color-texto)] hover:bg-stone-300/20" data-id="${item.id}">+</button>
+                <button onclick="MotorEventos.cambiarCantidadCarrito(${index}, -1)" class="w-6 h-6 rounded-lg bg-stone-100 dark:bg-stone-800 text-[var(--color-texto)] flex items-center justify-center text-xs font-bold">-</button>
+                <span class="text-xs font-bold w-4 text-center">${item.cantidad}</span>
+                <button onclick="MotorEventos.cambiarCantidadCarrito(${index}, 1)" class="w-6 h-6 rounded-lg bg-stone-100 dark:bg-stone-800 text-[var(--color-texto)] flex items-center justify-center text-xs font-bold">+</button>
               </div>
             `;
-
-            row.querySelector('.btn-menos').addEventListener('click', () => this.ajustarCantidadCarrito(item.id, -1));
-            row.querySelector('.btn-mas').addEventListener('click', () => this.ajustarCantidadCarrito(item.id, 1));
-            
-            contenedor.appendChild(row);
+            lista.appendChild(div);
           });
-
-          this.referencias.badgeContador.innerText = totalArticulos;
-          this.referencias.badgeContador.classList.remove('scale-0');
-          this.referencias.badgeContador.classList.add('scale-100');
         }
-
+        
+        // Calcular Precios totales
+        let total = EstadoAplicacion.carrito.reduce((acc, obj) => {
+          let pVal = parseInt(obj.precio, 10);
+          return acc + ((isNaN(pVal) ? 0 : pVal) * obj.cantidad);
+        }, 0);
+        
         this.referencias.carritoPrecioTotal.innerText = `${total} Bs.`;
       },
+      actualizarPrevisualizadorRamo: function() {
+        const config = EstadoAplicacion.simuladorRamo;
+        const lienzo = this.referencias.simLienzoTextura;
+        const txtEnvoltura = this.referencias.txtTexturaEnvoltura;
+        const gipsoCapa = document.getElementById('lienzo-gipso');
+        const organzaLazo = document.getElementById('lienzo-organza');
+        const tulipanesContenedor = document.getElementById('lienzo-contenedor-tulipanes');
 
-      toggleDedicatoriaForm: function() {
-        const checkbox = document.getElementById('check-dedicatoria-activa');
-        const formDiv = document.getElementById('modulo-dedicatoria-inputs');
-        EstadoAplicacion.dedicatoria.activa = checkbox.checked;
+        // 1. Aplicar la Textura Visual según la opción elegida
+        lienzo.className = "relative w-full aspect-[4/3] rounded-3xl overflow-hidden flex flex-col items-center justify-center p-4 border border-stone-200/10 transition-all duration-500 z-10";
+        if (config.envoltura === 'terciopelo') {
+          lienzo.classList.add('textura-terciopelo');
+          txtEnvoltura.innerText = "Textura: Terciopelo Burdeos Premium ✦";
+          txtEnvoltura.className = "text-[9px] font-bold text-amber-300 tracking-widest uppercase block drop-shadow-md";
+        } else if (config.envoltura === 'coreano') {
+          lienzo.classList.add('textura-coreano');
+          txtEnvoltura.innerText = "Textura: Papel Coreano Translúcido Rosado";
+          txtEnvoltura.className = "text-[9px] font-bold text-pink-700 tracking-widest uppercase block";
+        } else if (config.envoltura === 'kraft') {
+          lienzo.classList.add('textura-kraft');
+          txtEnvoltura.innerText = "Textura: Papel Kraft Rústico Fibroso";
+          txtEnvoltura.className = "text-[9px] font-bold text-stone-800 tracking-widest uppercase block";
+        }
+
+        // 2. Renderizar dinámicamente los tulipanes con textura de Chenilla
+        tulipanesContenedor.innerHTML = "";
+        const cantidad = config.cantidadFlores;
         
-        if (checkbox.checked) {
-          formDiv.classList.remove('hidden');
-          this.actualizarPreviewDedicatoria();
+        // Colores aleatorios elegantes para la simulación de tulipanes en chenilla
+        const paletaColores = [
+          "radial-gradient(circle at 35% 35%, #f43f5e 15%, #be123c 65%, #6c041d 100%)", // Rojo Terciopelo
+          "radial-gradient(circle at 35% 35%, #fb7185 15%, #f43f5e 65%, #9f1239 100%)", // Rosa Intenso
+          "radial-gradient(circle at 35% 35%, #fda4af 15%, #f43f5e 65%, #4c0519 100%)", // Rosa Suave
+          "radial-gradient(circle at 35% 35%, #fbbf24 15%, #d97706 65%, #78350f 100%)"  // Amarillo Dorado
+        ];
+
+        for (let i = 0; i < cantidad; i++) {
+          const tulipan = document.createElement('div');
+          tulipan.className = "tulipan-chenilla transition-all duration-500";
+          
+          // Estilo de chenilla suave y esponjoso con filtros CSS
+          tulipan.style.width = "40px";
+          tulipan.style.height = "52px";
+          tulipan.style.background = paletaColores[i % paletaColores.length];
+          
+          // Posicionamiento dinámico simulando un ramo abanicado
+          const desplazamientoX = (i - (cantidad - 1) / 2) * 22; 
+          const inclinacionRotacion = (i - (cantidad - 1) / 2) * 8;
+          const elevacionY = Math.abs(i - (cantidad - 1) / 2) * 4 - 15;
+
+          tulipan.style.transform = `translateX(${desplazamientoX}px) translateY(${elevacionY}px) rotate(${inclinacionRotacion}deg)`;
+          tulipanesContenedor.appendChild(tulipan);
+        }
+
+        // 3. Activar/Desactivar Gipsófila (Nubes de chenilla blanca)
+        if (config.follajeGipso) {
+          gipsoCapa.classList.remove('opacity-0');
+          gipsoCapa.classList.add('opacity-90');
         } else {
-          formDiv.classList.add('hidden');
+          gipsoCapa.classList.remove('opacity-90');
+          gipsoCapa.classList.add('opacity-0');
         }
-      },
 
-      cambiarEstiloDedicatoria: function(estilo) {
-        EstadoAplicacion.dedicatoria.estilo = estilo;
-        const btnDorado = document.getElementById('btn-estilo-dorado');
-        const btnAcuarela = document.getElementById('btn-estilo-acuarela');
-        const btnMarfil = document.getElementById('btn-estilo-marfil');
-
-        // Reset classes
-        [btnDorado, btnAcuarela, btnMarfil].forEach(btn => {
-          btn.className = "p-1.5 border border-stone-200 dark:border-stone-700 rounded-lg text-[9px] bg-transparent text-stone-400 transition-all text-center";
-        });
-
-        // Activar seleccionado
-        const seleccionado = document.getElementById(`btn-estilo-${estilo}`);
-        seleccionado.className = "p-1.5 border border-[var(--color-acento)] rounded-lg text-[9px] bg-[var(--color-tarjeta)] font-bold text-stone-900 dark:text-white transition-all text-center";
-
-        this.actualizarPreviewDedicatoria();
-        Utilidades.vibrar();
-      },
-
-      actualizarPreviewDedicatoria: function() {
-        const textarea = document.getElementById('texto-dedicatoria');
-        const previewText = document.getElementById('preview-texto-tarjeta');
-        const badge = document.getElementById('preview-badge-estilo');
-        const cardDiv = document.getElementById('mini-tarjeta-preview');
-        const charCount = document.getElementById('char-dedicatoria-count');
-
-        EstadoAplicacion.dedicatoria.texto = textarea.value;
-        charCount.innerText = textarea.value.length;
-
-        // Render del texto
-        previewText.innerText = textarea.value.trim() !== "" ? `"${textarea.value}"` : '"Tu hermoso mensaje aparecerá aquí..."';
-
-        // Estilos visuales
-        if (EstadoAplicacion.dedicatoria.estilo === 'dorado') {
-          cardDiv.className = "w-full aspect-[16/9] rounded-xl border border-amber-200/40 shadow-md bg-gradient-to-br from-yellow-50 via-amber-50 to-orange-50 p-4 flex flex-col justify-between text-stone-800 transition-all duration-300";
-          badge.innerText = "PAN DE ORO EXCLUSIVO";
-          badge.className = "text-[7px] tracking-[3px] uppercase font-semibold text-amber-800";
-          previewText.className = "font-serif italic text-[10px] leading-relaxed text-center text-amber-950 my-auto";
-        } else if (EstadoAplicacion.dedicatoria.estilo === 'acuarela') {
-          cardDiv.className = "w-full aspect-[16/9] rounded-xl border border-pink-200/40 shadow-md bg-gradient-to-br from-rose-50 via-pink-50 to-emerald-50 p-4 flex flex-col justify-between text-stone-800 transition-all duration-300";
-          badge.innerText = "COLECCIÓN ROMÁNTICA";
-          badge.className = "text-[7px] tracking-[3px] uppercase font-semibold text-rose-700";
-          previewText.className = "font-serif italic text-[10px] leading-relaxed text-center text-rose-950 my-auto";
-        } else if (EstadoAplicacion.dedicatoria.estilo === 'marfil') {
-          cardDiv.className = "w-full aspect-[16/9] rounded-xl border border-stone-200 shadow-md bg-neutral-100/95 dark:bg-stone-800 p-4 flex flex-col justify-between text-stone-800 dark:text-stone-100 transition-all duration-300";
-          badge.innerText = "MINIMALISMO CLÁSICO";
-          badge.className = "text-[7px] tracking-[3px] uppercase font-semibold text-stone-500 dark:text-stone-400";
-          previewText.className = "font-serif italic text-[10px] leading-relaxed text-center text-stone-800 dark:text-stone-200 my-auto";
+        // 4. Activar/Desactivar cinta de Organza
+        if (config.follajeOrganza) {
+          organzaLazo.style.transform = "scale(1)";
+        } else {
+          organzaLazo.style.transform = "scale(0)";
         }
-      },
-
-      abrirZoom: function(url) {
-        Utilidades.vibrar(); 
-        this.referencias.imagenAmpliada.src = url;
-        this.referencias.modal.classList.remove('hidden');
-        this.referencias.modal.classList.add('flex');
-        setTimeout(() => {
-          this.referencias.modal.classList.add('opacity-100');
-          this.referencias.imagenAmpliada.classList.add('scale-100');
-        }, 50);
-      },
-
-      cerrarZoom: function() { 
-        this.referencias.modal.classList.remove('opacity-100');
-        this.referencias.imagenAmpliada.classList.remove('scale-100');
-        setTimeout(() => {
-          this.referencias.modal.classList.add('hidden');
-          this.referencias.modal.classList.remove('flex');
-        }, 300);
-      },
-
-      abrirCarritoDrawer: function() {
-        this.referencias.carritoCapaOscura.classList.remove('hidden');
-        setTimeout(() => {
-          this.referencias.carritoCapaOscura.classList.remove('opacity-0');
-          this.referencias.carritoCapaOscura.classList.add('opacity-100');
-          this.referencias.carritoDrawer.classList.add('abierto');
-        }, 20);
-      },
-
-      cerrarCarritoDrawer: function() {
-        this.referencias.carritoDrawer.classList.remove('abierto');
-        this.referencias.carritoCapaOscura.classList.remove('opacity-100');
-        this.referencias.carritoCapaOscura.classList.add('opacity-0');
-        setTimeout(() => { this.referencias.carritoCapaOscura.classList.add('hidden'); }, 300);
       }
     };
 
     const MotorEventos = {
       escucharDOM: function() {
-        let r = MotorUI.referencias; 
-        let timer = null;
+        let r = MotorUI.referencias; let timer = null;
         
         r.buscador.addEventListener('input', e => {
+          EstadoAplicacion.filtroActivo = "TODO"; MotorUI.renderizarHUD();
           clearTimeout(timer);
           timer = setTimeout(() => {
-            EstadoAplicacion.textoBusqueda = e.target.value; 
-            MotorUI.renderizarCatalogo();
-          }, 250);
-        });
-
-        r.ordenador.addEventListener('change', e => {
-          EstadoAplicacion.ordenPrecio = e.target.value;
-          MotorUI.renderizarCatalogo();
+            EstadoAplicacion.textoBusqueda = e.target.value; MotorUI.renderizarCatalogo();
+          }, 300);
         });
 
         r.hud.addEventListener('click', e => {
           let target = e.target.closest('.boton-filtro');
           if (target) {
-            Utilidades.vibrar(); 
-            EstadoAplicacion.filtroActivo = target.dataset.categoria;
-            MotorUI.renderizarHUD(); 
-            MotorUI.renderizarCatalogo();
+            Utilidades.vibrar(); EstadoAplicacion.filtroActivo = target.dataset.categoria;
+            MotorUI.renderizarHUD(); MotorUI.renderizarCatalogo();
           }
         });
         
         r.matriz.addEventListener('click', e => {
-          if (e.target.classList.contains('imagen-item')) {
-            MotorUI.abrirZoom(e.target.dataset.url);
-          }
+          if (e.target.classList.contains('imagen-item')) MotorUI.abrirZoom(e.target.dataset.url);
         });
         
         r.modal.addEventListener('click', () => MotorUI.cerrarZoom());
-
-        r.btnAbrirCarrito.addEventListener('click', () => MotorUI.abrirCarritoDrawer());
-        r.btnCerrarCarrito.addEventListener('click', () => MotorUI.cerrarCarritoDrawer());
-        r.carritoCapaOscura.addEventListener('click', () => MotorUI.cerrarCarritoDrawer());
-
         r.panelScroll.addEventListener('scroll', () => {
-          if (r.panelScroll.scrollTop > 300) {
-            r.btnSubir.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-            r.btnSubir.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
-          } else {
-            r.btnSubir.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
-            r.btnSubir.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-          }
+          if (r.panelScroll.scrollTop > 300) r.btnSubir.classList.add('visible');
+          else r.btnSubir.classList.remove('visible');
         });
-
         r.btnSubir.addEventListener('click', () => {
-          Utilidades.vibrar(); 
-          r.panelScroll.scrollTo({ top: 0, behavior: 'smooth' });
+          Utilidades.vibrar(); r.panelScroll.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        r.btnEnviarPedido.addEventListener('click', () => {
-          if (EstadoAplicacion.carrito.length === 0) {
-            Utilidades.mostrarToast("No hay elementos en tu bolsa.", "trash");
-            return;
-          }
-          Utilidades.vibrar();
-          const lineaSeleccionada = document.querySelector('input[name="wpp-linea-destino"]:checked').value;
-          const numeroWpp = VECTORES_WPP[lineaSeleccionada] || VECTORES_WPP.linea1;
-          const link = Utilidades.crearEnlaceCarritoWpp(EstadoAplicacion.carrito, numeroWpp);
-          window.open(link, '_blank');
-        });
-
-        window.addEventListener('offline', () => r.offline.classList.remove('translate-y-full'));
-        window.addEventListener('online', () => r.offline.classList.add('translate-y-full'));
-      },
-
-      sincronizarFirebase: function(db) {
-        if (!db) return;
-        const coleccion = collection(db, "flores");
+        window.addEventListener('offline', () => r.offline.classList.add('visible'));
+        window.addEventListener('online', () => r.offline.classList.remove('visible'));
         
-        onSnapshot(coleccion, (snapshot) => {
-          let arr = []; 
-          let cats = new Set();
+        // CONTROL DE ABRIRES Y CERRAR DEL DRAWER
+        r.btnBolsaAbrir.addEventListener('click', () => {
+          Utilidades.vibrar();
+          r.drawer.classList.remove('translate-x-full');
+          MotorUI.renderizarCarrito();
+        });
+        r.btnBolsaCerrar.addEventListener('click', () => {
+          Utilidades.vibrar();
+          r.drawer.classList.add('translate-x-full');
+        });
+
+        // CONTROL DE PESTAÑAS (TABS)
+        r.tabCarrito.addEventListener('click', () => {
+          Utilidades.vibrar();
+          this.cambiarPestania('carrito');
+        });
+        r.tabTaller.addEventListener('click', () => {
+          Utilidades.vibrar();
+          this.cambiarPestania('taller');
+          MotorUI.actualizarPrevisualizadorRamo();
+        });
+
+        // CONTROL DEL SIMULADOR "ARMA TU RAMO"
+        r.simEnvoltorio.addEventListener('change', () => {
+          EstadoAplicacion.simuladorRamo.envoltura = r.simEnvoltorio.value;
+          MotorUI.actualizarPrevisualizadorRamo();
+        });
+        r.btnSimMenos.addEventListener('click', () => {
+          Utilidades.vibrar();
+          if (EstadoAplicacion.simuladorRamo.cantidadFlores > 1) {
+            EstadoAplicacion.simuladorRamo.cantidadFlores--;
+            r.simCantFlores.innerText = EstadoAplicacion.simuladorRamo.cantidadFlores;
+            MotorUI.actualizarPrevisualizadorRamo();
+          }
+        });
+        r.btnSimMas.addEventListener('click', () => {
+          Utilidades.vibrar();
+          if (EstadoAplicacion.simuladorRamo.cantidadFlores < 12) {
+            EstadoAplicacion.simuladorRamo.cantidadFlores++;
+            r.simCantFlores.innerText = EstadoAplicacion.simuladorRamo.cantidadFlores;
+            MotorUI.actualizarPrevisualizadorRamo();
+          }
+        });
+        r.simCheckGipso.addEventListener('change', () => {
+          EstadoAplicacion.simuladorRamo.follajeGipso = r.simCheckGipso.checked;
+          MotorUI.actualizarPrevisualizadorRamo();
+        });
+        r.simCheckOrganza.addEventListener('change', () => {
+          EstadoAplicacion.simuladorRamo.follajeOrganza = r.simCheckOrganza.checked;
+          MotorUI.actualizarPrevisualizadorRamo();
+        });
+
+        // AÑADIR RAMO PERSONALIZADO AL CARRITO
+        r.btnAniadirRamo.addEventListener('click', () => {
+          Utilidades.vibrar();
+          this.agregarRamoPersonalizadoAlCarrito();
+        });
+
+        // ENVIAR COMPRA INTEGRAL A WHATSAPP
+        r.btnEnviarPedido.addEventListener('click', () => {
+          Utilidades.vibrar();
+          this.enviarPedidoWhatsApp();
+        });
+      },
+      sincronizarFirebase: function(db) {
+        db.collection("flores").onSnapshot(snapshot => {
+          let arr = []; let cats = new Set();
           
           snapshot.docs.forEach(doc => {
             let d = doc.data();
@@ -1149,13 +1025,9 @@
             cats.add(p.grupo);
             
             arr.push({
-              id: doc.id, 
-              grupo: p.grupo, 
-              nombre: p.nombre,
-              badgeNuevo: p.badgeNuevo, 
-              badgeEscaso: p.badgeEscaso,
-              img: d.img || d.direccion || "", 
-              precio: d.precio
+              id: doc.id, grupo: p.grupo, nombre: p.nombre,
+              badgeNuevo: p.badgeNuevo, badgeEscaso: p.badgeEscaso,
+              img: d.img || d.direccion, precio: d.precio
             });
           });
           
@@ -1164,25 +1036,146 @@
           
           MotorUI.renderizarHUD();
           MotorUI.renderizarCatalogo();
-          MotorUI.actualizarReactivoCarrito();
-        }, (error) => {
-          console.error("Fallo de sincronización en tiempo real:", error);
-          Utilidades.mostrarToast("Fallo al conectar con el servidor. Catálogo offline.", "trash");
         });
+      },
+      alternarFavorito: function(idItem) {
+        let index = EstadoAplicacion.favoritos.indexOf(idItem);
+        if (index === -1) {
+          EstadoAplicacion.favoritos.push(idItem);
+          Utilidades.mostrarToast("Flor guardada en tus favoritos ♥", false);
+        } else {
+          EstadoAplicacion.favoritos.splice(index, 1);
+        }
+        localStorage.setItem('nivani_favs', JSON.stringify(EstadoAplicacion.favoritos));
+        MotorUI.renderizarCatalogo();
+      },
+      agregarAlCarrito: function(producto) {
+        let existente = EstadoAplicacion.carrito.find(obj => obj.id === producto.id);
+        if (existente) {
+          existente.cantidad++;
+        } else {
+          EstadoAplicacion.carrito.push({
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            img: producto.img,
+            cantidad: 1
+          });
+        }
+        MotorUI.actualizarContadoresPedido();
+        Utilidades.mostrarToast("Agregada al Pedido");
+      },
+      cambiarCantidadCarrito: function(index, cambio) {
+        Utilidades.vibrar();
+        let item = EstadoAplicacion.carrito[index];
+        if (item) {
+          item.cantidad += cambio;
+          if (item.cantidad <= 0) {
+            EstadoAplicacion.carrito.splice(index, 1);
+          }
+          MotorUI.actualizarContadoresPedido();
+          MotorUI.renderizarCarrito();
+        }
+      },
+      cambiarPestania: function(tabName) {
+        let r = MotorUI.referencias;
+        if (tabName === 'carrito') {
+          r.tabCarrito.className = "flex-1 py-4 text-center border-b-2 border-[var(--color-acento)] text-[var(--color-texto)]";
+          r.tabTaller.className = "flex-1 py-4 text-center border-b-2 border-transparent text-[var(--color-texto-sec)] hover:text-[var(--color-texto)]";
+          r.seccionTabCarrito.classList.remove('hidden');
+          r.seccionTabTaller.classList.add('hidden');
+        } else {
+          r.tabTaller.className = "flex-1 py-4 text-center border-b-2 border-[var(--color-acento)] text-[var(--color-texto)]";
+          r.tabCarrito.className = "flex-1 py-4 text-center border-b-2 border-transparent text-[var(--color-texto-sec)] hover:text-[var(--color-texto)]";
+          r.seccionTabTaller.classList.remove('hidden');
+          r.seccionTabCarrito.classList.add('hidden');
+        }
+      },
+      agregarRamoPersonalizadoAlCarrito: function() {
+        const config = EstadoAplicacion.simuladorRamo;
+        let subtotalFlores = config.cantidadFlores * 35;
+        let precioEnv = config.envoltura === 'terciopelo' ? 35 : (config.envoltura === 'coreano' ? 20 : 15);
+        let totalRamo = subtotalFlores + precioEnv;
+        
+        let extras = [];
+        if (config.follajeGipso) { totalRamo += 15; extras.push("Gipsófila"); }
+        if (config.follajeOrganza) { totalRamo += 10; extras.push("Organza"); }
+
+        let descTextura = config.envoltura === 'terciopelo' ? "Terciopelo" : (config.envoltura === 'coreano' ? "Coreano" : "Kraft");
+        let nombreRamo = `Ramo Personalizado ${descTextura} (${config.cantidadFlores} Tulipanes)`;
+        if (extras.length > 0) nombreRamo += ` + ${extras.join(' & ')}`;
+
+        EstadoAplicacion.carrito.push({
+          id: 'personalizado_' + Date.now(),
+          nombre: nombreRamo,
+          precio: totalRamo,
+          img: null, // Sin imagen por ser personalizado
+          cantidad: 1
+        });
+
+        MotorUI.actualizarContadoresPedido();
+        Utilidades.mostrarToast("¡Ramo Personalizado Creado!");
+        this.cambiarPestania('carrito');
+        MotorUI.renderizarCarrito();
+      },
+      enviarPedidoWhatsApp: function() {
+        if (EstadoAplicacion.carrito.length === 0) {
+          alert("Añade al menos una flor o diseña un ramo para poder enviar tu pedido.");
+          return;
+        }
+
+        // Selección de canal
+        const canales = document.getElementsByName('wpp-linea-destino');
+        let canalElegido = "linea1";
+        for (let i = 0; i < canales.length; i++) {
+          if (canales[i].checked) {
+            canalElegido = canales[i].value;
+            break;
+          }
+        }
+        const wppNumero = VECTORES_WPP[canalElegido];
+
+        // Construcción estructurada del mensaje unificado
+        let msg = `✦ *NIVANI | SOLICITUD DE PEDIDO ATELIER* ✦\n\n`;
+        let totalGeneral = 0;
+
+        EstadoAplicacion.carrito.forEach((item, index) => {
+          let pVal = parseInt(item.precio, 10);
+          let sub = (isNaN(pVal) ? 0 : pVal) * item.cantidad;
+          totalGeneral += sub;
+          msg += `*${index + 1}. ${item.nombre}*\n`;
+          msg += `   Cant: ${item.cantidad} x ${item.precio} Bs. | Sub: ${sub} Bs.\n\n`;
+        });
+
+        msg += `--------------------------------\n`;
+        msg += `*TOTAL DE TU COMBINACIÓN:* ${totalGeneral} Bs.\n\n`;
+
+        // Añadir dedicatoria si existe
+        const dedicatoria = document.getElementById('carrito-dedicatoria').value.trim();
+        if (dedicatoria !== "") {
+          msg += `💌 *TARJETA DEDICATORIA (${EstadoAplicacion.estiloTarjetaDedicatoria.toUpperCase()}):*\n`;
+          msg += `"${dedicatoria}"\n\n`;
+        }
+
+        msg += `¿Se encuentra disponible para coordinar la entrega? Muchas gracias.`;
+
+        const link = `https://wa.me/${wppNumero}?text=${encodeURIComponent(msg)}`;
+        window.open(link, '_blank');
       }
     };
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      window.MotorUI = MotorUI; // Exportación global para poder usar onclick inline en HTML
+    function cambiarEstiloDedicatoria(estilo) {
+      EstadoAplicacion.estiloTarjetaDedicatoria = estilo;
+      Utilidades.vibrar();
+      Utilidades.mostrarToast(`Tarjeta: acabado ${estilo.toUpperCase()} listo`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let db = MotorConexion.iniciar();
       MotorUI.mapearNodos();
       MotorEventos.escucharDOM();
-      
-      let db = await MotorConexion.iniciar();
       MotorEventos.sincronizarFirebase(db);
-      
-      if (!navigator.onLine) {
-        MotorUI.referencias.offline.classList.remove('translate-y-full');
-      }
+      if (!navigator.onLine) MotorUI.referencias.offline.classList.add('visible');
     });
   </script>
 </body>
