@@ -1,56 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- ====================================================================== -->
+  <!-- 1_METADATOS_Y_FUENTES_LUXURY                                           -->
+  <!-- ====================================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nivani | Atelier de Flores en Chenilla</title>
+  
+  <!-- Iconos y Tipografías de Prestigio -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- SDK de Firebase Compat para Conexión Segura -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <style>
+    /* ====================================================================== */
+    /* 2_ESTILOS_CSS_VARIABLES (ESTÉTICA DARK EXCLUSIVA)                      */
+    /* ====================================================================== */
     :root {
-      --color-fondo: #fdfcf8;
-      --color-acento: #c5a8a0;
-      --color-texto: #2a2a2a;
-      --color-texto-sec: #888888;
-      --color-wpp: #16a34a;
-      --color-wpp-fondo: #f0fdf4;
-      --color-wpp-borde: #bbf7d0;
-      --color-tarjeta: #ffffff;
-      --color-recuadro: #fdfdfd;
-      --color-cristal: rgba(253, 252, 248, 0.9);
-      --sombra-tarjeta: 0 10px 20px rgba(0,0,0,0.04);
-      --radio-borde: 24px;
-      --radio-borde-hud: 20px;
+      /* Paleta Ónice y Terracota Premium de la Captura */
+      --color-fondo: #0a0a0b;
+      --color-tarjeta: #131315;
+      --color-recuadro: #18181b;
+      --color-acento: #eba38a; /* Exclusivo Durazno Terracota Pastel */
+      --color-dorado-mudo: #c5a8a0;
+      --color-texto: #f5f5f5;
+      --color-texto-sec: #9a9a9f;
+      
+      --color-wpp: #22c55e;
+      --color-wpp-fondo: rgba(34, 197, 94, 0.1);
+      --color-wpp-borde: rgba(34, 197, 94, 0.2);
+      --sombra-premium: 0 15px 35px rgba(0,0,0,0.6);
+      --radio-borde: 20px;
+      --radio-borde-hud: 30px;
+      
       --fuente-ui: 'Inter', sans-serif;
-      --fuente-lujo: 'Playfair Display', serif;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --color-fondo: #121212;
-        --color-acento: #e5c8c0;
-        --color-texto: #f5f5f5;
-        --color-texto-sec: #aaaaaa;
-        --color-wpp: #22c55e;
-        --color-wpp-fondo: rgba(34, 197, 94, 0.1);
-        --color-wpp-borde: rgba(34, 197, 94, 0.2);
-        --color-tarjeta: #1e1e1e;
-        --color-recuadro: #242424;
-        --color-cristal: rgba(18, 18, 18, 0.85);
-        --sombra-tarjeta: 0 10px 30px rgba(0,0,0,0.3);
-      }
+      --fuente-lujo: 'Cinzel', serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: radial-gradient(circle at top center, var(--color-tarjeta) 0%, var(--color-fondo) 100%);
+      background: radial-gradient(circle at top center, #1c1c1f 0%, var(--color-fondo) 100%);
       background-attachment: fixed;
       color: var(--color-texto);
       font-family: var(--fuente-ui);
@@ -58,6 +54,7 @@
       overflow-x: hidden; overflow-y: hidden; display: flex; flex-direction: column;
     }
 
+    /* TELÓN DE ARRANQUE EXCLUSIVO */
     .pantalla-arranque {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: var(--color-fondo); z-index: 99999;
@@ -67,13 +64,13 @@
     .pantalla-oculta { opacity: 0; visibility: hidden; }
     
     .titulo-arranque {
-      font-family: var(--fuente-ui); font-weight: 200; letter-spacing: 15px;
+      font-family: var(--fuente-lujo); font-weight: 400; letter-spacing: 20px;
       font-size: 3rem; text-transform: uppercase; color: var(--color-texto);
-      margin-right: -15px; animation: pulsoArranque 2.5s infinite ease-in-out;
+      margin-right: -20px; animation: pulsoArranque 2.5s infinite ease-in-out;
     }
     @keyframes pulsoArranque {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(1.02); }
+      50% { opacity: 0.3; transform: scale(1.02); }
     }
 
     .alerta-offline {
@@ -84,19 +81,48 @@
     }
     .alerta-offline.visible { transform: translateY(0); }
 
+    /* TOAST MENSAJES PERSONALIZADO */
+    .toast-premium {
+      position: fixed; bottom: 30px; left: 50%; transform: translate(-50%, 100%);
+      background: rgba(25, 25, 27, 0.95); border: 1px solid rgba(235, 220, 213, 0.2);
+      padding: 12px 30px; border-radius: 30px; z-index: 10000; font-size: 0.85rem;
+      font-weight: 600; color: var(--color-acento); letter-spacing: 1px;
+      backdrop-filter: blur(10px); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: none;
+    }
+    .toast-premium.visible { transform: translate(-50%, 0); }
+
+    /* ====================================================================== */
+    /* INTERFAZ FLOTANTE - HUD DE NAVEGACIÓN                                  */
+    /* ====================================================================== */
     .interfaz-fija {
       position: sticky; top: 0; z-index: 100;
-      background-color: var(--color-cristal);
-      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      border-bottom: 1px solid rgba(197, 168, 160, 0.1);
-      padding: 20px 25px 15px 25px;
+      background-color: rgba(10, 10, 11, 0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      padding: 25px 40px 20px 40px;
       display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
+      transition: all 0.3s ease;
     }
 
     .titulo-marca {
-      font-family: var(--fuente-ui); font-weight: 200; letter-spacing: 15px;
-      font-size: 2.6rem; margin-bottom: 15px; text-transform: uppercase;
-      color: var(--color-texto); text-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-right: -15px;
+      font-family: var(--fuente-lujo); font-weight: 400; letter-spacing: 25px;
+      font-size: 2.8rem; margin-bottom: 20px; text-transform: uppercase;
+      color: var(--color-texto); text-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-right: -25px;
+      text-align: center; transition: all 0.3s ease;
+    }
+
+    /* Ajustes dinámicos para teléfonos móviles */
+    @media (max-width: 640px) {
+      .titulo-marca {
+        font-size: 1.8rem;
+        letter-spacing: 12px;
+        margin-right: -12px;
+        margin-bottom: 12px;
+      }
+      .interfaz-fija {
+        padding: 15px 15px 10px 15px;
+      }
     }
 
     .hud-wrapper {
@@ -107,53 +133,92 @@
     .contenedor-hud { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; align-items: center; }
 
     .boton-filtro {
-      padding: 8px 16px; border-radius: var(--radio-borde-hud);
-      border: 1px solid var(--color-acento); background-color: transparent;
-      color: var(--color-acento); font-weight: 600; font-size: 0.75rem;
-      cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      text-transform: uppercase; display: flex; align-items: center; gap: 6px;
+      padding: 10px 20px; border-radius: var(--radio-borde-hud);
+      border: 1px solid rgba(255, 255, 255, 0.1); background-color: transparent;
+      color: var(--color-texto-sec); font-weight: 600; font-size: 0.75rem;
+      cursor: pointer; transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      text-transform: uppercase; display: flex; align-items: center; gap: 8px;
+      letter-spacing: 1px;
     }
-    .boton-filtro:hover { background-color: rgba(197, 168, 160, 0.08); transform: translateY(-2px); }
-    .filtro-activo { background-color: var(--color-acento) !important; color: var(--color-fondo) !important; box-shadow: 0 4px 15px rgba(197, 168, 160, 0.3); }
+    .boton-filtro:hover { border-color: rgba(255, 255, 255, 0.25); color: var(--color-texto); }
+    .filtro-activo { 
+      background-color: var(--color-acento) !important; 
+      color: var(--color-fondo) !important; 
+      border-color: var(--color-acento) !important;
+      box-shadow: 0 4px 15px rgba(235, 220, 213, 0.2); 
+    }
 
-    .bloque-buscador { width: 100%; max-width: 300px; position: relative; }
+    .bloque-buscador { width: 100%; max-width: 280px; position: relative; }
     .bloque-buscador input {
-      width: 100%; padding: 10px 15px 10px 35px; border-radius: var(--radio-borde-hud);
-      border: 1px solid rgba(197, 168, 160, 0.4); background-color: var(--color-recuadro);
-      color: var(--color-texto); font-size: 0.9rem; outline: none; transition: all 0.3s ease;
+      width: 100%; padding: 10px 15px 10px 40px; border-radius: var(--radio-borde-hud);
+      border: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.03);
+      color: var(--color-texto); font-size: 0.85rem; outline: none; transition: all 0.3s ease;
+      letter-spacing: 0.5px;
     }
-    .bloque-buscador input:focus { border-color: var(--color-acento); box-shadow: 0 4px 15px rgba(197, 168, 160, 0.15); }
-    .bloque-buscador i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-acento); font-size: 0.9rem; }
+    .bloque-buscador input:focus { border-color: rgba(255,255,255,0.3); background-color: rgba(255, 255, 255, 0.06); }
+    .bloque-buscador i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--color-texto-sec); font-size: 0.85rem; }
 
-    .panel-catalogo { flex-grow: 1; overflow-y: auto; padding: 25px 20px 80px 20px; scroll-behavior: smooth; }
+    /* BOTÓN PEDIDO REFORMADO (MINIMALISTA) */
+    .btn-pedido {
+      background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 20px; border-radius: var(--radio-borde-hud); color: var(--color-texto);
+      font-weight: 600; font-size: 0.75rem; letter-spacing: 1.5px; display: flex; align-items: center;
+      gap: 10px; cursor: pointer; transition: all 0.3s; text-transform: uppercase;
+    }
+    .btn-pedido:hover { background-color: var(--color-acento); color: var(--color-fondo); border-color: var(--color-acento); }
+    .pedido-badge {
+      background-color: var(--color-acento); color: var(--color-fondo);
+      width: 18px; height: 18px; border-radius: 50%; display: flex;
+      justify-content: center; align-items: center; font-size: 0.65rem; font-weight: 700;
+      transition: transform 0.3s ease;
+    }
+    .badge-pop { transform: scale(1.3); }
+
+    /* ====================================================================== */
+    /* MATRIZ DE CATÁLOGO                                                     */
+    /* ====================================================================== */
+    .panel-catalogo { flex-grow: 1; overflow-y: auto; padding: 25px 40px 80px 40px; scroll-behavior: smooth; }
     .panel-catalogo::-webkit-scrollbar { width: 5px; }
-    .panel-catalogo::-webkit-scrollbar-thumb { background-color: rgba(197, 168, 160, 0.3); border-radius: 5px; }
+    .panel-catalogo::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.05); border-radius: 5px; }
 
     .matriz-simetrica {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 15px; max-width: 1200px; margin: 0 auto; position: relative;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px; max-width: 1200px; margin: 0 auto; position: relative;
+    }
+
+    /* Doble columna limpia en móviles */
+    @media (max-width: 640px) {
+      .matriz-simetrica {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .panel-catalogo {
+        padding: 15px 12px 80px 12px;
+      }
     }
 
     .estado-vacio {
-      grid-column: 1 / -1; text-align: center; padding: 60px 20px;
+      grid-column: 1 / -1; text-align: center; padding: 100px 20px;
       display: none; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease-out;
     }
-    .estado-vacio i { font-size: 3rem; color: var(--color-acento); opacity: 0.5; margin-bottom: 15px; }
-    .estado-vacio p { font-size: 1.1rem; color: var(--color-texto-sec); font-weight: 300; }
+    .estado-vacio i { font-size: 3rem; color: var(--color-dorado-mudo); opacity: 0.5; margin-bottom: 20px; }
+    .estado-vacio p { font-size: 1rem; color: var(--color-texto-sec); font-weight: 300; letter-spacing: 1px; }
 
+    /* TARJETA DE LUJO AJUSTADA */
     .tarjeta-item {
-      background-color: var(--color-tarjeta); border-radius: var(--radio-borde); padding: 8px;
-      box-shadow: var(--sombra-tarjeta); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+      background-color: var(--color-tarjeta); border-radius: var(--radio-borde); padding: 10px;
+      box-shadow: var(--sombra-premium); transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
       display: flex; flex-direction: column; position: relative;
-      content-visibility: auto; contain-intrinsic-size: 340px;
+      content-visibility: auto; contain-intrinsic-size: 380px;
       opacity: 0; transform: translateY(30px);
     }
     .tarjeta-item.revelado { opacity: 1; transform: translateY(0); }
-    .tarjeta-item:hover { transform: translateY(-6px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+    .tarjeta-item:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
 
+    /* CONTENEDOR FOTO COLOR DURAZNO PASTEL DE LA CAPTURA */
     .contenedor-imagen {
-      position: relative; width: 100%; height: 160px; border-radius: 16px; overflow: hidden;
-      background-color: var(--color-recuadro);
+      position: relative; width: 100%; height: 180px; border-radius: 14px; overflow: hidden;
+      background-color: var(--color-acento);
     }
     
     /* CARGADOR ATELIER CON HUELLA EN CHENILLA */
@@ -177,34 +242,157 @@
       opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;
     }
     .imagen-cargada { opacity: 1; }
-    .tarjeta-item:hover .imagen-cargada { transform: scale(1.06); }
+    .tarjeta-item:hover .imagen-cargada { transform: scale(1.05); }
 
+    /* CÁPSULAS FLOTANTES DE EDICIÓN EXCLUSIVA */
     .badge-luxury {
-      position: absolute; bottom: 8px; right: 8px; padding: 5px 12px;
+      position: absolute; bottom: 8px; left: 8px; padding: 4px 10px;
       border-radius: 20px; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px;
       text-transform: uppercase; z-index: 10; backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; gap: 5px;
     }
-    .badge-luxury-nuevo { background: rgba(240, 253, 244, 0.8); color: #0f766e; border: 1px solid rgba(15, 118, 110, 0.2); animation: pulsoRespiracion 3s infinite ease-in-out; }
-    .badge-luxury-escaso { background: rgba(254, 242, 242, 0.8); color: #991b1b; border: 1px solid rgba(153, 27, 27, 0.2); animation: pulsoCorazon 1.8s infinite; }
+    .badge-luxury-nuevo { background: rgba(255, 255, 255, 0.85); color: #000; border: 1px solid rgba(255, 255, 255, 0.3); animation: pulsoRespiracion 3s infinite ease-in-out; }
+    .badge-luxury-escaso { background: rgba(0, 0, 0, 0.65); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); animation: pulsoCorazon 1.8s infinite; }
 
+    /* RECUADRO DE INTEGRACIÓN MATE */
     .recuadro-info {
-      background: var(--color-recuadro); border: 1px solid rgba(197, 168, 160, 0.1); border-radius: 18px;
-      padding: 12px; margin-top: 8px; display: flex; flex-direction: column; flex-grow: 1; gap: 4px;
+      background: var(--color-recuadro); border: 1px solid rgba(197, 168, 160, 0.08); border-radius: 18px;
+      padding: 12px; margin-top: 10px; display: flex; flex-direction: column; flex-grow: 1; gap: 6px;
+      min-height: 105px; /* Altura optimizada y simétrica al remover la categoría */
     }
     
-    .cabecera-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .texto-grupo { font-size: 0.55rem; color: var(--color-acento); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
-    .btn-share { background: transparent; border: none; color: var(--color-texto-sec); cursor: pointer; transition: color 0.2s; font-size: 0.9rem; }
-    .btn-share:hover { color: var(--color-acento); transform: scale(1.1); }
+    .cabecera-info { display: flex; justify-content: flex-end; align-items: center; }
+    
+    .btn-favorito { background: transparent; border: none; color: var(--color-texto-sec); cursor: pointer; transition: all 0.2s; font-size: 0.85rem; }
+    .btn-favorito:hover { color: var(--color-acento); }
+    .btn-share { background: transparent; border: none; color: var(--color-texto-sec); cursor: pointer; transition: all 0.2s; font-size: 0.85rem; }
+    .btn-share:hover { color: var(--color-acento); }
+    .favorito-activo { color: var(--color-acento) !important; animation: popIcon 0.3s ease; }
 
+    /* EXQUISITO REDISEÑO EDITORIAL COMPACTO (1 SOLA LÍNEA SIN ITÁLICAS) */
     .texto-nombre {
-      font-family: var(--fuente-lujo); font-weight: 400; font-size: 0.85rem;
-      color: var(--color-texto); line-height: 1.3; flex-grow: 1; font-style: italic;
-      letter-spacing: 0.5px; opacity: 0.9;
+      font-family: var(--fuente-lujo); 
+      font-weight: 400; 
+      font-size: 1.1rem;
+      color: var(--color-texto); 
+      line-height: 1.2; 
+      letter-spacing: 2px; 
+      text-transform: uppercase; 
+      margin-top: 2px;
+      
+      /* Restricción Estricta de 1 Línea con Elipsis */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .texto-precio { font-weight: 700; color: var(--color-texto); font-size: 1.05rem; margin-top: 4px; }
 
+    @media (max-width: 640px) {
+      .texto-nombre {
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+      }
+    }
+
+    .texto-precio { font-weight: 500; color: var(--color-texto); font-size: 1.05rem; margin-top: 2px; }
+
+    /* BOTÓN AÑADIR SIMÉTRICO MAGNÉTICO */
+    .btn-agregar-carrito {
+      width: 100%; background: transparent; border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--color-texto-sec); text-transform: uppercase; font-size: 0.7rem;
+      font-weight: 600; letter-spacing: 1.5px; padding: 10px 0; border-radius: 8px;
+      cursor: pointer; transition: all 0.3s; 
+      margin-top: auto; 
+    }
+    .btn-agregar-carrito:hover { background: var(--color-texto); color: var(--color-fondo); border-color: var(--color-texto); }
+
+    /* ====================================================================== */
+    /* PANEL DE PEDIDO LATERAL Y OVERLAY                                      */
+    /* ====================================================================== */
+    .drawer-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.6); 
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.5s ease;
+    }
+    .drawer-overlay.activo { opacity: 1; visibility: visible; }
+
+    .drawer-pedido {
+      position: fixed; top: 0; right: 0; width: 100%; max-width: 420px; height: 100%;
+      background: #111112; border-left: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.8); z-index: 1001;
+      transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+      display: flex; flex-direction: column; padding: 30px;
+    }
+    .drawer-pedido.activo { transform: translateX(0); }
+
+    @media (max-width: 640px) {
+      .drawer-pedido {
+        padding: 20px 15px;
+      }
+    }
+
+    .cabecera-drawer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-shrink: 0; }
+    .titulo-drawer { font-family: var(--fuente-lujo); font-size: 1.5rem; letter-spacing: 5px; text-transform: uppercase; }
+    .btn-cerrar-drawer { background: transparent; border: none; color: var(--color-texto-sec); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
+    .btn-cerrar-drawer:hover { color: var(--color-texto); }
+
+    /* CONTENIDO SCROLLEABLE */
+    .lista-pedido { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; padding-right: 5px; }
+    .lista-pedido::-webkit-scrollbar { width: 3px; }
+    .lista-pedido::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); }
+
+    #drawer-contenido {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    #drawer-contenido::-webkit-scrollbar {
+      width: 4px;
+    }
+    #drawer-contenido::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+    }
+
+    .item-pedido-card {
+      display: flex; gap: 15px; align-items: center; background: rgba(255,255,255,0.02);
+      padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03);
+    }
+    .img-pedido-min { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background-color: var(--color-acento); }
+    .info-pedido-min { flex-grow: 1; display: flex; flex-direction: column; gap: 2px; }
+    .nom-pedido-min { font-family: var(--fuente-lujo); font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }
+    .pre-pedido-min { font-size: 0.8rem; color: var(--color-texto-sec); }
+
+    .controles-pedido-min { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); padding: 4px 10px; border-radius: 20px; }
+    .btn-cant-min { background: transparent; border: none; color: var(--color-texto); cursor: pointer; font-size: 0.8rem; }
+    .num-cant-min { font-size: 0.85rem; font-weight: bold; width: 15px; text-align: center; }
+
+    .btn-borrar-min { background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 0.9rem; padding: 5px; opacity: 0.6; transition: opacity 0.2s; }
+    .btn-borrar-min:hover { opacity: 1; }
+
+    /* PIE DEL DRAWER */
+    .pie-drawer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 20px;
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      flex-shrink: 0;
+      background: #111112;
+    }
+    .fila-total { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 600; }
+    .txt-total-val { color: var(--color-acento); font-size: 1.2rem; }
+    
+    .btn-enviar-wpp {
+      width: 100%; background-color: var(--color-wpp); color: white; border: none;
+      padding: 15px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 2px; text-transform: uppercase; cursor: pointer; display: flex;
+      justify-content: center; align-items: center; gap: 10px; transition: all 0.3s;
+    }
+    .btn-enviar-wpp:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(34, 197, 150, 0.3); }
+
+    /* SCROLL TOP */
     .btn-subir {
       position: fixed; bottom: 30px; right: 30px; background-color: var(--color-texto);
       color: var(--color-fondo); width: 45px; height: 45px; border-radius: 50%;
@@ -214,65 +402,92 @@
     }
     .btn-subir.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
+    /* ZOOM MODAL */
     .modal-zoom {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9);
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95);
       display: none; justify-content: center; align-items: center; z-index: 9999;
-      backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.3s ease;
+      backdrop-filter: blur(15px); opacity: 0; transition: opacity 0.3s ease;
     }
     .modal-activo { display: flex !important; opacity: 1 !important; }
-    .imagen-zoom { max-width: 90%; max-height: 90%; border-radius: 24px; box-shadow: 0 0 50px rgba(0,0,0,0.6); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .imagen-zoom { max-width: 90%; max-height: 90%; border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.8); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
     .modal-activo .imagen-zoom { transform: scale(1); }
 
-    /* ====================================================================== */
-    /* MINI TEXTURAS DINÁMICAS EN EL PREVISUALIZADOR DEL RAMO                  */
-    /* ====================================================================== */
+    /* TEXTURAS DEL SIMULADOR */
     .textura-terciopelo {
       background: radial-gradient(circle at 50% 30%, #5c0620 0%, #3b0212 70%, #1e0008 100%);
       box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.85), 0 10px 25px rgba(0, 0, 0, 0.45);
       border: 1.5px solid rgba(212, 163, 115, 0.25);
     }
-    
     .textura-coreano {
       background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-      opacity: 0.95;
       box-shadow: inset 0 0 25px rgba(219, 39, 119, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1);
       border-radius: 30px 30px 40px 40px;
     }
-    
     .textura-kraft {
       background: linear-gradient(150deg, #d2b48c 0%, #b59068 50%, #8b653f 100%);
       box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.25), 0 8px 20px rgba(0, 0, 0, 0.15);
       border-radius: 12px;
     }
 
-    /* TULIPANES TEXTURA CHENILLA EN PREVISUALIZADOR */
     .tulipan-chenilla {
       background: radial-gradient(circle at 35% 35%, #f43f5e 15%, #be123c 65%, #6c041d 100%);
       box-shadow: 0 0 12px rgba(244, 63, 94, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.3);
       filter: drop-shadow(0 0 1px rgba(244, 63, 94, 0.8));
-      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      border-radius: 50% 50% 50% 50% / 60% 60 40% 40%;
       position: absolute;
       transform-origin: bottom center;
     }
 
+    /* ESTILO PREMIUM PARA EL SELECTOR DE PLANTILLAS */
+    .chip-plantilla {
+      flex-shrink: 0;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      color: var(--color-texto-sec);
+      font-size: 0.7rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .chip-plantilla:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--color-texto);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .chip-plantilla-activo {
+      background: var(--color-acento) !important;
+      color: var(--color-fondo) !important;
+      border-color: var(--color-acento) !important;
+      font-weight: 600;
+    }
+
+    /* Ocultar barra de scroll en navegadores */
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes popIcon { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
     @keyframes pulsoCorazon {
-      0% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0.4); }
-      15% { box-shadow: 0 0 0 8px rgba(153, 27, 27, 0); }
-      30% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0.4); }
-      45% { box-shadow: 0 0 0 8px rgba(153, 27, 27, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(235, 163, 138, 0.4); }
+      15% { box-shadow: 0 0 0 8px rgba(235, 163, 138, 0); }
+      30% { box-shadow: 0 0 0 0 rgba(235, 163, 138, 0.4); }
+      45% { box-shadow: 0 0 0 8px rgba(235, 163, 138, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(235, 163, 138, 0); }
     }
     @keyframes pulsoRespiracion {
-      0% { box-shadow: 0 0 4px rgba(15, 118, 110, 0.2); transform: scale(1); }
-      50% { box-shadow: 0 0 14px rgba(15, 118, 110, 0.6); transform: scale(1.05); }
-      100% { box-shadow: 0 0 4px rgba(15, 118, 110, 0.2); transform: scale(1); }
+      0% { box-shadow: 0 0 4px rgba(255, 255, 255, 0.15); transform: scale(1); }
+      50% { box-shadow: 0 0 12px rgba(255, 255, 255, 0.4); transform: scale(1.05); }
+      100% { box-shadow: 0 0 4px rgba(255, 255, 255, 0.15); transform: scale(1); }
     }
   </style>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="transition-colors duration-300">
 
+  <!-- PANTALLA DE ARRANQUE -->
   <div id="pantalla-arranque" class="pantalla-arranque">
     <div class="text-center">
       <h1 class="titulo-arranque">NIVANI</h1>
@@ -280,6 +495,7 @@
     </div>
   </div>
 
+  <!-- ALERTA OFFLINE -->
   <div id="alerta-offline" class="alerta-offline">
     <i class="fas fa-wifi mr-2"></i> Conexión débil o nula. Visualizando catálogo offline.
   </div>
@@ -300,7 +516,7 @@
         <!-- Botón de Abrir Carrito -->
         <button id="btn-bolsa-abrir" class="relative bg-[var(--color-recuadro)] border border-stone-200/10 hover:border-[var(--color-acento)] px-4 py-2.5 rounded-full flex items-center gap-2 text-xs font-semibold tracking-wide transition-all duration-300 select-none">
           <i id="icono-bolsa-compras" class="fas fa-shopping-bag text-[var(--color-acento)] transition-all"></i>
-          <span class="hidden sm:inline">Mi Pedido</span>
+          <span class="hidden sm:inline">Pedido</span>
           <span id="contador-pedido" class="bg-[var(--color-acento)] text-stone-900 font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center scale-100 transition-all">0</span>
         </button>
       </div>
@@ -326,29 +542,30 @@
   <!-- TOASTS DE CONFIRMACIÓN -->
   <div id="toast-contenedor" class="fixed top-6 right-6 z-[10000] flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- ====================================================================== */
-  /* DRAWER: PANEL DE PEDIDOS Y TALLER DE DISEÑO DE RAMO                    */
-  /* ====================================================================== -->
-  <div id="pedido-drawer" class="fixed inset-y-0 right-0 w-full sm:max-w-md bg-[var(--color-cristal)] backdrop-blur-xl border-l border-stone-200/10 shadow-2xl z-[500] transform translate-x-full transition-transform duration-500 ease-out flex flex-col">
+  <!-- OVERLAY CON DISEÑO BLUR -->
+  <div id="drawer-overlay" class="drawer-overlay"></div>
+
+  <!-- DRAWER: PANEL DE PEDIDOS Y TALLER DE DISEÑO -->
+  <div id="pedido-drawer" class="drawer-pedido">
     <!-- Header Drawer -->
-    <div class="p-6 border-b border-stone-200/10 flex items-center justify-between">
+    <div class="cabecera-drawer">
       <div class="flex items-center gap-2">
         <i class="fas fa-magic text-[var(--color-acento)]"></i>
-        <h2 class="font-serif italic text-lg font-semibold text-[var(--color-texto)]">Mi Carrito & Taller</h2>
+        <h2 class="font-serif italic text-lg font-semibold text-[var(--color-texto)]">Pedido & Taller</h2>
       </div>
       <button id="btn-bolsa-cerrar" class="w-8 h-8 rounded-full bg-[var(--color-recuadro)] border border-stone-200/10 flex items-center justify-center text-sm text-[var(--color-texto-sec)] hover:text-[var(--color-texto)] transition-all">&times;</button>
     </div>
 
     <!-- Pestañas: 1. Mi Carrito | 2. Diseña tu Ramo -->
-    <div class="flex border-b border-stone-200/10 bg-[var(--color-recuadro)] text-xs font-bold uppercase tracking-wider select-none">
+    <div class="flex border-b border-stone-200/10 bg-[var(--color-recuadro)] text-xs font-bold uppercase tracking-wider select-none flex-shrink-0">
       <button id="tab-carrito" class="flex-1 py-4 text-center border-b-2 border-[var(--color-acento)] text-[var(--color-texto)]">Carrito de Flores</button>
       <button id="tab-taller" class="flex-1 py-4 text-center border-b-2 border-transparent text-[var(--color-texto-sec)] hover:text-[var(--color-texto)]">Diseña tu Ramo 🎨</button>
     </div>
 
     <!-- Cuerpo Scrolleable -->
-    <div id="drawer-contenido" class="flex-grow overflow-y-auto p-6 space-y-6 custom-scroll">
+    <div id="drawer-contenido" class="space-y-6 custom-scroll">
       
-      <!-- CONTENIDO PESTAÑA 1: Carrito ordinario -->
+      <!-- CONTENIDO PESTAÑA 1: Carrito -->
       <div id="seccion-tab-carrito" class="space-y-4">
         <div id="carrito-lista" class="space-y-3">
           <!-- Items generados dinámicamente -->
@@ -363,7 +580,7 @@
       <div id="seccion-tab-taller" class="hidden space-y-6">
         <!-- Renderizador Realista Dinámico de la Textura y Combinación -->
         <div class="relative w-full aspect-[4/3] rounded-3xl overflow-hidden flex flex-col items-center justify-center p-4 border border-stone-200/10 transition-all duration-500" id="simulador-lienzo-textura">
-          <!-- Capa de Gipsófila (Nube Flotante en Chenilla) -->
+          <!-- Capa de Gipsófila -->
           <div id="lienzo-gipso" class="absolute inset-0 bg-transparent opacity-0 transition-opacity duration-500 pointer-events-none z-10" style="background-image: radial-gradient(rgba(255,255,255,0.9) 2px, transparent 3px); background-size: 16px 16px;"></div>
           
           <!-- Contenedor del Ramillete (Tulipanes) -->
@@ -424,14 +641,23 @@
         </div>
       </div>
 
-      <!-- SECCIÓN DEDICATORIA: Para Ambos Modos -->
+      <!-- SECCIÓN DEDICATORIA INTEGRADA DENTRO DEL SCROLL -->
       <div class="border-t border-stone-200/10 pt-6 space-y-4">
         <label class="text-[10px] font-bold uppercase text-stone-400 block">Escribe tu Dedicatoria (Tarjeta de Regalo)</label>
         
+        <!-- ESTILO DE TARJETA -->
         <div class="grid grid-cols-3 gap-2">
           <button onclick="cambiarEstiloDedicatoria('dorado')" class="p-2 border border-[var(--color-acento)] rounded-lg text-[9px] bg-[var(--color-recuadro)] hover:bg-[var(--color-acento)] hover:text-stone-900 font-bold tracking-wide transition-all">PAN DE ORO</button>
           <button onclick="cambiarEstiloDedicatoria('acuarela')" class="p-2 border border-stone-300 dark:border-stone-700 rounded-lg text-[9px] bg-[var(--color-recuadro)] hover:bg-[var(--color-acento)] hover:text-stone-900 font-bold tracking-wide transition-all">ACUARELA</button>
           <button onclick="cambiarEstiloDedicatoria('marfil')" class="p-2 border border-stone-300 dark:border-stone-700 rounded-lg text-[9px] bg-[var(--color-recuadro)] hover:bg-[var(--color-acento)] hover:text-stone-900 font-bold tracking-wide transition-all">MARFIL</button>
+        </div>
+
+        <!-- CAROUSEL DE SUGERENCIAS DE LUJO -->
+        <div class="space-y-1.5">
+          <label class="text-[9px] font-semibold uppercase text-stone-500 block">Sugerencias del Atelier (Sencillo de 1-click)</label>
+          <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none" id="contenedor-plantillas">
+            <!-- Chips de sugerencias se inyectan dinámicamente -->
+          </div>
         </div>
 
         <textarea id="carrito-dedicatoria" maxlength="100" placeholder="Escribe aquí tu mensaje especial de amor, felicitación o agradecimiento..." class="w-full h-20 p-3 border border-stone-300 dark:border-stone-700 bg-[var(--color-recuadro)] rounded-xl text-xs outline-none focus:border-[var(--color-acento)] resize-none text-[var(--color-texto)]"></textarea>
@@ -440,7 +666,7 @@
     </div>
 
     <!-- Footer Checkout -->
-    <div class="p-6 border-t border-stone-200/10 bg-[var(--color-recuadro)]">
+    <div class="pie-drawer">
       <div class="flex justify-between items-center mb-4">
         <span class="text-xs uppercase tracking-widest text-[var(--color-texto-sec)] font-semibold">Total Estimado</span>
         <span id="carrito-precio-total" class="font-bold text-xl text-[var(--color-texto)]">0 Bs.</span>
@@ -478,7 +704,7 @@
       linea2: "59177047557"
     };
 
-    // Biblioteca de Frases de Espera Aleatorias del Oficio
+    // Frases de Espera Aleatorias
     const FRASES_ESPERA = [
       "Hilando la chenilla...",
       "Moldeando el terciopelo...",
@@ -489,6 +715,20 @@
       "Abriendo el Atelier..."
     ];
 
+    // Dedicatorias Sugeridas
+    const PLANTILLAS_DEDICATORIA = [
+      { id: 1, cat: "Amor 🤍", texto: "Una flor eterna para alguien cuyo brillo nunca se apaga. Te amo hoy y siempre." },
+      { id: 2, cat: "Especial ✨", texto: "Un detalle eterno para recordar lo increíblemente especial que eres para mí." },
+      { id: 3, cat: "Aniversario 💞", texto: "Cada pétalo de esta flor representa un hermoso recuerdo juntos. Feliz aniversario." },
+      { id: 4, cat: "Cumpleaños 🎂", texto: "Que tu día sea tan eterno, alegre y brillante como estas flores artesanales. ¡Felicidades!" },
+      { id: 5, cat: "Gratitud 🙏", texto: "Gracias por florecer mi mundo con tu hermosa presencia y bondad incondicional." },
+      { id: 6, cat: "Amistad 🤝", texto: "La verdadera amistad es como estas flores: resiste al tiempo y conserva siempre su belleza." },
+      { id: 7, cat: "Éxito 🏆", texto: "Felicidades por este gran logro. Que sigan floreciendo infinitos éxitos en tu camino." },
+      { id: 8, cat: "Disculpa 🥺", texto: "A veces faltan palabras, pero que estas flores eternas hablen por mí. Lo siento mucho." },
+      { id: 9, cat: "Atelier 🎨", texto: "Para alguien con alma de artista, un detalle moldeado con la más alta dedicación y delicadeza." },
+      { id: 10, cat: "Mamá 💖", texto: "Para la flor más hermosa y fuerte de mi jardín de vida. Te amo con todo mi corazón, mamá." }
+    ];
+
     const EstadoAplicacion = {
       datosProcesados: [],
       categoriasUnicas: [],
@@ -496,7 +736,6 @@
       textoBusqueda: "",
       primeraCarga: true,
       
-      // Carrito integrado con persistencia de Favoritos
       favoritos: JSON.parse(localStorage.getItem('nivani_favs')) || [],
       carrito: [],
       
@@ -506,7 +745,8 @@
         follajeGipso: false,
         follajeOrganza: false
       },
-      estiloTarjetaDedicatoria: 'dorado'
+      estiloTarjetaDedicatoria: 'dorado',
+      plantillaActivaId: 2 // Por defecto "Especial ✨"
     };
 
     // Animación de entrada de elementos
@@ -535,7 +775,7 @@
         const toast = document.createElement('div');
         toast.className = "pointer-events-auto bg-[var(--color-tarjeta)] border border-stone-200/10 text-[var(--color-texto)] px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 max-w-xs transition-all duration-300 opacity-0 transform translate-y-[-10px]";
         
-        let icono = esExitoso ? '<i class="fas fa-check-circle text-emerald-500"></i>' : '<i class="fas fa-heart text-pink-500"></i>';
+        let icono = esExitoso ? '<i class="fas fa-check-circle text-emerald-500"></i>' : '<i class="fas fa-exclamation-circle text-amber-500"></i>';
         toast.innerHTML = `${icono} <span class="text-xs font-semibold">${mensaje}</span>`;
         container.appendChild(toast);
 
@@ -547,7 +787,7 @@
         setTimeout(() => {
           toast.classList.add('opacity-0', 'translate-y-[-10px]');
           setTimeout(() => toast.remove(), 300);
-        }, 2500);
+        }, 3500);
       },
       ejecutarEfectoVuelo: function(event) {
         const rectOrigen = event.currentTarget.getBoundingClientRect();
@@ -600,6 +840,38 @@
           res.nombre = cadena.replace('+', '').replace('*', '').trim();
         }
         return res;
+      },
+      compartirNativo: function(nombreFlor) {
+        const textoCompartir = `¡Hola! Estaba viendo el Atelier de Nivani y me encantó esta hermosa flor hecha a mano: "${nombreFlor}". Es un hermoso detalle eterno. 🌸✨`;
+        
+        if (navigator.share) {
+          navigator.share({
+            title: 'Sugerencia de Regalo - Nivani',
+            text: textoCompartir,
+            url: window.location.href
+          }).then(() => {
+            Utilidades.mostrarToast("¡Sugerencia compartida!");
+          }).catch(() => {
+            Utilidades.copiarTexto(textoCompartir);
+          });
+        } else {
+          Utilidades.copiarTexto(textoCompartir);
+        }
+      },
+      copiarTexto: function(texto) {
+        // Copiado seguro y compatible con iframe
+        const inputAux = document.createElement("input");
+        inputAux.setAttribute("value", texto);
+        document.body.appendChild(inputAux);
+        inputAux.select();
+        inputAux.setSelectionRange(0, 99999);
+        try {
+          document.execCommand("copy");
+          Utilidades.mostrarToast("¡Sugerencia copiada! Envíala por WhatsApp a quien quieras 🎁");
+        } catch (e) {
+          console.error("No se pudo copiar el texto", e);
+        }
+        document.body.removeChild(inputAux);
       }
     };
 
@@ -650,7 +922,9 @@
           simCheckOrganza: document.getElementById('sim-check-organza'),
           btnAniadirRamo: document.getElementById('btn-aniadir-ramo-personalizado'),
           simLienzoTextura: document.getElementById('simulador-lienzo-textura'),
-          txtTexturaEnvoltura: document.getElementById('txt-textura-envoltura')
+          txtTexturaEnvoltura: document.getElementById('txt-textura-envoltura'),
+          contenedorPlantillas: document.getElementById('contenedor-plantillas'),
+          drawerOverlay: document.getElementById('drawer-overlay')
         };
       },
       renderizarHUD: function() {
@@ -703,7 +977,7 @@
             let contImg = document.createElement('div');
             contImg.className = "contenedor-imagen";
 
-            // CARGADOR ATELIER CON MODELADO DE CHENILLA Y HUELLA DACTILAR
+            // CARGADOR ATELIER
             let cargador = document.createElement('div');
             cargador.className = "cargador-atelier";
             cargador.innerHTML = `
@@ -742,20 +1016,22 @@
             let esFav = EstadoAplicacion.favoritos.includes(item.id);
             let claseCorazon = esFav ? "fas fa-heart text-pink-500" : "far fa-heart";
 
+            // Se elimina la visualización de la categoría para un acabado minimalista
             recuadro.innerHTML = `
-              <div class="cabecera-info select-none">
-                <div class="texto-grupo">${item.grupo}</div>
+              <div class="cabecera-info select-none flex justify-end">
                 <div class="flex items-center gap-3">
                   <button class="btn-favorito" data-id="${item.id}"><i class="${claseCorazon}"></i></button>
-                  <button class="btn-share" data-nombre="${item.nombre}" title="Sugerir como Regalo"><i class="fas fa-gift"></i></button>
+                  <button class="btn-share" data-nombre="${item.nombre}" title="Sugerir como Regalo"><i class="fas fa-gift text-stone-400 hover:text-[var(--color-acento)] transition-colors"></i></button>
                 </div>
               </div>
               <div class="texto-nombre">${item.nombre}</div>
-              <button class="btn-agregar-carrito w-full mt-3 bg-stone-100 dark:bg-stone-800 hover:bg-[var(--color-acento)] hover:text-stone-900 text-[var(--color-texto)] py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-wider transition-all" data-id="${item.id}">Añadir al Pedido</button>
+              <div class="texto-precio select-none">${pTxt}</div>
+              <button class="btn-agregar-carrito w-full" data-id="${item.id}">Añadir al Pedido</button>
             `;
             
             recuadro.querySelector('.btn-share').addEventListener('click', function(e) {
-              Utilidades.vibrar(); Utilidades.compartirNativo(this.dataset.nombre);
+              Utilidades.vibrar(); 
+              Utilidades.compartirNativo(this.dataset.nombre);
             });
 
             recuadro.querySelector('.btn-favorito').addEventListener('click', function(e) {
@@ -809,9 +1085,8 @@
           
           EstadoAplicacion.carrito.forEach((item, index) => {
             let div = document.createElement('div');
-            div.className = "flex items-center justify-between p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-2xl gap-3 animate-fade-in";
+            div.className = "flex items-center justify-between p-3 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-2xl gap-3";
             
-            // Imagen del item o icono si es personalizado
             let imgHTML = `<div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-lg"><i class="fas fa-magic text-[var(--color-acento)]"></i></div>`;
             if (item.img) {
               imgHTML = `<img src="${item.img}" class="w-12 h-12 rounded-xl object-cover">`;
@@ -835,7 +1110,6 @@
           });
         }
         
-        // Calcular Precios totales
         let total = EstadoAplicacion.carrito.reduce((acc, obj) => {
           let pVal = parseInt(obj.precio, 10);
           return acc + ((isNaN(pVal) ? 0 : pVal) * obj.cantidad);
@@ -867,28 +1141,25 @@
           txtEnvoltura.className = "text-[9px] font-bold text-stone-800 tracking-widest uppercase block";
         }
 
-        // 2. Renderizar dinámicamente los tulipanes con textura de Chenilla
+        // 2. Renderizar tulipanes con textura de Chenilla
         tulipanesContenedor.innerHTML = "";
         const cantidad = config.cantidadFlores;
         
-        // Colores aleatorios elegantes para la simulación de tulipanes en chenilla
         const paletaColores = [
-          "radial-gradient(circle at 35% 35%, #f43f5e 15%, #be123c 65%, #6c041d 100%)", // Rojo Terciopelo
-          "radial-gradient(circle at 35% 35%, #fb7185 15%, #f43f5e 65%, #9f1239 100%)", // Rosa Intenso
-          "radial-gradient(circle at 35% 35%, #fda4af 15%, #f43f5e 65%, #4c0519 100%)", // Rosa Suave
-          "radial-gradient(circle at 35% 35%, #fbbf24 15%, #d97706 65%, #78350f 100%)"  // Amarillo Dorado
+          "radial-gradient(circle at 35% 35%, #f43f5e 15%, #be123c 65%, #6c041d 100%)",
+          "radial-gradient(circle at 35% 35%, #fb7185 15%, #f43f5e 65%, #9f1239 100%)",
+          "radial-gradient(circle at 35% 35%, #fda4af 15%, #f43f5e 65%, #4c0519 100%)",
+          "radial-gradient(circle at 35% 35%, #fbbf24 15%, #d97706 65%, #78350f 100%)"
         ];
 
         for (let i = 0; i < cantidad; i++) {
           const tulipan = document.createElement('div');
           tulipan.className = "tulipan-chenilla transition-all duration-500";
           
-          // Estilo de chenilla suave y esponjoso con filtros CSS
           tulipan.style.width = "40px";
           tulipan.style.height = "52px";
           tulipan.style.background = paletaColores[i % paletaColores.length];
           
-          // Posicionamiento dinámico simulando un ramo abanicado
           const desplazamientoX = (i - (cantidad - 1) / 2) * 22; 
           const inclinacionRotacion = (i - (cantidad - 1) / 2) * 8;
           const elevacionY = Math.abs(i - (cantidad - 1) / 2) * 4 - 15;
@@ -897,7 +1168,7 @@
           tulipanesContenedor.appendChild(tulipan);
         }
 
-        // 3. Activar/Desactivar Gipsófila (Nubes de chenilla blanca)
+        // 3. Activar/Desactivar Gipsófila
         if (config.follajeGipso) {
           gipsoCapa.classList.remove('opacity-0');
           gipsoCapa.classList.add('opacity-90');
@@ -912,6 +1183,28 @@
         } else {
           organzaLazo.style.transform = "scale(0)";
         }
+      },
+      renderizarPlantillasDedicatoria: function() {
+        let cont = this.referencias.contenedorPlantillas;
+        cont.innerHTML = "";
+        
+        PLANTILLAS_DEDICATORIA.forEach(p => {
+          let chip = document.createElement('button');
+          let esActivo = EstadoAplicacion.plantillaActivaId === p.id;
+          chip.className = "chip-plantilla" + (esActivo ? " chip-plantilla-activo" : "");
+          chip.innerText = p.cat;
+          chip.dataset.id = p.id;
+          
+          chip.addEventListener('click', () => {
+            Utilidades.vibrar();
+            EstadoAplicacion.plantillaActivaId = p.id;
+            this.referencias.carritoDedicatoria.value = p.texto;
+            this.renderizarPlantillasDedicatoria();
+            Utilidades.mostrarToast(`Mensaje "${p.cat}" cargado`);
+          });
+          
+          cont.appendChild(chip);
+        });
       }
     };
 
@@ -951,16 +1244,23 @@
         window.addEventListener('offline', () => r.offline.classList.add('visible'));
         window.addEventListener('online', () => r.offline.classList.remove('visible'));
         
-        // CONTROL DE ABRIRES Y CERRAR DEL DRAWER
+        // CONTROL DE DRAWER
         r.btnBolsaAbrir.addEventListener('click', () => {
           Utilidades.vibrar();
           r.drawer.classList.remove('translate-x-full');
+          r.drawerOverlay.classList.add('activo'); 
           MotorUI.renderizarCarrito();
+          MotorUI.renderizarPlantillasDedicatoria();
         });
-        r.btnBolsaCerrar.addEventListener('click', () => {
+
+        const cerrarPedidoDrawer = () => {
           Utilidades.vibrar();
           r.drawer.classList.add('translate-x-full');
-        });
+          r.drawerOverlay.classList.remove('activo'); 
+        };
+
+        r.btnBolsaCerrar.addEventListener('click', cerrarPedidoDrawer);
+        r.drawerOverlay.addEventListener('click', cerrarPedidoDrawer); 
 
         // CONTROL DE PESTAÑAS (TABS)
         r.tabCarrito.addEventListener('click', () => {
@@ -973,7 +1273,7 @@
           MotorUI.actualizarPrevisualizadorRamo();
         });
 
-        // CONTROL DEL SIMULADOR "ARMA TU RAMO"
+        // CONTROL DEL SIMULADOR
         r.simEnvoltorio.addEventListener('change', () => {
           EstadoAplicacion.simuladorRamo.envoltura = r.simEnvoltorio.value;
           MotorUI.actualizarPrevisualizadorRamo();
@@ -1042,7 +1342,7 @@
         let index = EstadoAplicacion.favoritos.indexOf(idItem);
         if (index === -1) {
           EstadoAplicacion.favoritos.push(idItem);
-          Utilidades.mostrarToast("Flor guardada en tus favoritos ♥", false);
+          Utilidades.mostrarToast("Guardado en favoritos ♥", false);
         } else {
           EstadoAplicacion.favoritos.splice(index, 1);
         }
@@ -1063,7 +1363,7 @@
           });
         }
         MotorUI.actualizarContadoresPedido();
-        Utilidades.mostrarToast("Agregada al Pedido");
+        Utilidades.mostrarToast("Agregado al Pedido");
       },
       cambiarCantidadCarrito: function(index, cambio) {
         Utilidades.vibrar();
@@ -1109,22 +1409,22 @@
           id: 'personalizado_' + Date.now(),
           nombre: nombreRamo,
           precio: totalRamo,
-          img: null, // Sin imagen por ser personalizado
+          img: null,
+          fancyRamo: true,
           cantidad: 1
         });
 
         MotorUI.actualizarContadoresPedido();
-        Utilidades.mostrarToast("¡Ramo Personalizado Creado!");
+        Utilidades.mostrarToast("¡Ramo Creado con Éxito!");
         this.cambiarPestania('carrito');
         MotorUI.renderizarCarrito();
       },
       enviarPedidoWhatsApp: function() {
         if (EstadoAplicacion.carrito.length === 0) {
-          alert("Añade al menos una flor o diseña un ramo para poder enviar tu pedido.");
+          Utilidades.mostrarToast("Añade una flor o diseña un ramo primero.", false);
           return;
         }
 
-        // Selección de canal
         const canales = document.getElementsByName('wpp-linea-destino');
         let canalElegido = "linea1";
         for (let i = 0; i < canales.length; i++) {
@@ -1133,9 +1433,8 @@
             break;
           }
         }
-        const wppNumero = VECTORES_WPP[canalElegido];
+        const wppNumero = VECTORES_WPP[canalEenero] || VECTORES_WPP.linea1;
 
-        // Construcción estructurada del mensaje unificado
         let msg = `✦ *NIVANI | SOLICITUD DE PEDIDO ATELIER* ✦\n\n`;
         let totalGeneral = 0;
 
@@ -1144,13 +1443,12 @@
           let sub = (isNaN(pVal) ? 0 : pVal) * item.cantidad;
           totalGeneral += sub;
           msg += `*${index + 1}. ${item.nombre}*\n`;
-          msg += `   Cant: ${item.cantidad} x ${item.precio} Bs. | Sub: ${sub} Bs.\n\n`;
+          msg += `    Cant: ${item.cantidad} x ${item.precio} Bs. | Sub: ${sub} Bs.\n\n`;
         });
 
         msg += `--------------------------------\n`;
         msg += `*TOTAL DE TU COMBINACIÓN:* ${totalGeneral} Bs.\n\n`;
 
-        // Añadir dedicatoria si existe
         const dedicatoria = document.getElementById('carrito-dedicatoria').value.trim();
         if (dedicatoria !== "") {
           msg += `💌 *TARJETA DEDICATORIA (${EstadoAplicacion.estiloTarjetaDedicatoria.toUpperCase()}):*\n`;
@@ -1167,12 +1465,18 @@
     function cambiarEstiloDedicatoria(estilo) {
       EstadoAplicacion.estiloTarjetaDedicatoria = estilo;
       Utilidades.vibrar();
-      Utilidades.mostrarToast(`Tarjeta: acabado ${estilo.toUpperCase()} listo`);
+      Utilidades.mostrarToast(`Tarjeta: Acabado ${estilo.toUpperCase()} listo`);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       let db = MotorConexion.iniciar();
       MotorUI.mapearNodos();
+      
+      const plantillaPorDefecto = PLANTILLAS_DEDICATORIA.find(p => p.id === EstadoAplicacion.plantillaActivaId);
+      if (plantillaPorDefecto) {
+        MotorUI.referencias.carritoDedicatoria.value = plantillaPorDefecto.texto;
+      }
+      
       MotorEventos.escucharDOM();
       MotorEventos.sincronizarFirebase(db);
       if (!navigator.onLine) MotorUI.referencias.offline.classList.add('visible');
