@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- SEÑOR DE LA VIDA® - V11.9 | EDICIÓN NUMERADA, CERTIFICADO DE AUTENTICIDAD & LUJO SILENCIOSO -->
+  <!-- SEÑOR DE LA VIDA® - V11.9.2 | EDICIÓN NUMERADA, CERTIFICADO DE AUTENTICIDAD & LUJO SILENCIOSO -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
   <title>Nivani | Atelier de Flores en Chenilla</title>
@@ -274,10 +274,10 @@
     .imagen-cargada { opacity: 1; }
     .tarjeta-item:hover .imagen-cargada { transform: scale(1.05); }
 
-    /* SWAP 1: BADGE LUXURY EN DIAGONAL EN LA ESQUINA SUPERIOR DERECHA (ESTILO CINTA DE DISEÑADOR) */
+    /* BADGE LUXURY EN DIAGONAL EN LA ESQUINA SUPERIOR DERECHA (CINTA DE DISEÑO LLAMATIVA) */
     .badge-luxury {
       position: absolute; 
-      top: 14px; right: -28px; /* Offset para que calce perfecto en la esquina */
+      top: 14px; right: -28px; 
       transform: rotate(45deg);
       width: 105px;
       text-align: center;
@@ -291,17 +291,17 @@
       display: block;
     }
     .badge-luxury-nuevo { 
-      background: linear-gradient(135deg, #ff0055 0%, #ff5200 100%); /* Neón de alta costura, súper llamativo */
+      background: linear-gradient(135deg, #ff0055 0%, #ff5200 100%); /* Fucsia neón de alta gama */
       color: #ffffff; 
       text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
     .badge-luxury-escaso { 
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
-      color: #fbbf24; /* Letras doradas */
-      border: 1px solid rgba(251, 191, 36, 0.2);
+      background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); /* Ámbar brillante y selecto */
+      color: #1c1917; 
+      font-weight: 900;
     }
 
-    /* SWAP 2: BOTONES DE ACCIONES EN LA PARTE INFERIOR DE LA IMAGEN (ERGONÓMICOS) */
+    /* BOTONES DE ACCIONES EN LA PARTE INFERIOR DE LA IMAGEN */
     .overlay-actions {
       position: absolute;
       bottom: 10px; left: 10px; right: 10px; 
@@ -360,7 +360,7 @@
       }
     }
 
-    /* RECUADRO DE INFORMACIÓN REDUCIDO Y ULTRA COMPACTO */
+    /* RECUADRO DE INFORMACIÓN REDUCIDO Y COMPACTO */
     .recuadro-info {
       background: transparent; 
       border: none; 
@@ -478,45 +478,42 @@
       </div>
     </div>
 
-    <!-- SECCIÓN PREMIUM DE RESEÑAS LEGENDARIAS (Ficticias pero Famosas) -->
+    <!-- SECCIÓN PREMIUM DE RESEÑAS REALISTAS Y ORGANICAS (Subtles & Classy) -->
     <div class="mt-20 border-t border-stone-200/10 pt-16 max-w-[1200px] mx-auto pb-10">
-      <h3 class="font-serif italic text-2xl text-center text-[var(--color-texto)] mb-2">Crítica de Alta Costura</h3>
-      <p class="text-[0.65rem] tracking-[6px] text-stone-400 dark:text-stone-500 uppercase text-center mb-12">Lo que murmuran en los salones de París y New York</p>
+      <h3 class="font-serif italic text-xl text-center text-[var(--color-texto)] mb-1">Opiniones del Atelier</h3>
+      <p class="text-[0.60rem] tracking-[4px] text-stone-400 dark:text-stone-500 uppercase text-center mb-10">Lo que aprecian nuestros coleccionistas</p>
       
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Miranda Priestly -->
-        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-between">
-          <span class="absolute -right-3 -top-3 text-7xl opacity-5 font-serif text-[var(--color-acento)]">“</span>
-          <p class="text-xs font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-6">
-            "¿Flores de chenilla en invierno? Qué innovador... O al menos lo sería si no fuesen de Nivani. Pero como lo son, admito que es una genialidad absoluta. Al fin una pieza que no se marchita antes de la Semana de la Moda."
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+        <!-- Victoria B. -->
+        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-5 rounded-[20px] shadow-sm flex flex-col justify-between">
+          <p class="text-[11.5px] font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-4">
+            "La textura del terciopelo y la precisión del modelado son increíbles. Es una pieza de diseño preciosa para decorar mi tocador."
           </p>
           <div>
-            <h4 class="font-serif italic text-sm text-[var(--color-texto)]">M. Priestly</h4>
-            <p class="text-[8px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-1">Directora Creativa, Runway Mag</p>
+            <h4 class="font-serif italic text-xs font-semibold text-[var(--color-texto)]">Victoria B.</h4>
+            <p class="text-[7.5px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-0.5">Cliente Verificada</p>
           </div>
         </div>
         
-        <!-- Jay Gatsby -->
-        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-between">
-          <span class="absolute -right-3 -top-3 text-7xl opacity-5 font-serif text-[var(--color-acento)]">“</span>
-          <p class="text-xs font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-6">
-            "Mi querido amigo, decoré todo el salón de cristal de mi mansión en West Egg con los tulipanes eternos de Nivani para el reencuentro más esperado del siglo. Se mantuvieron tan suaves y perfectos como la primera noche."
+        <!-- Carolina H. -->
+        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-5 rounded-[20px] shadow-sm flex flex-col justify-between">
+          <p class="text-[11.5px] font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-4">
+            "La delicadeza con la que está modelada cada flor supera las expectativas. La presentación y el empaque son impecables."
           </p>
           <div>
-            <h4 class="font-serif italic text-sm text-[var(--color-texto)]">J. Gatsby</h4>
-            <p class="text-[8px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-1">Anfitrión de Long Island</p>
+            <h4 class="font-serif italic text-xs font-semibold text-[var(--color-texto)]">Carolina H.</h4>
+            <p class="text-[7.5px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-0.5">Coleccionista de Arte</p>
           </div>
         </div>
         
-        <!-- Reina Charlotte -->
-        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-between">
-          <span class="absolute -right-3 -top-3 text-7xl opacity-5 font-serif text-[var(--color-acento)]">“</span>
-          <p class="text-xs font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-6">
-            "El diamante de la temporada ha sido coronado... y no es una debutante, sino el arreglo de felpa real de Nivani. El palacio entero suspira por la delicadeza con la que acarician las manos de la corona real."
+        <!-- Sofia C. -->
+        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-5 rounded-[20px] shadow-sm flex flex-col justify-between">
+          <p class="text-[11.5px] font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-4">
+            "Un detalle de autor minimalista y duradero. La combinación de colores desaturados le da una sensibilidad única a mi sala."
           </p>
           <div>
-            <h4 class="font-serif italic text-sm text-[var(--color-texto)]">Reina Charlotte</h4>
-            <p class="text-[8px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-1">Corte Real de Mayfair</p>
+            <h4 class="font-serif italic text-xs font-semibold text-[var(--color-texto)]">Sofia C.</h4>
+            <p class="text-[7.5px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-0.5">Diseñadora de Interiores</p>
           </div>
         </div>
       </div>
@@ -717,7 +714,7 @@
       "3.5 horas de modelado"
     ];
 
-    // Failsafe Mock Products de alta costura por si ambas llamadas a Firestore fallan o están totalmente vacías
+    // Failsafe Mock Products de respaldo absoluto con estética fina en caso de que la sincronización inicial falle
     const PRODUCTOS_MOCK = [
       { id: "mock1", grupo: "TULIPANES", nombre: "TULIPÁN - Royal Velvet+", img: "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&q=80&w=600", precio: "45", badgeNuevo: true, badgeEscaso: false },
       { id: "mock2", grupo: "ROSAS", nombre: "ROSA - Crimson Gold*", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600", precio: "65", badgeNuevo: false, badgeEscaso: true },
@@ -808,7 +805,7 @@
             playBell(783.99, 0.14); 
           }
         } catch (e) {
-          console.warn("AudioContext no iniciado por permisos de interacción del usuario.", e);
+          console.warn("AudioContext no iniciado por permisos de interacción.", e);
         }
       },
 
@@ -1003,7 +1000,6 @@
             if (item.badgeNuevo) {
               badgeHTML = `<div class="badge-luxury badge-luxury-nuevo">✦ Nuevo</div>`;
             } else if (item.badgeEscaso) {
-              // ACTUALIZACIÓN DE ETIQUETA COMERCIAL Y DESEABLE A "MÁS PEDIDO"
               badgeHTML = `<div class="badge-luxury badge-luxury-escaso">🔥 Más Pedido</div>`;
             }
 
@@ -1375,7 +1371,6 @@
       sincronizarFirebase: function(db) {
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'limpiapipas-98f13';
         
-        // Función de extracción y mapeo de datos reales
         const mapearSnapshot = (snapshot) => {
           let arr = []; let cats = new Set();
           snapshot.docs.forEach(doc => {
@@ -1386,14 +1381,14 @@
             arr.push({
               id: doc.id, grupo: p.grupo, nombre: p.nombre,
               badgeNuevo: p.badgeNuevo, badgeEscaso: p.badgeEscaso,
-              img: d.img || d.direccion || d.direccion_imagen || '', // Soporte completo para tus variables reales de imagen
+              img: d.img || d.direccion || d.direccion_imagen || '', 
               precio: d.precio
             });
           });
           return { arr, cats };
         };
 
-        // PRIORIDAD 1: Sincronización en la ruta estructurada de la plataforma
+        // PRIORIDAD 1: Sincronización en la ruta estructurada segura para datos públicos
         db.collection('artifacts').doc(appId).collection('public').doc('data').collection('flores')
           .onSnapshot(snapshot => {
             if (!snapshot.empty) {
@@ -1403,7 +1398,7 @@
               MotorUI.renderizarHUD();
               MotorUI.renderizarCatalogo();
             } else {
-              // PRIORIDAD 2: Intento directo en la colección raíz original "flores" para no perder tus datos reales locales
+              // PRIORIDAD 2: Intento directo en tu colección raíz original "flores"
               db.collection("flores").onSnapshot(rootSnapshot => {
                 if (!rootSnapshot.empty) {
                   const datos = mapearSnapshot(rootSnapshot);
@@ -1415,13 +1410,12 @@
                   cargarMockDeRespaldo();
                 }
               }, err => {
-                console.warn("Fallo en lectura raíz, cargando respaldo seguro.", err);
+                console.warn("Fallo lectura colección raíz.", err);
                 cargarMockDeRespaldo();
               });
             }
           }, error => {
-            console.warn("Fallo lectura ruta estructurada, reintentando en raíz...", error);
-            // Fallback directo a raíz ante cualquier restricción de sandbox de la plataforma
+            console.warn("Fallo lectura ruta estructurada, consultando raíz directa...", error);
             db.collection("flores").onSnapshot(rootSnapshot => {
               if (!rootSnapshot.empty) {
                 const datos = mapearSnapshot(rootSnapshot);
@@ -1520,7 +1514,6 @@
           nombre: nombreRamo,
           precio: totalRamo,
           img: null,
-          offsetName: '',
           cantidad: 1
         });
 
@@ -1593,7 +1586,7 @@
       Utilidades.mostrarToast(`Tarjeta: acabado ${estilo.toUpperCase()} listo`);
     }
 
-    // Regla 3: Autenticación anónima garantizada antes de realizar consultas de base de datos
+    // Autenticación anónima garantizada antes de realizar consultas de base de datos
     document.addEventListener('DOMContentLoaded', async () => {
       let db = MotorConexion.iniciar();
       let auth = firebase.auth();
@@ -1613,7 +1606,6 @@
       await iniciarAutenticacionSegura();
       
       auth.onAuthStateChanged((user) => {
-        // Ejecución protegida
         MotorUI.mapearNodos();
         MotorEventos.escucharDOM();
         MotorEventos.sincronizarFirebase(db);
