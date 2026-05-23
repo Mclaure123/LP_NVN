@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- SEÑOR DE LA VIDA® - V11.5 | OPTIMIZACIÓN EXTREMA iOS / NO-SCROLL -->
+  <!-- SEÑOR DE LA VIDA® - V11.7 | ATELIER DE LUJO PORTRAIT & ERGONOMÍA TÁCTIL PREMIUM -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
   <title>Nivani | Atelier de Flores en Chenilla</title>
@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -79,8 +79,7 @@
       overflow-x: hidden; overflow-y: hidden; display: flex; flex-direction: column;
     }
 
-    /* Scrollbars elegantes iOS style */
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(197, 168, 160, 0.4); border-radius: 10px; }
 
     .pantalla-arranque {
@@ -207,27 +206,31 @@
     .estado-vacio i { font-size: 3rem; color: var(--color-acento); opacity: 0.5; margin-bottom: 15px; }
     .estado-vacio p { font-size: 1.1rem; color: var(--color-texto-sec); font-weight: 300; }
 
+    /* ESTILO REDISEÑADO DE LA TARJETA (Portrait & Editorial) */
     .tarjeta-item {
       background-color: var(--color-tarjeta); 
-      border-radius: var(--radio-borde); 
-      padding: 10px;
-      border: 1px solid rgba(197, 168, 160, 0.15);
+      border-radius: 24px; 
+      padding: 8px;
+      border: 1px solid rgba(197, 168, 160, 0.12);
       box-shadow: var(--sombra-tactil);
       transition: transform 0.5s cubic-bezier(0.15, 0.85, 0.35, 1.1), box-shadow 0.5s ease;
       display: flex; flex-direction: column; position: relative;
       content-visibility: auto; contain-intrinsic-size: 360px;
       opacity: 0; transform: translateY(30px);
-      perspective: 1000px;
     }
     .tarjeta-item.revelado { opacity: 1; transform: translateY(0); }
-    
     .tarjeta-item:hover { 
-      transform: perspective(1000px) rotateX(2.5deg) rotateY(1deg) translateY(-4px); 
+      transform: translateY(-4px); 
       box-shadow: var(--sombra-hover); 
     }
 
+    /* CONTENEDOR DE IMAGEN HERO */
     .contenedor-imagen {
-      position: relative; width: 100%; height: 160px; border-radius: 20px; overflow: hidden;
+      position: relative; 
+      width: 100%; 
+      height: 220px; /* Alargado editorial */
+      border-radius: 18px; 
+      overflow: hidden;
       background-color: var(--color-recuadro);
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
     }
@@ -254,40 +257,127 @@
     .imagen-cargada { opacity: 1; }
     .tarjeta-item:hover .imagen-cargada { transform: scale(1.05); }
 
+    /* SWAP 1: BADGE LUXURY AHORA EN LA ESQUINA SUPERIOR DERECHA */
     .badge-luxury {
-      position: absolute; bottom: 8px; right: 8px; padding: 5px 12px;
-      border-radius: 20px; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; z-index: 10; backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; gap: 5px;
+      position: absolute; 
+      top: 10px; right: 10px; /* Ubicación superior */
+      padding: 4px 10px;
+      border-radius: 12px; 
+      font-size: 0.58rem; 
+      font-weight: 700; 
+      letter-spacing: 0.8px;
+      text-transform: uppercase; 
+      z-index: 25; 
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%); 
+      display: flex; 
+      align-items: center; 
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    .badge-luxury-nuevo { background: rgba(240, 253, 244, 0.85); color: #0f766e; border: 1px solid rgba(15, 118, 110, 0.15); }
-    .badge-luxury-escaso { background: rgba(254, 242, 242, 0.85); color: #991b1b; border: 1px solid rgba(153, 27, 27, 0.15); animation: pulsoCorazon 2s infinite; }
+    .badge-luxury-nuevo { 
+      background: rgba(255, 255, 255, 0.85); 
+      color: #78350f; 
+      border: 1.2px solid rgba(212, 163, 115, 0.4); 
+    }
+    .badge-luxury-escaso { 
+      background: rgba(15, 14, 14, 0.8); 
+      color: #fda4af; 
+      border: 1.2px solid rgba(244, 63, 94, 0.3); 
+      animation: pulsoCorazon 2s infinite; 
+    }
 
+    @media (prefers-color-scheme: dark) {
+      .badge-luxury-nuevo { 
+        background: rgba(23, 22, 21, 0.85); 
+        color: #f59e0b; 
+        border: 1.2px solid rgba(245, 158, 11, 0.2); 
+      }
+    }
+
+    /* SWAP 2: BOTONES DE ACCIONES EN LA PARTE INFERIOR DE LA IMAGEN (ERGONÓMICOS) */
+    .overlay-actions {
+      position: absolute;
+      bottom: 10px; left: 10px; right: 10px; /* Ubicación inferior */
+      display: flex;
+      justify-content: space-between;
+      z-index: 20;
+      opacity: 0.9;
+      transform: translateY(4px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    .tarjeta-item:hover .overlay-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-favorito-overlay {
+      background: rgba(251, 250, 245, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.2px solid rgba(255, 255, 255, 0.3);
+      color: var(--color-texto-sec);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+    }
+    .btn-favorito-overlay:hover {
+      background: var(--color-tarjeta);
+      color: var(--color-texto);
+      transform: scale(1.12);
+      box-shadow: 0 6px 16px rgba(197, 168, 160, 0.35);
+    }
+    .btn-share.btn-favorito-overlay:hover {
+      color: #d97706 !important;
+      transform: scale(1.12) rotate(12deg);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .btn-favorito-overlay {
+        background: rgba(23, 22, 21, 0.85);
+        border: 1.2px solid rgba(255, 255, 255, 0.08);
+        color: var(--color-texto-sec);
+      }
+      .btn-favorito-overlay:hover {
+        background: var(--color-recuadro);
+        color: var(--color-texto);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+      }
+      .btn-share.btn-favorito-overlay:hover {
+        color: #fbbf24 !important;
+      }
+    }
+
+    /* RECUADRO DE INFORMACIÓN REDUCIDO Y ULTRA COMPACTO */
     .recuadro-info {
-      background: var(--color-recuadro); 
-      border: 1px solid rgba(197, 168, 160, 0.08); 
-      border-radius: 20px;
-      padding: 12px; margin-top: 10px; display: flex; flex-direction: column; flex-grow: 1; gap: 6px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+      background: transparent; 
+      border: none; 
+      padding: 8px 4px 4px 4px; 
+      margin-top: 4px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px;
+      box-shadow: none;
     }
-    
-    .cabecera-info { display: flex; justify-content: space-between; align-items: center; }
-    .texto-grupo { font-size: 0.55rem; color: var(--color-acento); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
-    
-    .tiempo-elaboracion {
-      font-size: 0.58rem; color: var(--color-texto-sec); font-weight: 500;
-      display: flex; align-items: center; gap: 4px; opacity: 0.8; margin-top: -2px;
-    }
-
-    .btn-share { background: transparent; border: none; color: var(--color-texto-sec); cursor: pointer; transition: color 0.2s; font-size: 0.85rem; }
-    .btn-share:hover { color: var(--color-acento); transform: scale(1.1); }
 
     .texto-nombre {
-      font-family: var(--fuente-lujo); font-weight: 400; font-size: 0.85rem;
-      color: var(--color-texto); line-height: 1.2; font-style: italic;
-      letter-spacing: 0.3px; opacity: 0.95;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      display: block; width: 100%;
+      font-family: var(--fuente-lujo); 
+      font-weight: 500; 
+      font-size: 0.82rem;
+      color: var(--color-texto); 
+      line-height: 1.2; 
+      font-style: italic;
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
+      display: block; 
+      width: 100%;
     }
 
     .btn-agregar-carrito { margin-top: auto; }
@@ -334,7 +424,7 @@
       background: radial-gradient(circle at 35% 35%, #f43f5e 15%, #be123c 65%, #6c041d 100%);
       box-shadow: 0 0 12px rgba(244, 63, 94, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.3);
       filter: drop-shadow(0 0 1px rgba(244, 63, 94, 0.8));
-      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      border-radius: 50% 50% 50% 50% / 60% 60 40% 40%;
       position: absolute;
       transform-origin: bottom center;
     }
@@ -402,10 +492,9 @@
 
   <div id="toast-contenedor" class="fixed top-[calc(1.5rem+env(safe-area-inset-top))] right-6 z-[10000] flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- PANTALLA COMPLETA DE PEDIDOS (Optimizada para 100dvh real en iPhone) -->
+  <!-- PANTALLA COMPLETA DE PEDIDOS -->
   <div id="pedido-drawer" class="fixed inset-0 w-full h-[100dvh] bg-[var(--color-fondo)] z-[5000] transform translate-y-full transition-transform duration-500 ease-out flex flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
     
-    <!-- Header Fijo Superior -->
     <div class="px-5 py-3 border-b border-stone-200/10 bg-[var(--color-cristal)] backdrop-blur-xl flex items-center justify-between shadow-sm flex-none z-50">
       <div class="flex items-center gap-3">
         <button id="btn-bolsa-cerrar" class="w-9 h-9 rounded-full bg-[var(--color-recuadro)] border border-stone-200/10 flex items-center justify-center text-[var(--color-texto-sec)] hover:text-[var(--color-texto)] transition-all shadow-sm">
@@ -415,7 +504,6 @@
       </div>
     </div>
 
-    <!-- Pestañas Estilo Píldora (Flex-none para no encogerse) -->
     <div class="px-4 py-3 bg-[var(--color-cristal)] border-b border-stone-200/5 flex justify-center flex-none z-40">
       <div class="flex bg-[var(--color-recuadro)] border border-stone-200/10 rounded-xl p-1 w-full max-w-md text-[10px] font-bold uppercase tracking-wider select-none shadow-inner">
         <button id="tab-carrito" class="flex-1 py-2.5 text-center rounded-lg bg-[var(--color-acento)] text-[var(--color-fondo)] shadow-sm transition-all">Carrito de Flores</button>
@@ -423,21 +511,14 @@
       </div>
     </div>
 
-    <!-- ÁREA PRINCIPAL ELÁSTICA (Se comprime para evitar el scroll vertical si hay pocas flores) -->
     <div id="drawer-contenido" class="flex-1 overflow-hidden flex flex-col relative w-full max-w-5xl mx-auto">
       <div class="w-full h-full p-3 md:p-6 flex flex-col">
         
-        <!-- ========================================================= -->
-        <!-- PESTAÑA 1: CARRITO (Lógica No-Scroll o Scroll Mínimo) -->
-        <!-- ========================================================= -->
         <div id="seccion-tab-carrito" class="flex-1 flex flex-col lg:flex-row gap-3 lg:gap-6 min-h-0 w-full">
           
-          <!-- SECCIÓN A: LISTA (Toma el espacio restante, hace scroll internamente solo si sobra contenido) -->
           <div class="flex-1 flex flex-col min-h-0 bg-[var(--color-recuadro)] border border-stone-200/10 rounded-[20px] p-3 shadow-sm">
             <h3 class="flex-none text-[10px] font-bold uppercase tracking-widest text-[var(--color-texto-sec)] mb-2 px-1"><i class="fas fa-shopping-bag mr-1"></i>Selecciones</h3>
-            
             <div id="carrito-lista" class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar" style="-webkit-overflow-scrolling: touch;"></div>
-            
             <div id="carrito-vacio-msg" class="flex-1 flex flex-col items-center justify-center gap-2">
               <i class="fas fa-shopping-basket text-4xl opacity-20 text-[var(--color-acento)]"></i>
               <p class="text-xs font-light text-[var(--color-texto-sec)]">Tu bolsa está vacía.</p>
@@ -445,11 +526,9 @@
             </div>
           </div>
 
-          <!-- SECCIÓN B: CHECKOUT SUPER COMPACTO (Fijado dinámicamente) -->
           <div class="flex-none lg:w-[360px] flex flex-col gap-3">
             
-            <!-- Bloque 1: Dedicatoria en Una Línea Expandible -->
-            <div class="bg-[var(--color-recuadro)] border border-stone-200/10 rounded-[20px] p-3.5 shadow-sm flex flex-col gap-2.5">
+            <div class="bg-[var(--color-recuadro)] border border-stone-200/10 rounded-[20px] p-3.5 shadow-sm flex flex-col gap-2">
               <div class="flex justify-between items-center">
                 <label class="text-[9px] font-bold uppercase text-[var(--color-texto-sec)] tracking-widest"><i class="fas fa-envelope-open-text mr-1"></i>Dedicatoria</label>
                 <div class="flex gap-0.5 bg-[var(--color-tarjeta)] p-0.5 rounded-lg border border-stone-200/20">
@@ -458,10 +537,20 @@
                   <button onclick="cambiarEstiloDedicatoria('marfil')" class="text-[7px] px-1.5 py-1 rounded-md text-[var(--color-texto-sec)] font-bold transition-all hover:bg-stone-100">MAR</button>
                 </div>
               </div>
-              <input type="text" id="carrito-dedicatoria" maxlength="100" placeholder="Escribe un mensaje..." class="w-full h-10 px-3 border border-stone-200/20 bg-[var(--color-tarjeta)] rounded-xl text-[16px] outline-none focus:border-[var(--color-acento)] text-[var(--color-texto)] shadow-inner transition-colors">
+
+              <div class="flex gap-1.5 overflow-x-auto py-1 custom-scrollbar select-none" style="-webkit-overflow-scrolling: touch;">
+                <button onclick="inyectarTextoPredeterminado('¡Feliz Cumpleaños! Que este día esté lleno de magia y color. 🌸')" class="shrink-0 text-[8px] font-semibold tracking-wider bg-[var(--color-tarjeta)] border border-stone-200/15 text-[var(--color-texto)] px-2.5 py-1.5 rounded-lg hover:border-[var(--color-acento)] transition-all">🎂 CUMPLE</button>
+                <button onclick="inyectarTextoPredeterminado('Con todo mi amor, porque cada día a tu lado es un regalo. Te amo. ❤️')" class="shrink-0 text-[8px] font-semibold tracking-wider bg-[var(--color-tarjeta)] border border-stone-200/15 text-[var(--color-texto)] px-2.5 py-1.5 rounded-lg hover:border-[var(--color-acento)] transition-all">❤️ AMOR</button>
+                <button onclick="inyectarTextoPredeterminado('Una flor eterna para alguien inolvidable. ¡Gracias por estar siempre! ✨')" class="shrink-0 text-[8px] font-semibold tracking-wider bg-[var(--color-tarjeta)] border border-stone-200/15 text-[var(--color-texto)] px-2.5 py-1.5 rounded-lg hover:border-[var(--color-acento)] transition-all">✨ GRATITUD</button>
+                <button onclick="inyectarTextoPredeterminado('¡Felicidades por este gran logro! El universo premia tu esfuerzo. 🎓')" class="shrink-0 text-[8px] font-semibold tracking-wider bg-[var(--color-tarjeta)] border border-stone-200/15 text-[var(--color-texto)] px-2.5 py-1.5 rounded-lg hover:border-[var(--color-acento)] transition-all">🎓 LOGROS</button>
+                <button onclick="inyectarTextoPredeterminado('Pensando en ti hoy más que nunca. Te envío un abrazo gigante y suave. 🕊️')" class="shrink-0 text-[8px] font-semibold tracking-wider bg-[var(--color-tarjeta)] border border-stone-200/15 text-[var(--color-texto)] px-2.5 py-1.5 rounded-lg hover:border-[var(--color-acento)] transition-all">🕊️ CARIÑO</button>
+                <button onclick="inyectarTextoPredeterminado('Para la mamá más hermosa del mundo entero. Mi ejemplo de amor eterno. 👑')" class="shrink-0 text-[8px] font-semibold tracking-wider bg-[var(--color-tarjeta)] border border-stone-200/15 text-[var(--color-texto)] px-2.5 py-1.5 rounded-lg hover:border-[var(--color-acento)] transition-all">👑 MAMÁ</button>
+                <button onclick="inyectarTextoPredeterminado('¡Que te recuperes pronto! Que la suavidad de estas flores te alegre el día. 🩹')" class="shrink-0 text-[8px] font-semibold tracking-wider bg-[var(--color-tarjeta)] border border-stone-200/15 text-[var(--color-texto)] px-2.5 py-1.5 rounded-lg hover:border-[var(--color-acento)] transition-all">🩹 SALUD</button>
+              </div>
+
+              <input type="text" id="carrito-dedicatoria" maxlength="100" placeholder="Escribe un mensaje o toca un botón de arriba..." class="w-full h-10 px-3 border border-stone-200/20 bg-[var(--color-tarjeta)] rounded-xl text-[16px] outline-none focus:border-[var(--color-acento)] text-[var(--color-texto)] shadow-inner transition-colors">
             </div>
 
-            <!-- Bloque 2: Panel de Total, VIP y Envío Agrupado -->
             <div class="bg-[var(--color-recuadro)] border border-stone-200/10 rounded-[20px] p-4 shadow-xl flex flex-col gap-3 relative overflow-hidden">
               <div class="absolute -right-3 -top-3 text-6xl opacity-5 text-[var(--color-acento)] pointer-events-none"><i class="fas fa-leaf"></i></div>
 
@@ -471,7 +560,6 @@
                   <span id="carrito-precio-total" class="font-bold text-2xl text-[var(--color-texto)] leading-none">0 Bs.</span>
                 </div>
                 
-                <!-- Selector Segmentado VIP Nativo iOS -->
                 <div class="flex flex-col items-end">
                   <span class="text-[8px] uppercase tracking-widest text-[var(--color-texto-sec)] font-semibold mb-1">Línea de Envío</span>
                   <div class="flex bg-[var(--color-tarjeta)] border border-stone-200/20 rounded-lg p-0.5 shadow-inner">
@@ -495,12 +583,7 @@
           </div>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- PESTAÑA 2: TALLER (Layout Dividido Inteligente) -->
-        <!-- ========================================================= -->
         <div id="seccion-tab-taller" class="hidden flex-1 flex flex-col lg:flex-row gap-4 min-h-0 w-full">
-          
-          <!-- Simulador Visual (Redimensionado paramovil) -->
           <div class="flex-none lg:flex-1 h-44 md:h-auto md:aspect-square relative rounded-[20px] overflow-hidden flex flex-col items-center justify-center p-2 border border-stone-200/10 shadow-inner shrink-0" id="simulador-lienzo-textura">
             <div id="lienzo-gipso" class="absolute inset-0 bg-transparent opacity-0 transition-opacity duration-500 pointer-events-none z-10" style="background-image: radial-gradient(rgba(255,255,255,0.9) 2px, transparent 3px); background-size: 16px 16px;"></div>
             <div id="lienzo-contenedor-tulipanes" class="relative w-full h-2/3 flex items-center justify-center z-20 scale-90 md:scale-100"></div>
@@ -512,10 +595,8 @@
             </div>
           </div>
 
-          <!-- Controles del Creador (Scroll interno si es necesario) -->
           <div class="flex-1 lg:w-[380px] flex flex-col bg-[var(--color-recuadro)] p-4 rounded-[20px] border border-stone-200/10 shadow-sm min-h-0">
             <h3 class="flex-none text-[10px] font-bold uppercase tracking-widest text-[var(--color-texto)] mb-3 border-b border-stone-200/10 pb-2"><i class="fas fa-magic mr-1 text-[var(--color-acento)]"></i>Ajustes</h3>
-            
             <div class="flex-1 overflow-y-auto space-y-4 pr-1 custom-scrollbar" style="-webkit-overflow-scrolling: touch;">
               <div>
                 <label class="text-[9px] font-bold uppercase tracking-wider text-[var(--color-texto-sec)] block mb-1">Envoltura</label>
@@ -525,7 +606,6 @@
                   <option value="kraft" data-precio="15">Kraft Natural (+15 Bs.)</option>
                 </select>
               </div>
-
               <div>
                 <label class="text-[9px] font-bold uppercase tracking-wider text-[var(--color-texto-sec)] block mb-1">Tulipanes Chenilla</label>
                 <div class="flex items-center justify-between p-1.5 bg-[var(--color-tarjeta)] border border-stone-200/20 rounded-xl shadow-sm">
@@ -534,7 +614,6 @@
                   <button id="btn-sim-mas" class="w-10 h-10 rounded-lg bg-[var(--color-recuadro)] font-bold text-lg text-[var(--color-texto)]">+</button>
                 </div>
               </div>
-
               <div class="grid grid-cols-2 gap-2">
                 <label class="flex items-center justify-center gap-2 p-3 bg-[var(--color-tarjeta)] border border-stone-200/20 rounded-xl cursor-pointer shadow-sm">
                   <input type="checkbox" id="sim-check-gipso" class="accent-[var(--color-acento)] w-4 h-4">
@@ -546,7 +625,6 @@
                 </label>
               </div>
             </div>
-
             <button id="btn-aniadir-ramo-personalizado" class="flex-none w-full mt-3 bg-[var(--color-texto)] text-[var(--color-fondo)] py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md">
               <i class="fas fa-plus mr-1"></i> Añadir Diseño
             </button>
@@ -624,6 +702,60 @@
       vibrar: function() {
         if (navigator.vibrate) navigator.vibrate(15);
       },
+      
+      /* ACTUALIZACIÓN PREMIUM: Sintetizador de sonido acústico Web Audio API */
+      reproducirSonidoAcustico: function(tipo) {
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return;
+          const ctx = new AudioContextClass();
+          
+          if (tipo === 'favorito') {
+            // Un pulso de arpa suave (2 tonos consecutivos ascendentes muy rápidos)
+            const playTone = (freq, time, delay) => {
+              const osc = ctx.createOscillator();
+              const gainNode = ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+              
+              gainNode.gain.setValueAtTime(0, ctx.currentTime + delay);
+              gainNode.gain.linearRampToValueAtTime(0.2, ctx.currentTime + delay + 0.02);
+              gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + time);
+              
+              osc.connect(gainNode);
+              gainNode.connect(ctx.destination);
+              osc.start(ctx.currentTime + delay);
+              osc.stop(ctx.currentTime + delay + time);
+            };
+            playTone(440, 0.4, 0); // La
+            playTone(554.37, 0.4, 0.06); // Do# (Tono de lujo de tercera mayor)
+          } 
+          else if (tipo === 'carrito') {
+            // Delicado arpegio de campanas de cristal (3 tonos ascendentes de ensueño)
+            const playBell = (freq, delay) => {
+              const osc = ctx.createOscillator();
+              const gainNode = ctx.createGain();
+              osc.type = 'triangle'; // Sonido más cálido y textil
+              osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+              
+              gainNode.gain.setValueAtTime(0, ctx.currentTime + delay);
+              gainNode.gain.linearRampToValueAtTime(0.15, ctx.currentTime + delay + 0.01);
+              gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.6);
+              
+              osc.connect(gainNode);
+              gainNode.connect(ctx.destination);
+              osc.start(ctx.currentTime + delay);
+              osc.stop(ctx.currentTime + delay + 0.6);
+            };
+            playBell(523.25, 0); // Do
+            playBell(659.25, 0.07); // Mi
+            playBell(783.99, 0.14); // Sol
+          }
+        } catch (e) {
+          console.warn("AudioContext no iniciado por permisos de interacción del usuario.", e);
+        }
+      },
+
       obtenerFraseEsperaAleatoria: function() {
         return FRASES_ESPERA[Math.floor(Math.random() * FRASES_ESPERA.length)];
       },
@@ -769,14 +901,22 @@
           cont.appendChild(btn);
         });
       },
+      
+      /* PROCESAMIENTO GENERALIZADO Y OPTIMIZADO DEL CATÁLOGO */
       renderizarCatalogo: function() {
-        let tarjetasPrevias = this.referencias.matriz.querySelectorAll('.tarjeta-item');
+        let matriz = this.referencias.matriz;
+        const estadoVacio = document.getElementById('estado-vacio');
+        
+        // Desvincular observers antiguos y remover tarjetas
+        const tarjetasPrevias = matriz.querySelectorAll('.tarjeta-item');
         tarjetasPrevias.forEach(n => { ObserverAnimacion.unobserve(n); n.remove(); });
         
         let filtroCat = EstadoAplicacion.filtroActivo;
         let busqueda = Utilidades.quitarTildes(EstadoAplicacion.textoBusqueda).toUpperCase();
         let contadorVisual = 0;
         
+        let htmlAcumulado = '';
+
         EstadoAplicacion.datosProcesados.forEach((item) => {
           let pasaFiltro = false;
           let pVal = parseInt(item.precio, 10);
@@ -790,92 +930,81 @@
           let pasaTex = Utilidades.quitarTildes(item.nombre).toUpperCase().includes(busqueda);
           
           if (pasaFiltro && pasaTex) {
-            let tarjeta = document.createElement('div');
-            tarjeta.className = "tarjeta-item";
-            
-            let contImg = document.createElement('div');
-            contImg.className = "contenedor-imagen";
-
-            let cargador = document.createElement('div');
-            cargador.className = "cargador-atelier";
-            cargador.innerHTML = `
-              <i class="fas fa-fingerprint icono-huella-pulso"></i>
-              <span class="texto-espera-narrativo">${Utilidades.obtenerFraseEsperaAleatoria()}</span>
-            `;
-            contImg.appendChild(cargador);
-
-            let img = document.createElement('img');
-            img.className = "imagen-item";
-            img.src = item.img || item.direccion || "";
-            img.dataset.url = img.src;
-            
-            img.onload = function() {
-              img.classList.add('imagen-cargada');
-              cargador.remove();
-            };
-            contImg.appendChild(img);
-
-            if (item.badgeNuevo) {
-              let b = document.createElement('div'); b.className = "badge-luxury badge-luxury-nuevo";
-              b.innerHTML = '✦ Nuevo'; contImg.appendChild(b);
-            }
-            if (item.badgeEscaso) {
-              let b = document.createElement('div'); b.className = "badge-luxury badge-luxury-escaso";
-              b.innerHTML = '🔴 Limitado'; contImg.appendChild(b);
-            }
-            tarjeta.appendChild(contImg);
-            
-            let recuadro = document.createElement('div');
-            recuadro.className = "recuadro-info";
-
             let esFav = EstadoAplicacion.favoritos.includes(item.id);
-            let claseCorazon = esFav ? "fas fa-heart text-pink-500" : "far fa-heart";
+            let claseCorazon = esFav ? "fas fa-heart text-pink-500 animate-pulse" : "far fa-heart";
+            
+            let badgeHTML = '';
+            if (item.badgeNuevo) {
+              badgeHTML = `<div class="badge-luxury badge-luxury-nuevo">✦ Nuevo</div>`;
+            } else if (item.badgeEscaso) {
+              badgeHTML = `<div class="badge-luxury badge-luxury-escaso">🔴 Limitado</div>`;
+            }
 
-            recuadro.innerHTML = `
-              <div class="cabecera-info select-none">
-                <div class="texto-grupo">${item.grupo}</div>
-                <div class="flex items-center gap-3">
-                  <button class="btn-favorito" data-id="${item.id}"><i class="${claseCorazon}"></i></button>
-                  <button class="btn-share" data-nombre="${item.nombre}" title="Sugerir como Regalo"><i class="fas fa-gift"></i></button>
+            // Diseño ultra minimalista y limpio sin grupo ni tiempo de elaboración
+            htmlAcumulado += `
+              <div class="tarjeta-item" id="tarjeta-${item.id}">
+                <div class="contenedor-imagen">
+                  <div class="cargador-atelier" id="cargador-${item.id}">
+                    <i class="fas fa-fingerprint icono-huella-pulso"></i>
+                    <span class="texto-espera-narrativo">${Utilidades.obtenerFraseEsperaAleatoria()}</span>
+                  </div>
+                  <img class="imagen-item" 
+                       src="" 
+                       data-src="${item.img || item.direccion || ''}" 
+                       data-url="${item.img || item.direccion || ''}" 
+                       loading="lazy" 
+                       alt="${item.nombre}"
+                       onload="document.getElementById('cargador-${item.id}')?.remove(); this.classList.add('imagen-cargada');"
+                       onerror="document.getElementById('cargador-${item.id}')?.remove();">
+                  
+                  <!-- SWAP: Controles flotantes abajo para máxima comodidad ergonómica -->
+                  <div class="overlay-actions select-none">
+                    <button class="btn-share btn-favorito-overlay" data-nombre="${item.nombre}" title="Sugerir Regalo">
+                      <i class="fas fa-gift"></i>
+                    </button>
+                    <button class="btn-favorito btn-favorito-overlay" data-id="${item.id}">
+                      <i class="${claseCorazon}"></i>
+                    </button>
+                  </div>
+                  <!-- SWAP: Insignias arriba para un look limpio de costura -->
+                  ${badgeHTML}
+                </div>
+                
+                <div class="recuadro-info">
+                  <div class="flex items-start justify-between gap-1 select-none">
+                    <div class="texto-nombre flex-1 truncate font-serif italic text-[13px] text-[var(--color-texto)]" title="${item.nombre}">
+                      ${item.nombre}
+                    </div>
+                    <div class="text-[11px] font-bold text-[var(--color-acento)] shrink-0 font-sans tracking-tight">
+                      ${item.precio} Bs.
+                    </div>
+                  </div>
+                  <button class="btn-agregar-carrito w-full bg-stone-100 dark:bg-stone-800 hover:bg-[var(--color-acento)] hover:text-stone-900 text-[var(--color-texto)] py-2.5 rounded-xl text-[9px] font-semibold uppercase tracking-wider transition-all" data-id="${item.id}">
+                    Añadir al Pedido
+                  </button>
                 </div>
               </div>
-              <div class="texto-nombre" title="${item.nombre}">${item.nombre}</div>
-              <div class="tiempo-elaboracion select-none">
-                <i class="far fa-clock"></i> ${Utilidades.obtenerTiempoElaboracionAleatorio()}
-              </div>
-              <button class="btn-agregar-carrito w-full bg-stone-100 dark:bg-stone-800 hover:bg-[var(--color-acento)] hover:text-stone-900 text-[var(--color-texto)] py-2.5 mt-2 rounded-xl text-[10px] font-semibold uppercase tracking-wider transition-all" data-id="${item.id}">Añadir al Pedido</button>
             `;
-            
-            recuadro.querySelector('.btn-share').addEventListener('click', function(e) {
-              Utilidades.vibrar(); 
-              if (navigator.share) {
-                navigator.share({
-                  title: 'Nivani | ' + item.nombre,
-                  text: `¡Mira esta hermosa flor moldeada en chenilla de Nivani: ${item.nombre}!`,
-                  url: window.location.href
-                }).catch(err => console.log('Share cancelado', err));
-              }
-            });
-
-            recuadro.querySelector('.btn-favorito').addEventListener('click', function(e) {
-              Utilidades.vibrar();
-              MotorEventos.alternarFavorito(item.id);
-            });
-
-            recuadro.querySelector('.btn-agregar-carrito').addEventListener('click', function(e) {
-              Utilidades.vibrar();
-              Utilidades.ejecutarEfectoVuelo(e);
-              MotorEventos.agregarAlCarrito(item);
-            });
-
-            tarjeta.appendChild(recuadro);
-            this.referencias.matriz.appendChild(tarjeta);
-            ObserverAnimacion.observe(tarjeta); 
             contadorVisual++;
           }
         });
         
-        this.referencias.estadoVacio.style.display = (contadorVisual === 0) ? "flex" : "none";
+        // Inyectar todo el HTML de un solo golpe para optimizar rendimiento
+        if (htmlAcumulado !== '') {
+          estadoVacio.insertAdjacentHTML('afterend', htmlAcumulado);
+          
+          // Asignar los src y registrar en el IntersectionObserver
+          const nuevasTarjetas = matriz.querySelectorAll('.tarjeta-item');
+          nuevasTarjetas.forEach(tarjeta => {
+            const img = tarjeta.querySelector('.imagen-item');
+            if (img) {
+              img.src = img.dataset.src;
+            }
+            ObserverAnimacion.observe(tarjeta);
+          });
+        }
+        
+        estadoVacio.style.display = (contadorVisual === 0) ? "flex" : "none";
 
         if (EstadoAplicacion.primeraCarga) {
           setTimeout(() => {
@@ -884,6 +1013,7 @@
           EstadoAplicacion.primeraCarga = false;
         }
       },
+      
       abrirZoom: function(url) {
         Utilidades.vibrar(); this.referencias.imagenAmpliada.src = url;
         this.referencias.modal.classList.add('modal-activo');
@@ -907,12 +1037,28 @@
           
           EstadoAplicacion.carrito.forEach((item, index) => {
             let div = document.createElement('div');
-            /* Renderizado de celda hiper-compacta estilo iOS Native App */
             div.className = "flex items-center justify-between p-2 bg-[var(--color-tarjeta)] border border-stone-200/15 rounded-xl gap-2 shadow-sm animate-fade-in";
             
-            let imgHTML = `<div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-sm shrink-0"><i class="fas fa-magic text-[var(--color-acento)]"></i></div>`;
-            if (item.img) {
-              imgHTML = `<img src="${item.img}" class="w-10 h-10 rounded-lg object-cover shrink-0">`;
+            /* ACTUALIZACIÓN PREMIUM: Renderizador dinámico de boceto SVG artesanal para ramos a medida */
+            let imgHTML = '';
+            if (item.id.toString().startsWith('personalizado_')) {
+              imgHTML = `
+                <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/10">
+                  <svg class="w-7 h-7" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 38L18 52" stroke="#c5a8a0" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M38 38L46 52" stroke="#c5a8a0" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M32 36V54" stroke="#c5a8a0" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="32" cy="24" r="10" fill="#f43f5e" opacity="0.8"/>
+                    <circle cx="24" cy="28" r="8" fill="#fda4af" opacity="0.9"/>
+                    <circle cx="40" cy="28" r="8" fill="#fda4af" opacity="0.9"/>
+                    <path d="M22 36C26 32 38 32 42 36" stroke="#c5a8a0" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              `;
+            } else {
+              imgHTML = item.img 
+                ? `<img src="${item.img}" class="w-10 h-10 rounded-lg object-cover shrink-0">`
+                : `<div class="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center shrink-0 text-stone-400"><i class="fas fa-magic"></i></div>`;
             }
 
             div.innerHTML = `
@@ -1026,8 +1172,59 @@
           }
         });
         
+        /* UNIFICACIÓN GENERALIZADA DE EVENTOS (Delegación de eventos en matriz) */
         r.matriz.addEventListener('click', e => {
-          if (e.target.classList.contains('imagen-item')) MotorUI.abrirZoom(e.target.dataset.url);
+          const btnAdd = e.target.closest('.btn-agregar-carrito');
+          const btnFav = e.target.closest('.btn-favorito');
+          const btnShare = e.target.closest('.btn-share');
+          const imgItem = e.target.closest('.imagen-item');
+
+          if (btnAdd) {
+            Utilidades.vibrar();
+            Utilidades.reproducirSonidoAcustico('carrito'); // Sonido Premium de Carrito
+            const id = btnAdd.dataset.id;
+            const producto = EstadoAplicacion.datosProcesados.find(p => p.id === id);
+            if (producto) {
+              const mockEvent = { currentTarget: btnAdd };
+              Utilidades.ejecutarEfectoVuelo(mockEvent);
+              MotorEventos.agregarAlCarrito(producto);
+            }
+            return;
+          }
+
+          if (btnFav) {
+            Utilidades.vibrar();
+            Utilidades.reproducirSonidoAcustico('favorito'); // Sonido Premium de Favorito
+            const id = btnFav.dataset.id;
+            MotorEventos.alternarFavorito(id);
+            return;
+          }
+
+          if (btnShare) {
+            Utilidades.vibrar();
+            const nombre = btnShare.dataset.nombre;
+            if (navigator.share) {
+              navigator.share({
+                title: 'Nivani | ' + nombre,
+                text: `¡Mira esta hermosa flor moldeada en chenilla de Nivani: ${nombre}!`,
+                url: window.location.href
+              }).catch(err => console.log('Share cancelado', err));
+            } else {
+              const tempInput = document.createElement('input');
+              tempInput.value = `¡Mira esta hermosa flor de Nivani: ${nombre}! - ${window.location.href}`;
+              document.body.appendChild(tempInput);
+              tempInput.select();
+              document.execCommand('copy');
+              document.body.removeChild(tempInput);
+              Utilidades.mostrarToast("Enlace de sugerencia copiado 🎁");
+            }
+            return;
+          }
+
+          if (imgItem) {
+            MotorUI.abrirZoom(imgItem.dataset.url);
+            return;
+          }
         });
         
         r.modal.addEventListener('click', () => MotorUI.cerrarZoom());
@@ -1130,6 +1327,7 @@
           });
           
           EstadoAplicacion.datosProcesados = arr;
+          EstadoAplicacion.categoriesUnicas = Array.from(cats).sort();
           EstadoAplicacion.categoriasUnicas = Array.from(cats).sort();
           
           MotorUI.renderizarHUD();
@@ -1147,6 +1345,8 @@
         localStorage.setItem('nivani_favs', JSON.stringify(EstadoAplicacion.favoritos));
         MotorUI.renderizarCatalogo();
       },
+      
+      /* FIJADO Y MEJORADO: Lógica de agregado seguro a cesta */
       agregarAlCarrito: function(producto) {
         let existente = EstadoAplicacion.carrito.find(obj => obj.id === producto.id);
         if (existente) {
@@ -1163,6 +1363,7 @@
         MotorUI.actualizarContadoresPedido();
         Utilidades.mostrarToast("Agregada al Pedido");
       },
+      
       cambiarCantidadCarrito: function(index, cambio) {
         Utilidades.vibrar();
         let item = EstadoAplicacion.carrito[index];
@@ -1212,6 +1413,7 @@
         });
 
         MotorUI.actualizarContadoresPedido();
+        Utilidades.reproducirSonidoAcustico('carrito');
         Utilidades.mostrarToast("¡Ramo Creado y Añadido!");
         this.cambiarPestania('carrito');
         MotorUI.renderizarCarrito();
@@ -1246,7 +1448,7 @@
         msg += `--------------------------------\n`;
         msg += `*TOTAL DE TU COMBINACIÓN:* ${totalGeneral} Bs.\n\n`;
 
-        const dedicatoria = document.getElementById('carrito-dedicatoria').value.trim();
+        const dedicatoria = document.querySelectorAll('#carrito-dedicatoria')[0].value.trim();
         if (dedicatoria !== "") {
           msg += `💌 *TARJETA DEDICATORIA (${EstadoAplicacion.estiloTarjetaDedicatoria.toUpperCase()}):*\n`;
           msg += `"${dedicatoria}"\n\n`;
@@ -1258,6 +1460,15 @@
         window.open(link, '_blank');
       }
     };
+
+    function inyectarTextoPredeterminado(textoCompleto) {
+      Utilidades.vibrar();
+      const campos = document.querySelectorAll('#carrito-dedicatoria');
+      campos.forEach(input => {
+        input.value = textoCompleto;
+      });
+      Utilidades.mostrarToast("Mensaje de dedicatoria aplicado");
+    }
 
     function cambiarEstiloDedicatoria(estilo) {
       EstadoAplicacion.estiloTarjetaDedicatoria = estilo;
