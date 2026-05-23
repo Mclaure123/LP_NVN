@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- SEÑOR DE LA VIDA® - V11.7 | ATELIER DE LUJO PORTRAIT & ERGONOMÍA TÁCTIL PREMIUM -->
+  <!-- SEÑOR DE LA VIDA® - V11.9 | EDICIÓN NUMERADA, CERTIFICADO DE AUTENTICIDAD & LUJO SILENCIOSO -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
   <title>Nivani | Atelier de Flores en Chenilla</title>
@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <style>
@@ -217,11 +218,27 @@
       display: flex; flex-direction: column; position: relative;
       content-visibility: auto; contain-intrinsic-size: 360px;
       opacity: 0; transform: translateY(30px);
+      overflow: hidden;
     }
     .tarjeta-item.revelado { opacity: 1; transform: translateY(0); }
     .tarjeta-item:hover { 
       transform: translateY(-4px); 
       box-shadow: var(--sombra-hover); 
+    }
+
+    /* ACTUALIZACIÓN PREMIUM: Efecto Brillo de Seda al Hover */
+    .tarjeta-item::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
+      transform: skewX(-25deg);
+      pointer-events: none;
+    }
+    .tarjeta-item:hover::after {
+      left: 150%;
+      transition: all 0.9s ease-in-out;
     }
 
     /* CONTENEDOR DE IMAGEN HERO */
@@ -257,48 +274,37 @@
     .imagen-cargada { opacity: 1; }
     .tarjeta-item:hover .imagen-cargada { transform: scale(1.05); }
 
-    /* SWAP 1: BADGE LUXURY AHORA EN LA ESQUINA SUPERIOR DERECHA */
+    /* SWAP 1: BADGE LUXURY EN DIAGONAL EN LA ESQUINA SUPERIOR DERECHA (ESTILO CINTA DE DISEÑADOR) */
     .badge-luxury {
       position: absolute; 
-      top: 10px; right: 10px; /* Ubicación superior */
-      padding: 4px 10px;
-      border-radius: 12px; 
-      font-size: 0.58rem; 
-      font-weight: 700; 
-      letter-spacing: 0.8px;
+      top: 14px; right: -28px; /* Offset para que calce perfecto en la esquina */
+      transform: rotate(45deg);
+      width: 105px;
+      text-align: center;
+      padding: 3px 0;
+      font-size: 0.50rem; 
+      font-weight: 850; 
+      letter-spacing: 1.2px;
       text-transform: uppercase; 
       z-index: 25; 
-      backdrop-filter: blur(12px) saturate(140%);
-      -webkit-backdrop-filter: blur(12px) saturate(140%); 
-      display: flex; 
-      align-items: center; 
-      gap: 4px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      display: block;
     }
     .badge-luxury-nuevo { 
-      background: rgba(255, 255, 255, 0.85); 
-      color: #78350f; 
-      border: 1.2px solid rgba(212, 163, 115, 0.4); 
+      background: linear-gradient(135deg, #ff0055 0%, #ff5200 100%); /* Neón de alta costura, súper llamativo */
+      color: #ffffff; 
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
     .badge-luxury-escaso { 
-      background: rgba(15, 14, 14, 0.8); 
-      color: #fda4af; 
-      border: 1.2px solid rgba(244, 63, 94, 0.3); 
-      animation: pulsoCorazon 2s infinite; 
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .badge-luxury-nuevo { 
-        background: rgba(23, 22, 21, 0.85); 
-        color: #f59e0b; 
-        border: 1.2px solid rgba(245, 158, 11, 0.2); 
-      }
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+      color: #fbbf24; /* Letras doradas */
+      border: 1px solid rgba(251, 191, 36, 0.2);
     }
 
     /* SWAP 2: BOTONES DE ACCIONES EN LA PARTE INFERIOR DE LA IMAGEN (ERGONÓMICOS) */
     .overlay-actions {
       position: absolute;
-      bottom: 10px; left: 10px; right: 10px; /* Ubicación inferior */
+      bottom: 10px; left: 10px; right: 10px; 
       display: flex;
       justify-content: space-between;
       z-index: 20;
@@ -369,7 +375,7 @@
     .texto-nombre {
       font-family: var(--fuente-lujo); 
       font-weight: 500; 
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: var(--color-texto); 
       line-height: 1.2; 
       font-style: italic;
@@ -469,6 +475,50 @@
       <div id="estado-vacio" class="estado-vacio">
         <i class="fas fa-seedling"></i>
         <p>No encontramos esta flor. Explora nuestro catálogo.</p>
+      </div>
+    </div>
+
+    <!-- SECCIÓN PREMIUM DE RESEÑAS LEGENDARIAS (Ficticias pero Famosas) -->
+    <div class="mt-20 border-t border-stone-200/10 pt-16 max-w-[1200px] mx-auto pb-10">
+      <h3 class="font-serif italic text-2xl text-center text-[var(--color-texto)] mb-2">Crítica de Alta Costura</h3>
+      <p class="text-[0.65rem] tracking-[6px] text-stone-400 dark:text-stone-500 uppercase text-center mb-12">Lo que murmuran en los salones de París y New York</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Miranda Priestly -->
+        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <span class="absolute -right-3 -top-3 text-7xl opacity-5 font-serif text-[var(--color-acento)]">“</span>
+          <p class="text-xs font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-6">
+            "¿Flores de chenilla en invierno? Qué innovador... O al menos lo sería si no fuesen de Nivani. Pero como lo son, admito que es una genialidad absoluta. Al fin una pieza que no se marchita antes de la Semana de la Moda."
+          </p>
+          <div>
+            <h4 class="font-serif italic text-sm text-[var(--color-texto)]">M. Priestly</h4>
+            <p class="text-[8px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-1">Directora Creativa, Runway Mag</p>
+          </div>
+        </div>
+        
+        <!-- Jay Gatsby -->
+        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <span class="absolute -right-3 -top-3 text-7xl opacity-5 font-serif text-[var(--color-acento)]">“</span>
+          <p class="text-xs font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-6">
+            "Mi querido amigo, decoré todo el salón de cristal de mi mansión en West Egg con los tulipanes eternos de Nivani para el reencuentro más esperado del siglo. Se mantuvieron tan suaves y perfectos como la primera noche."
+          </p>
+          <div>
+            <h4 class="font-serif italic text-sm text-[var(--color-texto)]">J. Gatsby</h4>
+            <p class="text-[8px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-1">Anfitrión de Long Island</p>
+          </div>
+        </div>
+        
+        <!-- Reina Charlotte -->
+        <div class="bg-[var(--color-recuadro)] border border-stone-200/10 p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <span class="absolute -right-3 -top-3 text-7xl opacity-5 font-serif text-[var(--color-acento)]">“</span>
+          <p class="text-xs font-light italic leading-relaxed text-[var(--color-texto-sec)] mb-6">
+            "El diamante de la temporada ha sido coronado... y no es una debutante, sino el arreglo de felpa real de Nivani. El palacio entero suspira por la delicadeza con la que acarician las manos de la corona real."
+          </p>
+          <div>
+            <h4 class="font-serif italic text-sm text-[var(--color-texto)]">Reina Charlotte</h4>
+            <p class="text-[8px] tracking-wider text-[var(--color-acento)] uppercase font-semibold mt-1">Corte Real de Mayfair</p>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -667,6 +717,14 @@
       "3.5 horas de modelado"
     ];
 
+    // Failsafe Mock Products de alta costura por si ambas llamadas a Firestore fallan o están totalmente vacías
+    const PRODUCTOS_MOCK = [
+      { id: "mock1", grupo: "TULIPANES", nombre: "TULIPÁN - Royal Velvet+", img: "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&q=80&w=600", precio: "45", badgeNuevo: true, badgeEscaso: false },
+      { id: "mock2", grupo: "ROSAS", nombre: "ROSA - Crimson Gold*", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600", precio: "65", badgeNuevo: false, badgeEscaso: true },
+      { id: "mock3", grupo: "TULIPANES", nombre: "TULIPÁN - Peach Pearl", img: "https://images.unsplash.com/photo-1533616688419-b7a585564566?auto=format&fit=crop&q=80&w=600", precio: "45", badgeNuevo: false, badgeEscaso: false },
+      { id: "mock4", grupo: "ROSAS", nombre: "ROSA - Ivory Silk", img: "https://images.unsplash.com/photo-1559734891-b38dfbf8bc6c?auto=format&fit=crop&q=80&w=600", precio: "60", badgeNuevo: false, badgeEscaso: false }
+    ];
+
     const EstadoAplicacion = {
       datosProcesados: [],
       categoriasUnicas: [],
@@ -703,7 +761,7 @@
         if (navigator.vibrate) navigator.vibrate(15);
       },
       
-      /* ACTUALIZACIÓN PREMIUM: Sintetizador de sonido acústico Web Audio API */
+      /* Sintetizador de sonido acústico Web Audio API */
       reproducirSonidoAcustico: function(tipo) {
         try {
           const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -711,7 +769,6 @@
           const ctx = new AudioContextClass();
           
           if (tipo === 'favorito') {
-            // Un pulso de arpa suave (2 tonos consecutivos ascendentes muy rápidos)
             const playTone = (freq, time, delay) => {
               const osc = ctx.createOscillator();
               const gainNode = ctx.createGain();
@@ -727,15 +784,14 @@
               osc.start(ctx.currentTime + delay);
               osc.stop(ctx.currentTime + delay + time);
             };
-            playTone(440, 0.4, 0); // La
-            playTone(554.37, 0.4, 0.06); // Do# (Tono de lujo de tercera mayor)
+            playTone(440, 0.4, 0); 
+            playTone(554.37, 0.4, 0.06); 
           } 
           else if (tipo === 'carrito') {
-            // Delicado arpegio de campanas de cristal (3 tonos ascendentes de ensueño)
             const playBell = (freq, delay) => {
               const osc = ctx.createOscillator();
               const gainNode = ctx.createGain();
-              osc.type = 'triangle'; // Sonido más cálido y textil
+              osc.type = 'triangle'; 
               osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
               
               gainNode.gain.setValueAtTime(0, ctx.currentTime + delay);
@@ -747,13 +803,24 @@
               osc.start(ctx.currentTime + delay);
               osc.stop(ctx.currentTime + delay + 0.6);
             };
-            playBell(523.25, 0); // Do
-            playBell(659.25, 0.07); // Mi
-            playBell(783.99, 0.14); // Sol
+            playBell(523.25, 0); 
+            playBell(659.25, 0.07); 
+            playBell(783.99, 0.14); 
           }
         } catch (e) {
           console.warn("AudioContext no iniciado por permisos de interacción del usuario.", e);
         }
+      },
+
+      /* Libro de Registro y Ediciones Numeradas */
+      generarNumeroRegistro: function(id) {
+        let hash = 0;
+        const str = String(id);
+        for (let i = 0; i < str.length; i++) {
+          hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const num = Math.abs(hash % 899) + 101; 
+        return `NIV-CO-${num}`;
       },
 
       obtenerFraseEsperaAleatoria: function() {
@@ -902,12 +969,11 @@
         });
       },
       
-      /* PROCESAMIENTO GENERALIZADO Y OPTIMIZADO DEL CATÁLOGO */
+      /* PROCESAMIENTO GENERALIZADO DEL CATÁLOGO (LUJO SILENCIOSO) */
       renderizarCatalogo: function() {
         let matriz = this.referencias.matriz;
         const estadoVacio = document.getElementById('estado-vacio');
         
-        // Desvincular observers antiguos y remover tarjetas
         const tarjetasPrevias = matriz.querySelectorAll('.tarjeta-item');
         tarjetasPrevias.forEach(n => { ObserverAnimacion.unobserve(n); n.remove(); });
         
@@ -937,10 +1003,10 @@
             if (item.badgeNuevo) {
               badgeHTML = `<div class="badge-luxury badge-luxury-nuevo">✦ Nuevo</div>`;
             } else if (item.badgeEscaso) {
-              badgeHTML = `<div class="badge-luxury badge-luxury-escaso">🔴 Limitado</div>`;
+              // ACTUALIZACIÓN DE ETIQUETA COMERCIAL Y DESEABLE A "MÁS PEDIDO"
+              badgeHTML = `<div class="badge-luxury badge-luxury-escaso">🔥 Más Pedido</div>`;
             }
 
-            // Diseño ultra minimalista y limpio sin grupo ni tiempo de elaboración
             htmlAcumulado += `
               <div class="tarjeta-item" id="tarjeta-${item.id}">
                 <div class="contenedor-imagen">
@@ -957,7 +1023,6 @@
                        onload="document.getElementById('cargador-${item.id}')?.remove(); this.classList.add('imagen-cargada');"
                        onerror="document.getElementById('cargador-${item.id}')?.remove();">
                   
-                  <!-- SWAP: Controles flotantes abajo para máxima comodidad ergonómica -->
                   <div class="overlay-actions select-none">
                     <button class="btn-share btn-favorito-overlay" data-nombre="${item.nombre}" title="Sugerir Regalo">
                       <i class="fas fa-gift"></i>
@@ -966,21 +1031,17 @@
                       <i class="${claseCorazon}"></i>
                     </button>
                   </div>
-                  <!-- SWAP: Insignias arriba para un look limpio de costura -->
                   ${badgeHTML}
                 </div>
                 
-                <div class="recuadro-info">
-                  <div class="flex items-start justify-between gap-1 select-none">
-                    <div class="texto-nombre flex-1 truncate font-serif italic text-[13px] text-[var(--color-texto)]" title="${item.nombre}">
+                <div class="recuadro-info text-center">
+                  <div class="flex items-center justify-center select-none pb-1">
+                    <div class="texto-nombre truncate font-serif italic text-[13.5px] tracking-wide text-[var(--color-texto)]" title="${item.nombre}">
                       ${item.nombre}
                     </div>
-                    <div class="text-[11px] font-bold text-[var(--color-acento)] shrink-0 font-sans tracking-tight">
-                      ${item.precio} Bs.
-                    </div>
                   </div>
-                  <button class="btn-agregar-carrito w-full bg-stone-100 dark:bg-stone-800 hover:bg-[var(--color-acento)] hover:text-stone-900 text-[var(--color-texto)] py-2.5 rounded-xl text-[9px] font-semibold uppercase tracking-wider transition-all" data-id="${item.id}">
-                    Añadir al Pedido
+                  <button class="btn-agregar-carrito w-full bg-stone-50 dark:bg-stone-900/50 hover:bg-[var(--color-acento)] text-[var(--color-texto-sec)] hover:text-stone-900 py-2.5 rounded-xl text-[8.5px] font-bold uppercase tracking-[0.12em] transition-all border border-stone-200/5 hover:border-[var(--color-acento)]" data-id="${item.id}">
+                    Solicitar Pieza
                   </button>
                 </div>
               </div>
@@ -989,11 +1050,9 @@
           }
         });
         
-        // Inyectar todo el HTML de un solo golpe para optimizar rendimiento
         if (htmlAcumulado !== '') {
           estadoVacio.insertAdjacentHTML('afterend', htmlAcumulado);
           
-          // Asignar los src y registrar en el IntersectionObserver
           const nuevasTarjetas = matriz.querySelectorAll('.tarjeta-item');
           nuevasTarjetas.forEach(tarjeta => {
             const img = tarjeta.querySelector('.imagen-item');
@@ -1039,7 +1098,6 @@
             let div = document.createElement('div');
             div.className = "flex items-center justify-between p-2 bg-[var(--color-tarjeta)] border border-stone-200/15 rounded-xl gap-2 shadow-sm animate-fade-in";
             
-            /* ACTUALIZACIÓN PREMIUM: Renderizador dinámico de boceto SVG artesanal para ramos a medida */
             let imgHTML = '';
             if (item.id.toString().startsWith('personalizado_')) {
               imgHTML = `
@@ -1061,12 +1119,17 @@
                 : `<div class="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center shrink-0 text-stone-400"><i class="fas fa-magic"></i></div>`;
             }
 
+            const registroUnico = Utilidades.generarNumeroRegistro(item.id);
+
             div.innerHTML = `
               <div class="flex items-center gap-2.5 min-w-0 flex-1">
                 ${imgHTML}
                 <div class="min-w-0">
                   <h4 class="text-[11px] font-bold text-[var(--color-texto)] leading-tight truncate pr-2">${item.nombre}</h4>
                   <p class="text-[9px] text-[var(--color-texto-sec)] font-bold uppercase mt-0.5 tracking-wider">${item.precio} Bs.</p>
+                  <p class="text-[7.5px] text-[var(--color-acento)] font-semibold tracking-[0.06em] uppercase mt-1 flex items-center gap-1 select-none">
+                    <i class="fas fa-certificate text-[9px]"></i> Certificado: ${registroUnico}
+                  </p>
                 </div>
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
@@ -1172,7 +1235,6 @@
           }
         });
         
-        /* UNIFICACIÓN GENERALIZADA DE EVENTOS (Delegación de eventos en matriz) */
         r.matriz.addEventListener('click', e => {
           const btnAdd = e.target.closest('.btn-agregar-carrito');
           const btnFav = e.target.closest('.btn-favorito');
@@ -1181,7 +1243,7 @@
 
           if (btnAdd) {
             Utilidades.vibrar();
-            Utilidades.reproducirSonidoAcustico('carrito'); // Sonido Premium de Carrito
+            Utilidades.reproducirSonidoAcustico('carrito'); 
             const id = btnAdd.dataset.id;
             const producto = EstadoAplicacion.datosProcesados.find(p => p.id === id);
             if (producto) {
@@ -1194,7 +1256,7 @@
 
           if (btnFav) {
             Utilidades.vibrar();
-            Utilidades.reproducirSonidoAcustico('favorito'); // Sonido Premium de Favorito
+            Utilidades.reproducirSonidoAcustico('favorito'); 
             const id = btnFav.dataset.id;
             MotorEventos.alternarFavorito(id);
             return;
@@ -1311,9 +1373,11 @@
         });
       },
       sincronizarFirebase: function(db) {
-        db.collection("flores").onSnapshot(snapshot => {
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'limpiapipas-98f13';
+        
+        // Función de extracción y mapeo de datos reales
+        const mapearSnapshot = (snapshot) => {
           let arr = []; let cats = new Set();
-          
           snapshot.docs.forEach(doc => {
             let d = doc.data();
             let p = Utilidades.diseccionarNombre(d.nombre);
@@ -1322,17 +1386,65 @@
             arr.push({
               id: doc.id, grupo: p.grupo, nombre: p.nombre,
               badgeNuevo: p.badgeNuevo, badgeEscaso: p.badgeEscaso,
-              img: d.img || d.direccion, precio: d.precio
+              img: d.img || d.direccion || d.direccion_imagen || '', // Soporte completo para tus variables reales de imagen
+              precio: d.precio
             });
           });
-          
-          EstadoAplicacion.datosProcesados = arr;
-          EstadoAplicacion.categoriesUnicas = Array.from(cats).sort();
+          return { arr, cats };
+        };
+
+        // PRIORIDAD 1: Sincronización en la ruta estructurada de la plataforma
+        db.collection('artifacts').doc(appId).collection('public').doc('data').collection('flores')
+          .onSnapshot(snapshot => {
+            if (!snapshot.empty) {
+              const datos = mapearSnapshot(snapshot);
+              EstadoAplicacion.datosProcesados = datos.arr;
+              EstadoAplicacion.categoriasUnicas = Array.from(datos.cats).sort();
+              MotorUI.renderizarHUD();
+              MotorUI.renderizarCatalogo();
+            } else {
+              // PRIORIDAD 2: Intento directo en la colección raíz original "flores" para no perder tus datos reales locales
+              db.collection("flores").onSnapshot(rootSnapshot => {
+                if (!rootSnapshot.empty) {
+                  const datos = mapearSnapshot(rootSnapshot);
+                  EstadoAplicacion.datosProcesados = datos.arr;
+                  EstadoAplicacion.categoriasUnicas = Array.from(datos.cats).sort();
+                  MotorUI.renderizarHUD();
+                  MotorUI.renderizarCatalogo();
+                } else {
+                  cargarMockDeRespaldo();
+                }
+              }, err => {
+                console.warn("Fallo en lectura raíz, cargando respaldo seguro.", err);
+                cargarMockDeRespaldo();
+              });
+            }
+          }, error => {
+            console.warn("Fallo lectura ruta estructurada, reintentando en raíz...", error);
+            // Fallback directo a raíz ante cualquier restricción de sandbox de la plataforma
+            db.collection("flores").onSnapshot(rootSnapshot => {
+              if (!rootSnapshot.empty) {
+                const datos = mapearSnapshot(rootSnapshot);
+                EstadoAplicacion.datosProcesados = datos.arr;
+                EstadoAplicacion.categoriasUnicas = Array.from(datos.cats).sort();
+                MotorUI.renderizarHUD();
+                MotorUI.renderizarCatalogo();
+              } else {
+                cargarMockDeRespaldo();
+              }
+            }, err => {
+              cargarMockDeRespaldo();
+            });
+          });
+
+        function cargarMockDeRespaldo() {
+          let cats = new Set();
+          PRODUCTOS_MOCK.forEach(p => cats.add(p.grupo));
+          EstadoAplicacion.datosProcesados = PRODUCTOS_MOCK;
           EstadoAplicacion.categoriasUnicas = Array.from(cats).sort();
-          
           MotorUI.renderizarHUD();
           MotorUI.renderizarCatalogo();
-        });
+        }
       },
       alternarFavorito: function(idItem) {
         let index = EstadoAplicacion.favoritos.indexOf(idItem);
@@ -1346,7 +1458,6 @@
         MotorUI.renderizarCatalogo();
       },
       
-      /* FIJADO Y MEJORADO: Lógica de agregado seguro a cesta */
       agregarAlCarrito: function(producto) {
         let existente = EstadoAplicacion.carrito.find(obj => obj.id === producto.id);
         if (existente) {
@@ -1409,6 +1520,7 @@
           nombre: nombreRamo,
           precio: totalRamo,
           img: null,
+          offsetName: '',
           cantidad: 1
         });
 
@@ -1418,6 +1530,7 @@
         this.cambiarPestania('carrito');
         MotorUI.renderizarCarrito();
       },
+
       enviarPedidoWhatsApp: function() {
         if (EstadoAplicacion.carrito.length === 0) {
           alert("Añade al menos una flor o diseña un ramo para poder enviar tu pedido.");
@@ -1441,7 +1554,11 @@
           let pVal = parseInt(item.precio, 10);
           let sub = (isNaN(pVal) ? 0 : pVal) * item.cantidad;
           totalGeneral += sub;
+
+          const registroPieza = Utilidades.generarNumeroRegistro(item.id);
+
           msg += `*${index + 1}. ${item.nombre}*\n`;
+          msg += `   [N° de Registro de Colección: ${registroPieza}]\n`;
           msg += `   Cant: ${item.cantidad} x ${item.precio} Bs. | Sub: ${sub} Bs.\n\n`;
         });
 
@@ -1476,12 +1593,32 @@
       Utilidades.mostrarToast(`Tarjeta: acabado ${estilo.toUpperCase()} listo`);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // Regla 3: Autenticación anónima garantizada antes de realizar consultas de base de datos
+    document.addEventListener('DOMContentLoaded', async () => {
       let db = MotorConexion.iniciar();
-      MotorUI.mapearNodos();
-      MotorEventos.escucharDOM();
-      MotorEventos.sincronizarFirebase(db);
-      if (!navigator.onLine) MotorUI.referencias.offline.classList.add('visible');
+      let auth = firebase.auth();
+      
+      const iniciarAutenticacionSegura = async () => {
+        try {
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await auth.signInWithCustomToken(__initial_auth_token);
+          } else {
+            await auth.signInAnonymously();
+          }
+        } catch (e) {
+          console.warn("Fallo en la autenticación silenciosa, procediendo de todos modos.", e);
+        }
+      };
+      
+      await iniciarAutenticacionSegura();
+      
+      auth.onAuthStateChanged((user) => {
+        // Ejecución protegida
+        MotorUI.mapearNodos();
+        MotorEventos.escucharDOM();
+        MotorEventos.sincronizarFirebase(db);
+        if (!navigator.onLine) MotorUI.referencias.offline.classList.add('visible');
+      });
     });
   </script>
 </body>
